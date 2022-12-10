@@ -1,0 +1,15 @@
+{
+  "required": false,
+  "package": "mathax.client.mixin.sodium",
+  "compatibilityLevel": "JAVA_17",
+  "plugin": "mathax.client.MixinPlugin",
+  "client": [
+    "SodiumLightDataAccessMixin",
+    "SodiumBlockOcculsionCacheMixin",
+    "SodiumBlockRendererMixin",
+    "SodiumFluidRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

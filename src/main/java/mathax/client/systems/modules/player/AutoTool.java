@@ -1,0 +1,208 @@
+package mathax.client.systems.modules.player;
+
+import mathax.client.eventbus.EventHandler;
+import mathax.client.eventbus.EventPriority;
+import mathax.client.events.entity.player.StartBreakingBlockEvent;
+import mathax.client.events.world.TickEvent;
+import mathax.client.settings.*;
+import mathax.client.systems.modules.Category;
+import mathax.client.systems.modules.Module;
+import mathax.client.systems.modules.Modules;
+import mathax.client.systems.modules.world.InfinityMiner;
+import mathax.client.utils.player.InvUtils;
+import mathax.client.utils.world.BlockUtils;
+import net.minecraft.block.BambooBlock;
+import net.minecraft.block.BambooSaplingBlock;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ShearsItem;
+import net.minecraft.item.SwordItem;
+import net.minecraft.item.ToolItem;
+
+import java.util.function.Predicate;
+
+public class AutoTool extends Module {
+    private boolean wasPressed;
+    private boolean shouldSwitch;
+
+    private int ticks;
+    private int bestSlot;
+
+    private final SettingGroup generalSettings = settings.createGroup("General");
+
+    // General
+
+    private final Setting<EnchantPreference> preferSetting = generalSettings.add(new EnumSetting.Builder<EnchantPreference>()
+            .name("Prefer")
+            .description("Either to prefer Silk Touch, Fortune, or none.")
+            .defaultValue(EnchantPreference.Fortune)
+            .build()
+    );
+
+    private final Setting<Boolean> silkTouchForEnderChestSetting = generalSettings.add(new BoolSetting.Builder()
+            .name("Silk touch for ender chest")
+            .description("Mine Ender Chests only with the Silk Touch enchantment.")
+            .defaultValue(true)
+            .build()
+    );
+
+    private final Setting<Boolean> antiBreakSetting = generalSettings.add(new BoolSetting.Builder()
+            .name("Anti break")
+            .description("Stop you from breaking your tool.")
+            .defaultValue(false)
+            .build()
+    );
+
+    private final Setting<Integer> breakDurabilitySetting = generalSettings.add(new IntSetting.Builder()
+            .name("Anti break percentage")
+            .description("The durability percentage to stop using a tool.")
+            .defaultValue(10)
+            .range(1, 100)
+            .sliderRange(1, 100)
+            .visible(antiBreakSetting::get)
+            .build()
+    );
+
+    private final Setting<Boolean> switchBackSetting = generalSettings.add(new BoolSetting.Builder()
+            .name("Switch back")
+            .description("Switche your hand to whatever was selected when releasing your attack key.")
+            .defaultValue(false)
+            .build()
+    );
+
+    private final Setting<Integer> switchDelaySetting = generalSettings.add((new IntSetting.Builder()
+            .name("Switch delay")
+            .description("Delay in ticks before switching tools.")
+            .defaultValue(0)
+            .build()
+    ));
+
+    public AutoTool(Category category) {
+        super(category, "Auto Tool", "Automatically switches to the most effective tool when performing an action.");
+    }
+
+    @EventHandler
+    private void onTick(TickEvent.Post event) {
+        if (Modules.get().isEnabled(InfinityMiner.class)) {
+            return;
+        }
+
+        if (switchBackSetting.get() && !mc.options.attackKey.isPressed() && wasPressed && InvUtils.previousSlot != -1) {
+            InvUtils.swapBack();
+            wasPressed = false;
+            return;
+        }
+
+        if (ticks <= 0 && shouldSwitch && bestSlot != -1) {
+            InvUtils.swap(bestSlot, switchBackSetting.get());
+            shouldSwitch = false;
+        } else {
+            ticks--;
+        }
+
+        wasPressed = mc.options.attackKey.isPressed();
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    private void onStartBreakingBlock(StartBreakingBlockEvent event) {
+        if (Modules.get().isEnabled(InfinityMiner.class)) {
+            return;
+        }
+
+        BlockState blockState = mc.world.getBlockState(event.blockPos);
+        if (!BlockUtils.canBreak(event.blockPos, blockState)) {
+            return;
+        }
+
+        ItemStack currentStack = mc.player.getMainHandStack();
+
+        double bestScore = -1;
+        bestSlot = -1;
+
+        for (int i = 0; i < 9; i++) {
+            double score = getScore(mc.player.getInventory().getStack(i), blockState, silkTouchForEnderChestSetting.get(), preferSetting.get(), itemStack -> !shouldStopUsing(itemStack));
+            if (score < 0) {
+                continue;
+            }
+
+            if (score > bestScore) {
+                bestScore = score;
+                bestSlot = i;
+            }
+        }
+
+        if ((bestSlot != -1 && (bestScore > getScore(currentStack, blockState, silkTouchForEnderChestSetting.get(), preferSetting.get(), itemStack -> !shouldStopUsing(itemStack))) || shouldStopUsing(currentStack) || !isTool(currentStack))) {
+            ticks = switchDelaySetting.get();
+            if (ticks == 0) {
+                InvUtils.swap(bestSlot, true);
+            } else {
+                shouldSwitch = true;
+            }
+        }
+
+        currentStack = mc.player.getMainHandStack();
+
+        if (shouldStopUsing(currentStack) && isTool(currentStack)) {
+            mc.options.attackKey.setPressed(false);
+            event.setCancelled(true);
+        }
+    }
+
+    private boolean shouldStopUsing(ItemStack itemStack) {
+        return antiBreakSetting.get() && (itemStack.getMaxDamage() - itemStack.getDamage()) < (itemStack.getMaxDamage() * breakDurabilitySetting.get() / 100);
+    }
+
+    public static double getScore(ItemStack itemStack, BlockState state, boolean silkTouchEnderChest, EnchantPreference enchantPreference, Predicate<ItemStack> good) {
+        if (!good.test(itemStack) || !isTool(itemStack)) {
+            return -1;
+        }
+
+        if (silkTouchEnderChest && state.getBlock() == Blocks.ENDER_CHEST && EnchantmentHelper.getLevel(Enchantments.SILK_TOUCH, itemStack) == 0) {
+            return -1;
+        }
+
+        double score = 0;
+        score += itemStack.getMiningSpeedMultiplier(state) * 1000;
+        score += EnchantmentHelper.getLevel(Enchantments.UNBREAKING, itemStack);
+        score += EnchantmentHelper.getLevel(Enchantments.EFFICIENCY, itemStack);
+        score += EnchantmentHelper.getLevel(Enchantments.MENDING, itemStack);
+
+        if (enchantPreference == EnchantPreference.Fortune) {
+            score += EnchantmentHelper.getLevel(Enchantments.FORTUNE, itemStack);
+        }
+
+        if (enchantPreference == EnchantPreference.Silk_Touch) {
+            score += EnchantmentHelper.getLevel(Enchantments.SILK_TOUCH, itemStack);
+        }
+
+        if (itemStack.getItem() instanceof SwordItem item && (state.getBlock() instanceof BambooBlock || state.getBlock() instanceof BambooSaplingBlock)) {
+            score += 9000 + (item.getMaterial().getMiningLevel() * 1000);
+        }
+
+        return score;
+    }
+
+    public static boolean isTool(ItemStack itemStack) {
+        return itemStack.getItem() instanceof ToolItem || itemStack.getItem() instanceof ShearsItem;
+    }
+
+    public enum EnchantPreference {
+        None("None"),
+        Fortune("Fortune"),
+        Silk_Touch("Silk Touch");
+
+        private final String name;
+
+        EnchantPreference(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return name;
+        }
+    }
+}

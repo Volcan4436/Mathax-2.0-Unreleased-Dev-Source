@@ -1,0 +1,8 @@
+plugins {
+    id "java"
+}
+
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
+
+group "mathax"
+version "1.0.0"
