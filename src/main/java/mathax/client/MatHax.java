@@ -33,6 +33,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ChatScreen;
+import net.minecraft.util.Formatting;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,6 +60,39 @@ public class MatHax implements ClientModInitializer {
     public static final IEventBus EVENT_BUS = new EventBus();
 
     public static final Logger LOG = LoggerFactory.getLogger(NAME);
+
+    public static List<String> getSplashes() {
+        return Arrays.asList(
+                // SPLASHES
+                Formatting.RED + "MatHax on top!",
+                Formatting.GRAY + "Matejko06" + Formatting.RED + " based god",
+                Formatting.RED + "MatHaxClient.xyz",
+                Formatting.RED + "MatHaxClient.xyz/Discord",
+                Formatting.RED + Versions.getStylized(),
+                Formatting.RED + Versions.getMinecraft(),
+
+                // MEME SPLASHES
+                Formatting.YELLOW + "cope",
+                Formatting.YELLOW + "I <3 nns",
+                Formatting.YELLOW + "haha 69",
+                Formatting.YELLOW + "420 XDDDDDD",
+                Formatting.YELLOW + "ayy",
+                Formatting.YELLOW + "too ez",
+                Formatting.YELLOW + "owned",
+                Formatting.YELLOW + "your mom :joy:",
+                Formatting.YELLOW + "BOOM BOOM BOOM!",
+                Formatting.YELLOW + "I <3 forks",
+                Formatting.YELLOW + "based",
+                Formatting.YELLOW + "Pog",
+                Formatting.YELLOW + "Big Rat on top!",
+                Formatting.YELLOW + "bigrat.monster",
+
+                // PERSONALIZED
+                Formatting.YELLOW + "You're cool, " + Formatting.GRAY + MinecraftClient.getInstance().getSession().getUsername(),
+                Formatting.YELLOW + "Owning with " + Formatting.GRAY + MinecraftClient.getInstance().getSession().getUsername(),
+                Formatting.YELLOW + "Who is " + Formatting.GRAY + MinecraftClient.getInstance().getSession().getUsername() + Formatting.YELLOW + "?"
+        );
+    }
 
     @Override
     public void onInitializeClient() {
