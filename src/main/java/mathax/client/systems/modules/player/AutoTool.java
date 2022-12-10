@@ -17,11 +17,9 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ShearsItem;
-import net.minecraft.item.SwordItem;
-import net.minecraft.item.ToolItem;
+import net.minecraft.item.*;
 
+import java.util.List;
 import java.util.function.Predicate;
 
 public class AutoTool extends Module {
@@ -32,6 +30,7 @@ public class AutoTool extends Module {
     private int bestSlot;
 
     private final SettingGroup generalSettings = settings.createGroup("General");
+    private final SettingGroup listSettings = settings.createGroup("List");
 
     // General
 
@@ -80,6 +79,31 @@ public class AutoTool extends Module {
             .build()
     ));
 
+    // List
+
+    private final Setting<ListMode> listModeSetting = listSettings.add(new EnumSetting.Builder<ListMode>()
+            .name("List mode")
+            .description("Selection mode.")
+            .defaultValue(ListMode.Blacklist)
+            .build()
+    );
+
+    private final Setting<List<Item>> whitelistSetting = listSettings.add(new ItemListSetting.Builder()
+            .name("Whitelist")
+            .description("The tools you want to use.")
+            .visible(() -> listModeSetting.get() == ListMode.Whitelist)
+            .filter(AutoTool::isTool)
+            .build()
+    );
+
+    private final Setting<List<Item>> blacklistSetting = listSettings.add(new ItemListSetting.Builder()
+            .name("Blacklist")
+            .description("The tools you don't want to use.")
+            .visible(() -> listModeSetting.get() == ListMode.Blacklist)
+            .filter(AutoTool::isTool)
+            .build()
+    );
+
     public AutoTool(Category category) {
         super(category, "Auto Tool", "Automatically switches to the most effective tool when performing an action.");
     }
@@ -123,7 +147,16 @@ public class AutoTool extends Module {
         bestSlot = -1;
 
         for (int i = 0; i < 9; i++) {
-            double score = getScore(mc.player.getInventory().getStack(i), blockState, silkTouchForEnderChestSetting.get(), preferSetting.get(), itemStack -> !shouldStopUsing(itemStack));
+            ItemStack itemStack = mc.player.getInventory().getStack(i);
+            if (listModeSetting.get() == ListMode.Whitelist && !whitelistSetting.get().contains(itemStack.getItem())) {
+                continue;
+            }
+
+            if (listModeSetting.get() == ListMode.Blacklist && blacklistSetting.get().contains(itemStack.getItem())) {
+                continue;
+            }
+
+            double score = getScore(itemStack, blockState, silkTouchForEnderChestSetting.get(), preferSetting.get(), itemStack2 -> !shouldStopUsing(itemStack2));
             if (score < 0) {
                 continue;
             }
@@ -185,8 +218,12 @@ public class AutoTool extends Module {
         return score;
     }
 
+    public static boolean isTool(Item item) {
+        return item instanceof ToolItem || item instanceof ShearsItem;
+    }
+
     public static boolean isTool(ItemStack itemStack) {
-        return itemStack.getItem() instanceof ToolItem || itemStack.getItem() instanceof ShearsItem;
+        return isTool(itemStack.getItem());
     }
 
     public enum EnchantPreference {
@@ -197,6 +234,22 @@ public class AutoTool extends Module {
         private final String name;
 
         EnchantPreference(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return name;
+        }
+    }
+
+    public enum ListMode {
+        Whitelist("Whitelist"),
+        Blacklist("Blacklist");
+
+        private final String name;
+
+        ListMode(String name) {
             this.name = name;
         }
 

@@ -1,5 +1,6 @@
 package mathax.client.systems.hud.elements;
 
+import mathax.client.gui.renderer.OverlayRenderer;
 import mathax.client.settings.BoolSetting;
 import mathax.client.settings.IntSetting;
 import mathax.client.settings.Setting;
@@ -8,7 +9,6 @@ import mathax.client.systems.enemies.Enemies;
 import mathax.client.systems.friends.Friends;
 import mathax.client.systems.hud.Hud;
 import mathax.client.systems.hud.HudElement;
-import mathax.client.systems.hud.HudRenderer;
 import mathax.client.utils.player.PlayerUtils;
 import mathax.client.utils.render.color.Color;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
@@ -63,7 +63,7 @@ public class TextRadarHudElement extends HudElement {
     }
 
     @Override
-    public void update(HudRenderer renderer) {
+    public void update(OverlayRenderer renderer) {
         double width = renderer.textWidth(name + ":");
         double height = renderer.textHeight();
 
@@ -98,7 +98,7 @@ public class TextRadarHudElement extends HudElement {
     }
 
     @Override
-    public void render(HudRenderer renderer) {
+    public void render(OverlayRenderer renderer) {
         double x = box.getX();
         double y = box.getY();
 

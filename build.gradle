@@ -112,7 +112,7 @@ jar {
     from "LICENSE"
 
     manifest {
-        attributes("Main-Class": project.maven_group + "." + project.main_class)
+        attributes("Main-Class": project.maven_group + ".Main")
     }
 }
 

@@ -1,8 +1,8 @@
 package mathax.client.systems.hud.elements;
 
+import mathax.client.gui.renderer.OverlayRenderer;
 import mathax.client.systems.hud.Hud;
 import mathax.client.systems.hud.HudElement;
-import mathax.client.systems.hud.HudRenderer;
 import mathax.client.utils.misc.Names;
 import mathax.client.utils.render.color.Color;
 import net.minecraft.entity.effect.StatusEffect;
@@ -17,7 +17,7 @@ public class PotionTimersHudElement extends HudElement {
     }
 
     @Override
-    public void update(HudRenderer renderer) {
+    public void update(OverlayRenderer renderer) {
         if (isInEditor()) {
             box.setSize(renderer.textWidth(name + " 0:00"), renderer.textHeight());
             return;
@@ -42,7 +42,7 @@ public class PotionTimersHudElement extends HudElement {
     }
 
     @Override
-    public void render(HudRenderer renderer) {
+    public void render(OverlayRenderer renderer) {
         double x = box.getX();
         double y = box.getY();
 

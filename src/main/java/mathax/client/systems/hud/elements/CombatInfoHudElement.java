@@ -1,6 +1,7 @@
 package mathax.client.systems.hud.elements;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import mathax.client.gui.renderer.OverlayRenderer;
 import mathax.client.renderer.Renderer2D;
 import mathax.client.renderer.text.TextRenderer;
 import mathax.client.settings.*;
@@ -8,7 +9,6 @@ import mathax.client.systems.enemies.Enemies;
 import mathax.client.systems.friends.Friends;
 import mathax.client.systems.hud.Hud;
 import mathax.client.systems.hud.HudElement;
-import mathax.client.systems.hud.HudRenderer;
 import mathax.client.utils.Utils;
 import mathax.client.utils.entity.EntityUtils;
 import mathax.client.utils.entity.SortPriority;
@@ -178,12 +178,12 @@ public class CombatInfoHudElement extends HudElement {
     }
 
     @Override
-    public void update(HudRenderer renderer) {
+    public void update(OverlayRenderer renderer) {
         box.setSize(175 * scaleSetting.get(), 95 * scaleSetting.get());
     }
 
     @Override
-    public void render(HudRenderer renderer) {
+    public void render(OverlayRenderer renderer) {
         renderer.addPostTask(() -> {
             double x = box.getX();
             double y = box.getY();

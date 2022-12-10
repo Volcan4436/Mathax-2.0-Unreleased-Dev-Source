@@ -20,8 +20,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 
 public class Tracers extends Module {
-    private final Color distanceColor = new Color(255, 255, 255);
-
     private int count;
 
     private final SettingGroup generalSettings = settings.createGroup("General");
@@ -93,6 +91,14 @@ public class Tracers extends Module {
             .build()
     );
 
+    public final Setting<Boolean> friendOverride = colorSettings.add(new BoolSetting.Builder()
+            .name("Show friend colors")
+            .description("Whether or not to override the distance color of friends with the friend color.")
+            .defaultValue(true)
+            .visible(distanceSetting::get)
+            .build()
+    );
+
     private final Setting<SettingColor> playersColorSetting = colorSettings.add(new ColorSetting.Builder()
             .name("Players colors")
             .description("The player's color.")
@@ -159,7 +165,11 @@ public class Tracers extends Module {
 
             Color color;
             if (distanceSetting.get()) {
-                color = getColorFromDistance(entity);
+                if (friendOverride.get() && entity instanceof PlayerEntity && Friends.get().contains((PlayerEntity) entity)) {
+                    color = Friends.get().colorSetting.get();
+                } else {
+                    color = EntityUtils.getColorFromDistance(entity);
+                }
             } else if (entity instanceof PlayerEntity) {
                 color = PlayerUtils.getPlayerColor(((PlayerEntity) entity), playersColorSetting.get());
             } else {
@@ -190,28 +200,6 @@ public class Tracers extends Module {
 
             count++;
         }
-    }
-
-    private Color getColorFromDistance(Entity entity) {
-        double distance = mc.gameRenderer.getCamera().getPos().distanceTo(entity.getPos());
-        double percent = distance / 60;
-        if (percent < 0 || percent > 1) {
-            distanceColor.set(0, 255, 0, 255);
-            return distanceColor;
-        }
-
-        int r, g;
-        if (percent < 0.5) {
-            r = 255;
-            g = (int) (255 * percent / 0.5);  // Closer to 0.5, closer to yellow (255,255,0)
-        } else {
-            g = 255;
-            r = 255 - (int) (255 * (percent - 0.5) / 0.5); // Closer to 1.0, closer to green (0,255,0)
-        }
-
-        distanceColor.set(r, g, 0, 255);
-
-        return distanceColor;
     }
 
     @Override

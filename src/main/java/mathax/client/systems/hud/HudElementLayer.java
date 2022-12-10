@@ -1,12 +1,13 @@
 package mathax.client.systems.hud;
 
+import mathax.client.gui.renderer.OverlayRenderer;
 import mathax.client.utils.render.Alignment;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class HudElementLayer {
-    private final HudRenderer renderer;
+    private final OverlayRenderer renderer;
 
     private final List<HudElement> allElements, elements;
 
@@ -15,7 +16,7 @@ public class HudElementLayer {
 
     private final int xOffset, yOffset;
 
-    public HudElementLayer(HudRenderer renderer, List<HudElement> allElements, Alignment.X xAlign, Alignment.Y yAlign, int xOffset, int yOffset) {
+    public HudElementLayer(OverlayRenderer renderer, List<HudElement> allElements, Alignment.X xAlign, Alignment.Y yAlign, int xOffset, int yOffset) {
         this.renderer = renderer;
         this.allElements = allElements;
         this.elements = new ArrayList<>();

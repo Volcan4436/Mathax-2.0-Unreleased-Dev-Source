@@ -1,5 +1,6 @@
 package mathax.client.systems.hud;
 
+import mathax.client.gui.renderer.OverlayRenderer;
 import mathax.client.utils.render.color.Color;
 
 public abstract class DoubleTextHudElement extends HudElement {
@@ -25,7 +26,7 @@ public abstract class DoubleTextHudElement extends HudElement {
     }
 
     @Override
-    public void update(HudRenderer renderer) {
+    public void update(OverlayRenderer renderer) {
         left = getLeft();
         leftWidth = renderer.textWidth(left);
 
@@ -36,7 +37,7 @@ public abstract class DoubleTextHudElement extends HudElement {
     }
 
     @Override
-    public void render(HudRenderer renderer) {
+    public void render(OverlayRenderer renderer) {
         if (!visible) {
             return;
         }

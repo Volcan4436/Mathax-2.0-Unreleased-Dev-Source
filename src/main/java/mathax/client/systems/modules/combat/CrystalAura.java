@@ -16,6 +16,7 @@ import mathax.client.mixininterface.IRaycastContext;
 import mathax.client.mixininterface.IVec3d;
 import mathax.client.renderer.ShapeMode;
 import mathax.client.settings.*;
+import mathax.client.systems.Systems;
 import mathax.client.systems.enemies.Enemies;
 import mathax.client.systems.friends.Friends;
 import mathax.client.systems.modules.Category;
@@ -1181,7 +1182,7 @@ public class CrystalAura extends Module {
             return;
         }
 
-        Theme theme = Themes.getTheme();
+        Theme theme = Systems.get(Themes.class).getTheme();
         vec3.set(renderPos.getX() + 0.5, renderPos.getY() + 0.5, renderPos.getZ() + 0.5);
         if (NametagUtils.to2D(vec3, damageTextScaleSetting.get())) {
             NametagUtils.begin(vec3);

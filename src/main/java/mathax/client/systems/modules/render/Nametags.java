@@ -8,6 +8,7 @@ import mathax.client.renderer.GL;
 import mathax.client.renderer.Renderer2D;
 import mathax.client.renderer.text.TextRenderer;
 import mathax.client.settings.*;
+import mathax.client.systems.Systems;
 import mathax.client.systems.config.Config;
 import mathax.client.systems.enemies.Enemies;
 import mathax.client.systems.friends.Friends;
@@ -310,7 +311,7 @@ public class Nametags extends Module {
     @EventHandler
     private void onRender2D(Render2DEvent event) {
         int count = getRenderCount();
-        boolean shadow = Themes.getTheme().fontShadow();
+        boolean shadow = Systems.get(Themes.class).getTheme().fontShadow();
         for (int i = count - 1; i > -1; i--) {
             Entity entity = entityList.get(i);
 

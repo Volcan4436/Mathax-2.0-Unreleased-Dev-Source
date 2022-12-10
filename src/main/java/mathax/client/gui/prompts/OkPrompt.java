@@ -1,6 +1,7 @@
 package mathax.client.gui.prompts;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import mathax.client.systems.Systems;
 import mathax.client.systems.themes.Theme;
 import mathax.client.systems.themes.Themes;
 import mathax.client.gui.WindowScreen;
@@ -26,7 +27,7 @@ public class OkPrompt {
     private Runnable onOk = () -> {};
 
     private OkPrompt() {
-        this(Themes.getTheme(), mc.currentScreen);
+        this(Systems.get(Themes.class).getTheme(), mc.currentScreen);
     }
 
     private OkPrompt(Theme theme, Screen parent) {

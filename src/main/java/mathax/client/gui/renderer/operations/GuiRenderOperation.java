@@ -5,6 +5,7 @@ import mathax.client.utils.render.color.Color;
 
 public abstract class GuiRenderOperation<T extends GuiRenderOperation<T>> {
     protected double x, y;
+
     protected Color color;
 
     public void set(double x, double y, Color color) {

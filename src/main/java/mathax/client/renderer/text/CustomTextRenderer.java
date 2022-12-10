@@ -19,6 +19,8 @@ public class CustomTextRenderer implements TextRenderer {
     private final Font[] fonts;
     private Font font;
 
+    public boolean shadow;
+
     private boolean built;
     private boolean building;
     private boolean scaleOnly;
@@ -35,11 +37,6 @@ public class CustomTextRenderer implements TextRenderer {
             ((Buffer) buffer).flip();
             fonts[i] = new Font(buffer, (int) Math.round(18 * ((i * 0.5) + 1)));
         }
-    }
-
-    @Override
-    public boolean isVanilla() {
-        return false;
     }
 
     @Override
@@ -63,7 +60,17 @@ public class CustomTextRenderer implements TextRenderer {
     }
 
     @Override
-    public void begin(double scale, boolean scaleOnly, boolean big) {
+    public boolean getShadow() {
+        return shadow;
+    }
+
+    @Override
+    public void setShadow(boolean shadow) {
+        this.shadow = shadow;
+    }
+
+    @Override
+    public void begin(double scale, boolean scaleOnly, boolean big, boolean shadow) {
         if (building) {
             throw new RuntimeException("CustomTextRenderer.begin() called twice");
         }
@@ -99,6 +106,7 @@ public class CustomTextRenderer implements TextRenderer {
 
         double fontScale = font.getHeight() / 18.0;
         this.scale = 1 + (scale - fontScale) / fontScale;
+        this.shadow = shadow;
     }
 
     @Override
@@ -115,6 +123,11 @@ public class CustomTextRenderer implements TextRenderer {
     public double getHeight(boolean shadow) {
         Font font = building ? this.font : fonts[0];
         return (font.getHeight() + 1 + (shadow ? 1 : 0)) * scale;
+    }
+
+    @Override
+    public double render(String text, double x, double y, Color color) {
+        return render(text, x, y, color, shadow);
     }
 
     @Override

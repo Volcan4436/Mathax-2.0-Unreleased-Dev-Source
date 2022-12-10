@@ -1,5 +1,6 @@
 package mathax.client.gui.tabs.builtin;
 
+import mathax.client.systems.Systems;
 import mathax.client.systems.themes.Theme;
 import mathax.client.systems.themes.Themes;
 import mathax.client.gui.tabs.Tab;
@@ -18,6 +19,6 @@ public class ModulesTab extends Tab {
 
     @Override
     public boolean isScreen(Screen screen) {
-        return Themes.getTheme().isModulesScreen(screen);
+        return Systems.get(Themes.class).getTheme().isModulesScreen(screen);
     }
 }

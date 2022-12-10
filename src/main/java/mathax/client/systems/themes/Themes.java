@@ -23,7 +23,7 @@ public class Themes extends System<Themes> {
         load();
     }
 
-    public static Theme getTheme() {
+    public Theme getTheme() {
         return theme;
     }
 

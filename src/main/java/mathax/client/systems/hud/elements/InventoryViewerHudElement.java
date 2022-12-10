@@ -1,11 +1,11 @@
 package mathax.client.systems.hud.elements;
 
+import mathax.client.gui.renderer.OverlayRenderer;
 import mathax.client.renderer.GL;
 import mathax.client.renderer.Renderer2D;
 import mathax.client.settings.*;
 import mathax.client.systems.hud.Hud;
 import mathax.client.systems.hud.HudElement;
-import mathax.client.systems.hud.HudRenderer;
 import mathax.client.utils.misc.MatHaxIdentifier;
 import mathax.client.utils.render.RenderUtils;
 import mathax.client.utils.render.color.SettingColor;
@@ -17,7 +17,7 @@ public class InventoryViewerHudElement extends HudElement {
     private static final Identifier TEXTURE = new MatHaxIdentifier("textures/container.png");
     private static final Identifier TEXTURE_TRANSPARENT = new MatHaxIdentifier("textures/container-transparent.png");
 
-    private final ItemStack[] editorInv;
+    private final ItemStack[] editorInventory;
 
     private final SettingGroup generalSettings = settings.createGroup("General");
     private final SettingGroup backgroundSettings = settings.createGroup("Background");
@@ -51,20 +51,20 @@ public class InventoryViewerHudElement extends HudElement {
     public InventoryViewerHudElement(Hud hud) {
         super(hud, "Inventory Viewer", "Displays your inventory.");
 
-        editorInv = new ItemStack[9 * 3];
-        editorInv[0] = Items.TOTEM_OF_UNDYING.getDefaultStack();
-        editorInv[5] = new ItemStack(Items.ENCHANTED_GOLDEN_APPLE, 6);
-        editorInv[19] = new ItemStack(Items.OBSIDIAN, 64);
-        editorInv[editorInv.length - 1] = Items.NETHERITE_AXE.getDefaultStack();
+        editorInventory = new ItemStack[9 * 3];
+        editorInventory[0] = Items.TOTEM_OF_UNDYING.getDefaultStack();
+        editorInventory[5] = new ItemStack(Items.ENCHANTED_GOLDEN_APPLE, 6);
+        editorInventory[19] = new ItemStack(Items.OBSIDIAN, 64);
+        editorInventory[editorInventory.length - 1] = Items.NETHERITE_AXE.getDefaultStack();
     }
 
     @Override
-    public void update(HudRenderer renderer) {
+    public void update(OverlayRenderer renderer) {
         box.setSize(backgroundSetting.get().width * scaleSetting.get(), backgroundSetting.get().height * scaleSetting.get());
     }
 
     @Override
-    public void render(HudRenderer renderer) {
+    public void render(OverlayRenderer renderer) {
         double x = box.getX();
         double y = box.getY();
 
@@ -88,7 +88,7 @@ public class InventoryViewerHudElement extends HudElement {
 
     private ItemStack getStack(int i) {
         if (isInEditor()) {
-            return editorInv[i - 9];
+            return editorInventory[i - 9];
         }
 
         return mc.player.getInventory().getStack(i);

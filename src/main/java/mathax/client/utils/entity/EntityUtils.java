@@ -8,6 +8,7 @@ import mathax.client.mixin.SectionedEntityCacheAccessor;
 import mathax.client.mixin.SimpleEntityLookupAccessor;
 import mathax.client.mixin.WorldAccessor;
 import mathax.client.utils.player.PlayerUtils;
+import mathax.client.utils.render.color.Color;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
@@ -158,6 +159,29 @@ public class EntityUtils {
         }
 
         return entity.getType().getName().getString();
+    }
+
+    public static Color getColorFromDistance(Entity entity) {
+        Color distanceColor = new Color(255, 255, 255);
+        double distance = PlayerUtils.distanceToCamera(entity);
+        double percent = distance / 60;
+
+        if (percent < 0 || percent > 1) {
+            distanceColor.set(0, 255, 0, 255);
+            return distanceColor;
+        }
+
+        int r, g;
+        if (percent < 0.5) {
+            r = 255;
+            g = (int) (255 * percent / 0.5);
+        } else {
+            g = 255;
+            r = 255 - (int) (255 * (percent - 0.5) / 0.5);
+        }
+
+        distanceColor.set(r, g, 0, 255);
+        return distanceColor;
     }
 
     public static boolean intersectsWithEntity(Box box, Predicate<Entity> predicate) {

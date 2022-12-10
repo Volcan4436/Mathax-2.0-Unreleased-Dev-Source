@@ -1,6 +1,7 @@
 package mathax.client.systems.profiles;
 
 import mathax.client.settings.*;
+import mathax.client.systems.Systems;
 import mathax.client.systems.hud.Hud;
 import mathax.client.systems.macros.Macros;
 import mathax.client.systems.modules.Modules;
@@ -87,7 +88,7 @@ public class Profile implements ISerializable<Profile> {
     public void load() {
         File folder = new File(getFolder().getParentFile(), nameSetting.get());
         if (themeSetting.get()) {
-            Themes.getTheme().load(new File(folder, "Theme.json"));
+            Systems.get(Themes.class).getTheme().load(new File(folder, "Theme.json"));
         }
 
         if (modulesSetting.get()) {
@@ -110,7 +111,7 @@ public class Profile implements ISerializable<Profile> {
     public void save() {
         File folder = new File(getFolder().getParentFile(), nameSetting.get());
         if (themeSetting.get()) {
-            Themes.getTheme().save(new File(folder, "Theme.json"));
+            Systems.get(Themes.class).getTheme().save(new File(folder, "Theme.json"));
         }
 
         if (modulesSetting.get()) {

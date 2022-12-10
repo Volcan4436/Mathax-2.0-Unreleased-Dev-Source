@@ -1,10 +1,10 @@
 package mathax.client.systems.hud.elements;
 
+import mathax.client.gui.renderer.OverlayRenderer;
 import mathax.client.renderer.Renderer2D;
 import mathax.client.settings.*;
 import mathax.client.systems.hud.Hud;
 import mathax.client.systems.hud.HudElement;
-import mathax.client.systems.hud.HudRenderer;
 import mathax.client.utils.misc.FakeClientPlayer;
 import mathax.client.utils.render.color.SettingColor;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
@@ -84,12 +84,12 @@ public class PlayerModelHudElement extends HudElement {
     }
 
     @Override
-    public void update(HudRenderer renderer) {
+    public void update(OverlayRenderer renderer) {
         box.setSize(50 * scaleSetting.get(), 75 * scaleSetting.get());
     }
 
     @Override
-    public void render(HudRenderer renderer) {
+    public void render(OverlayRenderer renderer) {
         double x = box.getX();
         double y = box.getY();
 

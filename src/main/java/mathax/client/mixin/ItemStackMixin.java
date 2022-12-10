@@ -4,6 +4,7 @@ import mathax.client.MatHax;
 import mathax.client.events.entity.player.FinishUsingItemEvent;
 import mathax.client.events.entity.player.StoppedUsingItemEvent;
 import mathax.client.events.game.ItemStackTooltipEvent;
+import mathax.client.events.game.SectionVisibleEvent;
 import mathax.client.systems.modules.Modules;
 import mathax.client.systems.modules.render.BetterTooltips;
 import mathax.client.utils.Utils;
@@ -47,10 +48,9 @@ public abstract class ItemStackMixin {
         }
     }
 
-    @Inject(method = "getHideFlags", at = @At("HEAD"), cancellable = true)
-    private void onGetHideFlags(CallbackInfoReturnable<Integer> infoReturnable) {
-        if (Modules.get().get(BetterTooltips.class).alwaysShow()) {
-            infoReturnable.setReturnValue(0);
-        }
+    @Inject(method = "isSectionVisible", at = @At("RETURN"), cancellable = true)
+    private static void onSectionVisible(int flags, ItemStack.TooltipSection tooltipSection, CallbackInfoReturnable<Boolean> info) {
+        SectionVisibleEvent event = MatHax.EVENT_BUS.post(SectionVisibleEvent.get(tooltipSection, info.getReturnValueZ()));
+        info.setReturnValue(event.visible);
     }
 }

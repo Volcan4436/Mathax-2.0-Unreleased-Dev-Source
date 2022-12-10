@@ -3,6 +3,7 @@ package mathax.client.systems.hud;
 import mathax.client.MatHax;
 import mathax.client.eventbus.EventHandler;
 import mathax.client.events.render.Render2DEvent;
+import mathax.client.gui.renderer.OverlayRenderer;
 import mathax.client.settings.*;
 import mathax.client.systems.System;
 import mathax.client.systems.Systems;
@@ -28,7 +29,7 @@ import static mathax.client.MatHax.mc;
 public class Hud extends System<Hud> implements Iterable<HudElement> {
     public static final File HUD_FOLDER = new File(MatHax.VERSION_FOLDER, "HUD");
 
-    private final HudRenderer RENDERER = new HudRenderer();
+    private final OverlayRenderer RENDERER = new OverlayRenderer();
 
     public final Settings settings = new Settings();
 

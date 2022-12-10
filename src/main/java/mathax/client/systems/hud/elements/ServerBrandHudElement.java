@@ -1,5 +1,6 @@
 package mathax.client.systems.hud.elements;
 
+import mathax.client.systems.Systems;
 import mathax.client.systems.hud.DoubleTextHudElement;
 import mathax.client.systems.hud.Hud;
 import mathax.client.systems.themes.Themes;
@@ -23,7 +24,7 @@ public class ServerBrandHudElement extends DoubleTextHudElement {
         }
 
         String brand = mc.player.getServerBrand();
-        if (Themes.getTheme().customFont()) {
+        if (Systems.get(Themes.class).getTheme().customFont()) {
             brand = StringHelper.stripTextFormat(brand);
         }
 

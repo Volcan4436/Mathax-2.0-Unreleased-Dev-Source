@@ -3,11 +3,11 @@ package mathax.client.systems.hud.elements;
 import mathax.client.MatHax;
 import mathax.client.eventbus.EventHandler;
 import mathax.client.events.game.GameJoinedEvent;
+import mathax.client.gui.renderer.OverlayRenderer;
 import mathax.client.renderer.GL;
 import mathax.client.renderer.Renderer2D;
 import mathax.client.settings.*;
 import mathax.client.systems.hud.Hud;
-import mathax.client.systems.hud.HudRenderer;
 import mathax.client.systems.hud.TripleTextHudElement;
 import mathax.client.utils.misc.MatHaxIdentifier;
 import mathax.client.utils.network.versions.Versions;
@@ -80,7 +80,7 @@ public class WatermarkHudElement extends TripleTextHudElement {
     }
 
     @Override
-    public void render(HudRenderer renderer) {
+    public void render(OverlayRenderer renderer) {
         double textWidth = renderer.textWidth(getLeft()) + renderer.textWidth(getCenter()) + renderer.textWidth(getRight());
 
         switch (modeSetting.get()) {

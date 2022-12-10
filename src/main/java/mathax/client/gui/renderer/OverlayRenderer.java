@@ -1,13 +1,15 @@
-package mathax.client.systems.hud;
+package mathax.client.gui.renderer;
 
+import mathax.client.MatHax;
 import mathax.client.renderer.text.TextRenderer;
+import mathax.client.systems.Systems;
 import mathax.client.systems.themes.Themes;
 import mathax.client.utils.render.color.Color;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HudRenderer {
+public class OverlayRenderer {
     private final List<Runnable> postTasks = new ArrayList<>();
 
     private TextRenderer textRenderer;
@@ -18,10 +20,10 @@ public class HudRenderer {
     public double delta;
 
     public void begin(double scale, double frameDelta, boolean scaleOnly) {
-        this.textRenderer = Themes.getTheme().textRenderer();
-        this.textRenderer.begin(scale, scaleOnly, false);
+        this.textRenderer = Systems.get(Themes.class).getTheme().textRenderer();
+        this.textRenderer.begin(scale, scaleOnly, false, shadow);
 
-        this.shadow = Themes.getTheme().fontShadow();
+        this.shadow = Systems.get(Themes.class).getTheme().fontShadow();
         this.scale = scale;
         this.delta = frameDelta;
     }

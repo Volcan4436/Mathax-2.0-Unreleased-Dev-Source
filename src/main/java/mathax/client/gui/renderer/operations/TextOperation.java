@@ -4,6 +4,7 @@ import mathax.client.renderer.text.TextRenderer;
 
 public class TextOperation extends GuiRenderOperation<TextOperation> {
     private String text;
+
     private TextRenderer renderer;
 
     public boolean title;

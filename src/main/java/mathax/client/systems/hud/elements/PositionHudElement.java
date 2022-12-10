@@ -1,12 +1,12 @@
 package mathax.client.systems.hud.elements;
 
+import mathax.client.gui.renderer.OverlayRenderer;
 import mathax.client.settings.BoolSetting;
 import mathax.client.settings.DoubleSetting;
 import mathax.client.settings.Setting;
 import mathax.client.settings.SettingGroup;
 import mathax.client.systems.hud.Hud;
 import mathax.client.systems.hud.HudElement;
-import mathax.client.systems.hud.HudRenderer;
 import mathax.client.systems.modules.Modules;
 import mathax.client.utils.player.PlayerUtils;
 import mathax.client.systems.modules.render.Freecam;
@@ -81,7 +81,7 @@ public class PositionHudElement extends HudElement {
     }
 
     @Override
-    public void update(HudRenderer renderer) {
+    public void update(OverlayRenderer renderer) {
         left1Width = renderer.textWidth(left1);
         left2 = null;
         right2 = null;
@@ -151,7 +151,7 @@ public class PositionHudElement extends HudElement {
     }
 
     @Override
-    public void render(HudRenderer renderer) {
+    public void render(OverlayRenderer renderer) {
         double x = box.getX();
         double y = box.getY();
 

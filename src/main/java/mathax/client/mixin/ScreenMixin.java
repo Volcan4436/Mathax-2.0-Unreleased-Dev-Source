@@ -1,5 +1,6 @@
 package mathax.client.mixin;
 
+import mathax.client.MatHax;
 import mathax.client.systems.modules.Modules;
 import mathax.client.systems.modules.render.NoRender;
 import mathax.client.utils.Utils;
@@ -7,6 +8,7 @@ import mathax.client.utils.tooltip.MatHaxTooltipData;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.item.TooltipData;
+import net.minecraft.client.util.math.MatrixStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

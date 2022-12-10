@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import mathax.client.eventbus.EventHandler;
 import mathax.client.events.game.ItemStackTooltipEvent;
+import mathax.client.events.game.SectionVisibleEvent;
 import mathax.client.events.render.TooltipDataEvent;
 import mathax.client.mixin.EntityAccessor;
 import mathax.client.mixin.EntityBucketItemAccessor;
@@ -50,6 +51,7 @@ public class BetterTooltips extends Module {
     private final SettingGroup generalSettings = settings.createGroup("General");
     private final SettingGroup previewsSettings = settings.createGroup("Previews");
     private final SettingGroup otherSettings = settings.createGroup("Other");
+    private final SettingGroup hideFlagsSettings = settings.createGroup("Hide Flags");
 
     // General
 
@@ -71,13 +73,6 @@ public class BetterTooltips extends Module {
     private final Setting<Boolean> middleClickOpenSetting = generalSettings.add(new BoolSetting.Builder()
             .name("Middle click open")
             .description("Open a GUI window with the inventory of the storage block when you middle click the item.")
-            .defaultValue(true)
-            .build()
-    );
-
-    public final Setting<Boolean> alwaysShowSetting = generalSettings.add(new BoolSetting.Builder()
-            .name("Always show")
-            .description("Disable the HideFlags nbt tag.")
             .defaultValue(true)
             .build()
     );
@@ -137,8 +132,8 @@ public class BetterTooltips extends Module {
             .build()
     );
 
-    private final Setting<Boolean> entitiesSetting = previewsSettings.add(new BoolSetting.Builder()
-            .name("Entities")
+    private final Setting<Boolean> entitiesInBuckets = previewsSettings.add(new BoolSetting.Builder()
+            .name("Entities in buckets")
             .description("Show entities in buckets when hovering over it in an inventory.")
             .defaultValue(true)
             .build()
@@ -164,6 +159,58 @@ public class BetterTooltips extends Module {
             .name("Beehive")
             .description("Display information about a beehive or bee nest.")
             .defaultValue(true)
+            .build()
+    );
+
+
+    // Hide flags
+
+    private final Setting<Boolean> enchantmentsSetting = hideFlagsSettings.add(new BoolSetting.Builder()
+            .name("Enchantments")
+            .description("Show enchantments when it's hidden.")
+            .defaultValue(false)
+            .build()
+    );
+
+    private final Setting<Boolean> modifiersSetting = hideFlagsSettings.add(new BoolSetting.Builder()
+            .name("Modifiers")
+            .description("Show item modifiers when it's hidden.")
+            .defaultValue(false)
+            .build()
+    );
+
+    private final Setting<Boolean> unbreakableSetting = hideFlagsSettings.add(new BoolSetting.Builder()
+            .name("Unbreakable")
+            .description("Show \"Unbreakable\" tag when it's hidden.")
+            .defaultValue(false)
+            .build()
+    );
+
+    private final Setting<Boolean> canDestroySetting = hideFlagsSettings.add(new BoolSetting.Builder()
+            .name("Can destroy")
+            .description("Show \"CanDestroy\" tag when it's hidden.")
+            .defaultValue(false)
+            .build()
+    );
+
+    private final Setting<Boolean> canPlaceOnSetting = hideFlagsSettings.add(new BoolSetting.Builder()
+            .name("Can place on")
+            .description("Show \"CanPlaceOn\" tag when it's hidden.")
+            .defaultValue(false)
+            .build()
+    );
+
+    private final Setting<Boolean> additionalSetting = hideFlagsSettings.add(new BoolSetting.Builder()
+            .name("Additional")
+            .description("Show potion effects, firework status, book author, etc when it's hidden.")
+            .defaultValue(false)
+            .build()
+    );
+
+    private final Setting<Boolean> dyeSetting = hideFlagsSettings.add(new BoolSetting.Builder()
+            .name("Dye")
+            .description("Show dyed item tags when it's hidden.")
+            .defaultValue(false)
             .build()
     );
 
@@ -241,7 +288,7 @@ public class BetterTooltips extends Module {
             }
         }
 
-        if ((Utils.hasItems(event.itemStack) && shulkersSetting.get() && !previewShulkers()) || (event.itemStack.getItem() == Items.ENDER_CHEST && echestSetting.get() && !previewEChest()) || (event.itemStack.getItem() == Items.FILLED_MAP && mapsSetting.get() && !previewMaps()) || (event.itemStack.getItem() == Items.WRITABLE_BOOK && booksSetting.get() && !previewBooks()) || (event.itemStack.getItem() == Items.WRITTEN_BOOK && booksSetting.get() && !previewBooks()) || (event.itemStack.getItem() instanceof EntityBucketItem && entitiesSetting.get() && !previewEntities()) || (event.itemStack.getItem() instanceof BannerItem && bannersSetting.get() && !previewBanners()) || (event.itemStack.getItem() instanceof BannerPatternItem && bannersSetting.get()  && !previewBanners()) || (event.itemStack.getItem() == Items.SHIELD && bannersSetting.get() && !previewBanners())) {
+        if ((Utils.hasItems(event.itemStack) && shulkersSetting.get() && !previewShulkers()) || (event.itemStack.getItem() == Items.ENDER_CHEST && echestSetting.get() && !previewEChest()) || (event.itemStack.getItem() == Items.FILLED_MAP && mapsSetting.get() && !previewMaps()) || (event.itemStack.getItem() == Items.WRITABLE_BOOK && booksSetting.get() && !previewBooks()) || (event.itemStack.getItem() == Items.WRITTEN_BOOK && booksSetting.get() && !previewBooks()) || (event.itemStack.getItem() instanceof EntityBucketItem && entitiesInBuckets.get() && !previewEntities()) || (event.itemStack.getItem() instanceof BannerItem && bannersSetting.get() && !previewBanners()) || (event.itemStack.getItem() instanceof BannerPatternItem && bannersSetting.get()  && !previewBanners()) || (event.itemStack.getItem() == Items.SHIELD && bannersSetting.get() && !previewBanners())) {
             event.list.add(Text.literal(""));
             event.list.add(Text.literal("Hold " + Formatting.YELLOW + keybind + Formatting.RESET + " to preview"));
         }
@@ -289,9 +336,15 @@ public class BetterTooltips extends Module {
         }
     }
 
+    @EventHandler
+    private void onSectionVisible(SectionVisibleEvent event) {
+        if (enchantmentsSetting.get() && event.section == ItemStack.TooltipSection.ENCHANTMENTS || modifiersSetting.get() && event.section == ItemStack.TooltipSection.MODIFIERS || unbreakableSetting.get() && event.section == ItemStack.TooltipSection.UNBREAKABLE || canDestroySetting.get() && event.section == ItemStack.TooltipSection.CAN_DESTROY || canPlaceOnSetting.get() && event.section == ItemStack.TooltipSection.CAN_PLACE || additionalSetting.get() && event.section == ItemStack.TooltipSection.ADDITIONAL || dyeSetting.get() && event.section == ItemStack.TooltipSection.DYE) {
+            event.visible = true;
+        }
+    }
+
     public void applyCompactShulkerTooltip(ItemStack stack, List<Text> tooltip) {
         NbtCompound tag = stack.getSubNbt("BlockEntityTag");
-
         if (tag != null) {
             if (tag.contains("LootTable", 8)) {
                 tooltip.add(Text.literal("???????"));
@@ -395,10 +448,6 @@ public class BetterTooltips extends Module {
         return isEnabled() && middleClickOpenSetting.get();
     }
 
-    public boolean alwaysShow() {
-        return isEnabled() && alwaysShowSetting.get();
-    }
-
     public boolean previewShulkers() {
         return isEnabled() && isPressed() && shulkersSetting.get();
     }
@@ -424,7 +473,7 @@ public class BetterTooltips extends Module {
     }
 
     private boolean previewEntities() {
-        return isPressed() && entitiesSetting.get();
+        return isPressed() && entitiesInBuckets.get();
     }
 
     private boolean isPressed() {

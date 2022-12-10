@@ -1,10 +1,10 @@
 package mathax.client.systems.hud.elements;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import mathax.client.gui.renderer.OverlayRenderer;
 import mathax.client.settings.*;
 import mathax.client.systems.hud.Hud;
 import mathax.client.systems.hud.HudElement;
-import mathax.client.systems.hud.HudRenderer;
 import mathax.client.utils.render.RenderUtils;
 import mathax.client.utils.render.color.Color;
 import mathax.client.utils.render.color.SettingColor;
@@ -59,7 +59,7 @@ public class ArmorHudElement extends HudElement {
     }
 
     @Override
-    public void update(HudRenderer renderer) {
+    public void update(OverlayRenderer renderer) {
         switch (orientationSetting.get()) {
             case Horizontal -> box.setSize(16 * scaleSetting.get() * 4 + 2 * 4, 16 * scaleSetting.get());
             case Vertical -> box.setSize(16 * scaleSetting.get(), 16 * scaleSetting.get() * 4 + 2 * 4);
@@ -67,7 +67,7 @@ public class ArmorHudElement extends HudElement {
     }
 
     @Override
-    public void render(HudRenderer renderer) {
+    public void render(OverlayRenderer renderer) {
         double x = box.getX();
         double y = box.getY();
         double armorX = 0;

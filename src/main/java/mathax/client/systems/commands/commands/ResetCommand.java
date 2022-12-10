@@ -37,13 +37,13 @@ public class ResetCommand extends Command {
                     return SINGLE_SUCCESS;
                 }))
         ).then(literal("gui").executes(context -> {
-            Themes.getTheme().clearWindowConfigs();
+            Systems.get(Themes.class).getTheme().clearWindowConfigs();
 
             info("GUI positioning has been reset.");
 
             return SINGLE_SUCCESS;
         }).then(literal("scale").executes(context -> {
-            Themes.getTheme().resetScale();
+            Systems.get(Themes.class).getTheme().resetScale();
 
             info("GUI scale has been reset.");
 

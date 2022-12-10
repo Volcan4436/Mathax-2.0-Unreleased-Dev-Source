@@ -1,9 +1,13 @@
 package mathax.client.mixin;
 
 import mathax.client.MatHax;
+import mathax.client.gui.renderer.OverlayRenderer;
+import mathax.client.systems.Systems;
 import mathax.client.systems.config.Config;
 import mathax.client.systems.proxies.Proxies;
 import mathax.client.systems.proxies.Proxy;
+import mathax.client.systems.themes.Theme;
+import mathax.client.systems.themes.Themes;
 import mathax.client.utils.network.Executor;
 import mathax.client.utils.network.versions.Version;
 import mathax.client.utils.network.versions.Versions;
@@ -22,6 +26,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(TitleScreen.class)
 public class TitleScreenMixin extends Screen {
+    private final OverlayRenderer RENDERER = new OverlayRenderer();
+
     private static boolean firstTimeOpen = true;
 
     public TitleScreenMixin(Text title) {
@@ -76,9 +82,16 @@ public class TitleScreenMixin extends Screen {
             return;
         }
 
-        //TODO: Find a way to use custom font renderer without it disappearing after joining a world.
-        float y = 2;
-        float y2 = y + textRenderer.fontHeight + y;
+        RENDERER.begin(Systems.get(Themes.class).getTheme().scale(0.5), 0, true);
+
+        //TODO: Only vanilla text renderer works atm
+        RENDERER.text("TEST", 2, 2, Color.WHITE);
+
+        RENDERER.end();
+
+        // OLD CODE
+        double y = 2;
+        double y2 = y + textRenderer.fontHeight + y;
 
         String space = " ";
         int spaceLength = textRenderer.getWidth(space);

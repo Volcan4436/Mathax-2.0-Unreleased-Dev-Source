@@ -1,9 +1,9 @@
 package mathax.client.systems.hud.elements;
 
+import mathax.client.gui.renderer.OverlayRenderer;
 import mathax.client.settings.*;
 import mathax.client.systems.hud.Hud;
 import mathax.client.systems.hud.HudElement;
-import mathax.client.systems.hud.HudRenderer;
 import mathax.client.systems.modules.Module;
 import mathax.client.systems.modules.Modules;
 import mathax.client.systems.modules.combat.CrystalAura;
@@ -60,7 +60,7 @@ public class ModuleInfoHudElement extends HudElement {
     }
 
     @Override
-    public void update(HudRenderer renderer) {
+    public void update(OverlayRenderer renderer) {
         if (Modules.get() == null || modulesSetting.get().isEmpty()) {
             box.setSize(renderer.textWidth(name), renderer.textHeight());
             return;
@@ -84,7 +84,7 @@ public class ModuleInfoHudElement extends HudElement {
     }
 
     @Override
-    public void render(HudRenderer renderer) {
+    public void render(OverlayRenderer renderer) {
         double x = box.getX();
         double y = box.getY();
 
@@ -100,14 +100,14 @@ public class ModuleInfoHudElement extends HudElement {
         }
     }
 
-    private void renderModule(HudRenderer renderer, Module module, double x, double y) {
+    private void renderModule(OverlayRenderer renderer, Module module, double x, double y) {
         renderer.text(module.name, x, y, hud.primaryColorSetting.get());
 
         String info = getModuleInfo(module);
         renderer.text(info, x + renderer.textWidth(module.name) + renderer.textWidth(" "), y, module.isEnabled() ? onColorSetting.get() : offColorSetting.get());
     }
 
-    private double getModuleWidth(HudRenderer renderer, Module module) {
+    private double getModuleWidth(OverlayRenderer renderer, Module module) {
         double width = renderer.textWidth(module.name);
         if (infoSetting.get()) {
             width += renderer.textWidth(" ") + renderer.textWidth(getModuleInfo(module));

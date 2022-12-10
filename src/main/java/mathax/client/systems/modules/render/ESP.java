@@ -7,6 +7,7 @@ import mathax.client.events.render.Render3DEvent;
 import mathax.client.renderer.Renderer2D;
 import mathax.client.renderer.ShapeMode;
 import mathax.client.settings.*;
+import mathax.client.systems.config.Config;
 import mathax.client.systems.enemies.Enemies;
 import mathax.client.systems.friends.Friends;
 import mathax.client.systems.modules.Category;
@@ -25,8 +26,6 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 
 public class ESP extends Module {
-    private final Color distanceColor = Color.WHITE;
-
     private final Color lineColor = new Color();
     private final Color sideColor = new Color();
     private final Color baseColor = new Color();
@@ -38,7 +37,7 @@ public class ESP extends Module {
     private int count;
 
     private final SettingGroup generalSettings = settings.createGroup("General");
-    private final SettingGroup colorsSettings = settings.createGroup("Colors");
+    private final SettingGroup colorSettings = settings.createGroup("Colors");
 
     // General
 
@@ -126,14 +125,22 @@ public class ESP extends Module {
 
     // Colors
 
-    public final Setting<Boolean> distanceSetting = colorsSettings.add(new BoolSetting.Builder()
+    public final Setting<Boolean> distanceSetting = colorSettings.add(new BoolSetting.Builder()
             .name("Distance colors")
             .description("Change the color of tracers depending on distance.")
             .defaultValue(false)
             .build()
     );
 
-    private final Setting<SettingColor> playersColorSetting = colorsSettings.add(new ColorSetting.Builder()
+    public final Setting<Boolean> friendOverride = colorSettings.add(new BoolSetting.Builder()
+            .name("Show friend colors")
+            .description("Whether or not to override the distance color of friends with the friend color.")
+            .defaultValue(true)
+            .visible(distanceSetting::get)
+            .build()
+    );
+
+    private final Setting<SettingColor> playersColorSetting = colorSettings.add(new ColorSetting.Builder()
             .name("Players color")
             .description("The other player's color.")
             .defaultValue(new SettingColor(255, 255, 255))
@@ -141,7 +148,7 @@ public class ESP extends Module {
             .build()
     );
 
-    private final Setting<SettingColor> animalsColorSetting = colorsSettings.add(new ColorSetting.Builder()
+    private final Setting<SettingColor> animalsColorSetting = colorSettings.add(new ColorSetting.Builder()
             .name("Animals color")
             .description("The animal's color.")
             .defaultValue(new SettingColor(25, 255, 25))
@@ -149,7 +156,7 @@ public class ESP extends Module {
             .build()
     );
 
-    private final Setting<SettingColor> waterAnimalsColorSetting = colorsSettings.add(new ColorSetting.Builder()
+    private final Setting<SettingColor> waterAnimalsColorSetting = colorSettings.add(new ColorSetting.Builder()
             .name("Water animals color")
             .description("The water animal's color.")
             .defaultValue(new SettingColor(25, 25, 255))
@@ -157,7 +164,7 @@ public class ESP extends Module {
             .build()
     );
 
-    private final Setting<SettingColor> monstersColorSetting = colorsSettings.add(new ColorSetting.Builder()
+    private final Setting<SettingColor> monstersColorSetting = colorSettings.add(new ColorSetting.Builder()
             .name("Monsters color")
             .description("The monster's color.")
             .defaultValue(new SettingColor(255, 25, 25))
@@ -165,7 +172,7 @@ public class ESP extends Module {
             .build()
     );
 
-    private final Setting<SettingColor> ambientColorSetting = colorsSettings.add(new ColorSetting.Builder()
+    private final Setting<SettingColor> ambientColorSetting = colorSettings.add(new ColorSetting.Builder()
             .name("Ambient color")
             .description("The ambient's color.")
             .defaultValue(new SettingColor(25, 25, 25))
@@ -173,7 +180,7 @@ public class ESP extends Module {
             .build()
     );
 
-    private final Setting<SettingColor> miscColorSetting = colorsSettings.add(new ColorSetting.Builder()
+    private final Setting<SettingColor> miscColorSetting = colorSettings.add(new ColorSetting.Builder()
             .name("Misc color")
             .description("The misc color.")
             .defaultValue(new SettingColor(175, 175, 175, 255))
@@ -400,45 +407,20 @@ public class ESP extends Module {
 
     public Color getEntityTypeColor(Entity entity) {
         if (distanceSetting.get()) {
-            return getColorFromDistance(entity);
-        }
-
-        if (entity instanceof PlayerEntity) {
+            if (friendOverride.get() && entity instanceof PlayerEntity && Friends.get().contains((PlayerEntity) entity)) {
+                return Friends.get().colorSetting.get();
+            } else return EntityUtils.getColorFromDistance(entity);
+        } else if (entity instanceof PlayerEntity) {
             return PlayerUtils.getPlayerColor(((PlayerEntity) entity), playersColorSetting.get());
-        }
-
-        return switch (entity.getType().getSpawnGroup()) {
-            case CREATURE -> animalsColorSetting.get();
-            case WATER_AMBIENT, WATER_CREATURE, UNDERGROUND_WATER_CREATURE, AXOLOTLS -> waterAnimalsColorSetting.get();
-            case MONSTER -> monstersColorSetting.get();
-            case AMBIENT -> ambientColorSetting.get();
-            default -> miscColorSetting.get();
-        };
-    }
-
-    public boolean isShader() {
-        return isEnabled() && modeSetting.get() == Mode.Shader;
-    }
-
-    private Color getColorFromDistance(Entity entity) {
-        double distance = PlayerUtils.distanceToCamera(entity);
-        double percent = distance / 60;
-
-        if (percent < 0 || percent > 1) {
-            distanceColor.set(0, 255, 0, 255);
-            return distanceColor;
-        }
-
-        int r = 255;
-        int g = 255;
-        if (percent < 0.5) {
-            g = (int) (255 * percent / 0.5);
         } else {
-            r = 255 - (int) (255 * (percent - 0.5) / 0.5);
+            return switch (entity.getType().getSpawnGroup()) {
+                case CREATURE -> animalsColorSetting.get();
+                case WATER_AMBIENT, WATER_CREATURE, UNDERGROUND_WATER_CREATURE, AXOLOTLS -> waterAnimalsColorSetting.get();
+                case MONSTER -> monstersColorSetting.get();
+                case AMBIENT -> ambientColorSetting.get();
+                default -> miscColorSetting.get();
+            };
         }
-
-        distanceColor.set(r, g, 0, 255);
-        return distanceColor;
     }
 
     @Override

@@ -109,7 +109,7 @@ public class GuiRenderer {
         textureRenderer.render(matrixStack);
 
         // Normal text
-        theme.textRenderer().begin(theme.scale(1));
+        theme.textRenderer().begin(theme.scale(1), theme.fontShadow());
         for (TextOperation text : texts) {
             if (!text.title) {
                 text.run(textPool);
@@ -118,7 +118,7 @@ public class GuiRenderer {
         theme.textRenderer().end(matrixStack);
 
         // Title text
-        theme.textRenderer().begin(theme.scale(1.25));
+        theme.textRenderer().begin(theme.scale(1.25), theme.fontShadow());
         for (TextOperation text : texts) {
             if (text.title) {
                 text.run(textPool);

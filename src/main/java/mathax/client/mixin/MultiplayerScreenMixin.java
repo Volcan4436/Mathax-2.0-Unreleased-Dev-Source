@@ -1,6 +1,9 @@
 package mathax.client.mixin;
 
-import mathax.client.systems.themes.Theme;
+import mathax.client.gui.renderer.OverlayRenderer;
+import mathax.client.systems.Systems;
+import mathax.client.systems.proxies.Proxies;
+import mathax.client.systems.proxies.Proxy;
 import mathax.client.systems.themes.Themes;
 import mathax.client.utils.network.LastServerInfo;
 import mathax.client.utils.render.color.Color;
@@ -17,6 +20,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(MultiplayerScreen.class)
 public class MultiplayerScreenMixin extends Screen {
+    private final OverlayRenderer RENDERER = new OverlayRenderer();
+
     public MultiplayerScreenMixin(Text title) {
         super(title);
     }
@@ -24,11 +29,11 @@ public class MultiplayerScreenMixin extends Screen {
     @Inject(method = "init", at = @At("TAIL"))
     private void onInit(CallbackInfo info) {
         addDrawableChild(new ButtonWidget(this.width - 75 - 3, 3, 75, 20, Text.literal("Accounts"), button -> {
-            client.setScreen(Themes.getTheme().accountsScreen());
+            client.setScreen(Systems.get(Themes.class).getTheme().accountsScreen());
         }));
 
         addDrawableChild(new ButtonWidget(this.width - 75 - 3 - 75 - 2, 3, 75, 20, Text.literal("Proxies"), button -> {
-            client.setScreen(Themes.getTheme().proxiesScreen());
+            client.setScreen(Systems.get(Themes.class).getTheme().proxiesScreen());
         }));
 
         if (LastServerInfo.getLastServer() != null) {
@@ -40,11 +45,38 @@ public class MultiplayerScreenMixin extends Screen {
 
     @Inject(method = "render", at = @At("TAIL"))
     private void onRender(MatrixStack matrixStack, int mouseX, int mouseY, float delta, CallbackInfo info) {
-        Theme theme = Themes.getTheme();
-        boolean shadow = theme.fontShadow();
-        theme.textRenderer().setScale(0.5);
-        double loggedWidth = theme.textRenderer().render("Logged in as ", 2, 2, Color.LIGHT_GRAY, shadow);
-        theme.textRenderer().render(client.getSession().getProfile().getName(), loggedWidth, 2, Color.WHITE, shadow);
+        float x = 2;
+        float y = 2;
+
+        String space = " ";
+        int spaceLength = textRenderer.getWidth(space);
+
+        String loggedInAs = "Logged in as";
+        int loggedInAsLength = textRenderer.getWidth(loggedInAs);
+        String loggedName = /*Modules.get().get(NameProtect.class).getName(*/client.getSession().getUsername()/*)*/;
+
+        drawStringWithShadow(matrixStack, textRenderer, loggedInAs, 2, (int) y, Color.fromRGBA(Color.GRAY));
+        drawStringWithShadow(matrixStack, textRenderer, space, loggedInAsLength + 2, (int) y, Color.fromRGBA(Color.GRAY));
+        drawStringWithShadow(matrixStack, textRenderer, loggedName, loggedInAsLength + spaceLength + 2, (int) y, Color.fromRGBA(Color.WHITE));
+
+        y += textRenderer.fontHeight + 2;
+
+        Proxy proxy = Proxies.get().getEnabled();
+        String proxyLeft = proxy != null ? "Using proxy " : "Not using a proxy";
+        drawStringWithShadow(matrixStack, textRenderer, proxyLeft, (int)x, (int) y, Color.fromRGBA(Color.GRAY));
+
+        String proxyRight = proxy != null ? (proxy.nameSetting.get() != null && !proxy.nameSetting.get().isEmpty() ? "(" + proxy.nameSetting.get() + ") " : "") + proxy.addressSetting.get() + ":" + proxy.portSetting.get() : null;
+        if (proxyRight != null) {
+            drawStringWithShadow(matrixStack, textRenderer, proxyRight, (int)x + textRenderer.getWidth(proxyLeft), (int) y, Color.fromRGBA(Color.WHITE));
+        }
+
+        // NEW CODE
+
+        RENDERER.begin(Systems.get(Themes.class).getTheme().scale(0.5), 0, true);
+
+        RENDERER.text("TEST", 2, 2, Color.WHITE);
+
+        RENDERER.end();
     }
 
     @Inject(at = @At("HEAD"), method = "connect(Lnet/minecraft/client/network/ServerInfo;)V")

@@ -1,5 +1,6 @@
 package mathax.client.systems.hud;
 
+import mathax.client.gui.renderer.OverlayRenderer;
 import mathax.client.settings.Settings;
 import mathax.client.utils.Utils;
 import mathax.client.utils.json.JSONUtils;
@@ -52,9 +53,9 @@ public abstract class HudElement implements ISerializable<HudElement> {
         enabled = toggle;
     }
 
-    public abstract void update(HudRenderer renderer);
+    public abstract void update(OverlayRenderer renderer);
 
-    public abstract void render(HudRenderer renderer);
+    public abstract void render(OverlayRenderer renderer);
 
     protected boolean isInEditor() {
         return Hud.isEditorScreen() || !Utils.canUpdate();

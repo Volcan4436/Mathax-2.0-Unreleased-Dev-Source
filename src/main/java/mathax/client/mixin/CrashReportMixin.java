@@ -41,9 +41,15 @@ public class CrashReportMixin {
                 }
 
                 if (active) {
-                    stringBuilder.append("\n[").append(category.name).append("]:\n");
+                    boolean printCategory = true;
+                    stringBuilder.append("\n[").append(category.name).append("]\n");
 
                     for (Module module : modules) {
+                        if (printCategory) {
+                            stringBuilder.append("\n");
+                            printCategory = false;
+                        }
+
                         if (module != null && module.isEnabled()) {
                             stringBuilder.append(module.name).append("\n");
                         }
@@ -67,7 +73,7 @@ public class CrashReportMixin {
                 }
             }
 
-            stringBuilder.append("<---------------->\n\n");
+            stringBuilder.append(modulesActive || hudActive ? "\n" : "").append("<---------------->\n\n");
         }
     }
 }

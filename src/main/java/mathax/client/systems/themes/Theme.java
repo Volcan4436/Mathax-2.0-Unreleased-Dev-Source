@@ -500,6 +500,10 @@ public class Theme implements ISerializable<Theme> {
         return value * scaleSetting.get();
     }
 
+    public double scale() {
+        return scale(1);
+    }
+
     public void resetScale() {
         scaleSetting.reset();
     }

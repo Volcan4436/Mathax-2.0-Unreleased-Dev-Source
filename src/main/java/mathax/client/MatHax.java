@@ -151,7 +151,7 @@ public class MatHax implements ClientModInitializer {
 
     private void openGui() {
         if (Utils.canOpenGui()) {
-            Tabs.get().get(0).openScreen(Themes.getTheme());
+            Tabs.get().get(0).openScreen(Systems.get(Themes.class).getTheme());
         }
     }
 
@@ -161,7 +161,7 @@ public class MatHax implements ClientModInitializer {
 
     @EventHandler(priority = EventPriority.LOWEST)
     private void onOpenScreen(OpenScreenEvent event) {
-        boolean hideHud = Themes.getTheme().hideHud();
+        boolean hideHud = Systems.get(Themes.class).getTheme().hideHud();
 
         if (hideHud) {
             if (!wasWidgetScreen) {

@@ -4,6 +4,7 @@ import mathax.client.MatHax;
 import mathax.client.eventbus.EventHandler;
 import mathax.client.events.world.TickEvent;
 import mathax.client.init.PostInit;
+import mathax.client.systems.Systems;
 import mathax.client.systems.themes.Theme;
 import mathax.client.systems.themes.Themes;
 import mathax.client.gui.WidgetScreen;
@@ -58,7 +59,7 @@ public class RainbowColors {
 
     @EventHandler
     private static void onTick(TickEvent.Post event) {
-        Theme theme = Themes.getTheme();
+        Theme theme = Systems.get(Themes.class).getTheme();
         GLOBAL.setSpeed(theme.rainbowSpeed() / 100);
         GLOBAL.setSaturation(theme.rainbowSaturation());
         GLOBAL.setBrightness(theme.rainbowBrightness());
@@ -87,7 +88,7 @@ public class RainbowColors {
         }
 
         if (mc.currentScreen instanceof WidgetScreen) {
-            for (SettingGroup group : Themes.getTheme().settings) {
+            for (SettingGroup group : Systems.get(Themes.class).getTheme().settings) {
                 for (Setting<?> setting : group) {
                     if (setting instanceof ColorSetting) {
                         ((SettingColor) setting.get()).update();

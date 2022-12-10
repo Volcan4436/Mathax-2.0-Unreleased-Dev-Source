@@ -1,10 +1,11 @@
 package mathax.client.systems.hud.elements;
 
+import mathax.client.gui.renderer.OverlayRenderer;
 import mathax.client.renderer.Renderer2D;
 import mathax.client.settings.*;
+import mathax.client.systems.Systems;
 import mathax.client.systems.hud.Hud;
 import mathax.client.systems.hud.HudElement;
-import mathax.client.systems.hud.HudRenderer;
 import mathax.client.systems.modules.Module;
 import mathax.client.systems.modules.Modules;
 import mathax.client.systems.themes.Theme;
@@ -103,7 +104,7 @@ public class EnabledModulesHudElement extends HudElement {
     }
 
     @Override
-    public void update(HudRenderer renderer) {
+    public void update(OverlayRenderer renderer) {
         if (Modules.get() == null) {
             box.setSize(renderer.textWidth(name), renderer.textHeight());
             return;
@@ -150,7 +151,7 @@ public class EnabledModulesHudElement extends HudElement {
     }
 
     @Override
-    public void render(HudRenderer renderer) {
+    public void render(OverlayRenderer renderer) {
         double x = box.getX();
         double y = box.getY();
 
@@ -159,7 +160,7 @@ public class EnabledModulesHudElement extends HudElement {
             return;
         }
 
-        Theme theme = Themes.getTheme();
+        Theme theme = Systems.get(Themes.class).getTheme();
         rainbowHue1 += (theme.rainbowSpeed() / 1000) * renderer.delta;
         if (rainbowHue1 > 1) {
             rainbowHue1 -= 1;
@@ -184,8 +185,8 @@ public class EnabledModulesHudElement extends HudElement {
         Renderer2D.COLOR.render(null);
     }
 
-    private void renderModule(HudRenderer renderer, List<Module> modules, int index, double x, double y) {
-        Theme theme = Themes.getTheme();
+    private void renderModule(OverlayRenderer renderer, List<Module> modules, int index, double x, double y) {
+        Theme theme = Systems.get(Themes.class).getTheme();
         Module module = modules.get(index);
         Color color = flatColorSetting.get();
         ColorMode colorMode = colorModeSetting.get();
@@ -240,7 +241,7 @@ public class EnabledModulesHudElement extends HudElement {
         prevColor = color;
     }
 
-    private double getModuleWidth(HudRenderer renderer, Module module) {
+    private double getModuleWidth(OverlayRenderer renderer, Module module) {
         double width = renderer.textWidth(module.name);
         if (enabledInfoSetting.get()) {
             String info = module.getInfoString();

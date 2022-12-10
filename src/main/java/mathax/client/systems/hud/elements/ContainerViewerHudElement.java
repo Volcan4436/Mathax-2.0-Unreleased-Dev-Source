@@ -1,5 +1,6 @@
 package mathax.client.systems.hud.elements;
 
+import mathax.client.gui.renderer.OverlayRenderer;
 import mathax.client.renderer.GL;
 import mathax.client.renderer.Renderer2D;
 import mathax.client.settings.BoolSetting;
@@ -8,7 +9,6 @@ import mathax.client.settings.Setting;
 import mathax.client.settings.SettingGroup;
 import mathax.client.systems.hud.Hud;
 import mathax.client.systems.hud.HudElement;
-import mathax.client.systems.hud.HudRenderer;
 import mathax.client.utils.Utils;
 import mathax.client.utils.misc.MatHaxIdentifier;
 import mathax.client.utils.render.RenderUtils;
@@ -46,12 +46,12 @@ public class ContainerViewerHudElement extends HudElement {
     }
 
     @Override
-    public void update(HudRenderer renderer) {
+    public void update(OverlayRenderer renderer) {
         box.setSize(176 * scaleSetting.get(), 67 * scaleSetting.get());
     }
 
     @Override
-    public void render(HudRenderer renderer) {
+    public void render(OverlayRenderer renderer) {
         double x = box.getX();
         double y = box.getY();
 

@@ -1,6 +1,7 @@
 package mathax.client.mixin;
 
 import it.unimi.dsi.fastutil.io.FastByteArrayOutputStream;
+import mathax.client.systems.Systems;
 import mathax.client.systems.themes.Themes;
 import mathax.client.gui.screens.EditBookTitleAndAuthorScreen;
 import net.minecraft.client.gui.screen.Screen;
@@ -78,7 +79,7 @@ public class BookScreenMixin extends Screen {
         ItemStack book = itemStack; // Fuck you Java
         Hand finalHand = hand; // Honestly
         addDrawableChild(new ButtonWidget(4, 4 + 20 + 2, 120, 20, Text.literal("Edit title & author"), button -> {
-            mc.setScreen(new EditBookTitleAndAuthorScreen(Themes.getTheme(), book, finalHand));
+            mc.setScreen(new EditBookTitleAndAuthorScreen(Systems.get(Themes.class).getTheme(), book, finalHand));
         }));
     }
 }

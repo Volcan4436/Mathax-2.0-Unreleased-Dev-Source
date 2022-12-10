@@ -22,6 +22,8 @@ public class VanillaTextRenderer implements TextRenderer {
     public double scale = 2;
     public boolean scaleIndividually;
 
+    public boolean shadow;
+
     private boolean built;
     private boolean building;
     private double alpha = 1;
@@ -30,11 +32,6 @@ public class VanillaTextRenderer implements TextRenderer {
         // Use INSTANCE
 
         emptyMatrix.loadIdentity();
-    }
-
-    @Override
-    public boolean isVanilla() {
-        return true;
     }
 
     @Override
@@ -58,6 +55,16 @@ public class VanillaTextRenderer implements TextRenderer {
     }
 
     @Override
+    public boolean getShadow() {
+        return shadow;
+    }
+
+    @Override
+    public void setShadow(boolean shadow) {
+        this.shadow = shadow;
+    }
+
+    @Override
     public double getWidth(String text, int length, boolean shadow) {
         if (text.isEmpty()) {
             return 0;
@@ -76,14 +83,20 @@ public class VanillaTextRenderer implements TextRenderer {
     }
 
     @Override
-    public void begin(double scale, boolean scaleOnly, boolean big) {
+    public void begin(double scale, boolean scaleOnly, boolean big, boolean shadow) {
         if (building) {
             throw new RuntimeException("VanillaTextRenderer.begin() called twice");
         }
 
         this.scale = scale * 2;
+        this.shadow = shadow;
         built = false;
         building = true;
+    }
+
+    @Override
+    public double render(String text, double x, double y, Color color) {
+        return render(text, x, y, color, shadow);
     }
 
     @Override

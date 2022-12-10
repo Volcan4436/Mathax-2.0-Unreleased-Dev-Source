@@ -3,6 +3,7 @@ package mathax.client.systems.commands.commands;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import mathax.client.gui.WidgetScreen;
 import mathax.client.settings.Setting;
+import mathax.client.systems.Systems;
 import mathax.client.systems.commands.Command;
 import mathax.client.systems.commands.arguments.ModuleArgumentType;
 import mathax.client.systems.commands.arguments.SettingArgumentType;
@@ -24,7 +25,7 @@ public class SettingCommand extends Command {
         builder.then(
                 argument("module", ModuleArgumentType.create()).executes(context -> {
                     Module module = context.getArgument("module", Module.class);
-                    WidgetScreen screen = Themes.getTheme().moduleScreen(module);
+                    WidgetScreen screen = Systems.get(Themes.class).getTheme().moduleScreen(module);
                     screen.parent = null;
 
                     Utils.screenToOpen = screen;

@@ -1,5 +1,6 @@
 package mathax.client.renderer.text;
 
+import mathax.client.systems.Systems;
 import mathax.client.systems.themes.Themes;
 import mathax.client.utils.render.color.Color;
 import net.minecraft.client.util.math.MatrixStack;
@@ -14,7 +15,7 @@ public interface TextRenderer {
                 return VanillaTextRenderer.INSTANCE;
             }
             default -> {
-                return Themes.getTheme().customFont() ? Fonts.RENDERER : VanillaTextRenderer.INSTANCE;
+                return Systems.get(Themes.class).getTheme().customFont() ? Fonts.RENDERER : VanillaTextRenderer.INSTANCE;
             }
         }
     }
@@ -22,8 +23,6 @@ public interface TextRenderer {
     static TextRenderer get() {
         return get(TextRendererType.Config);
     }
-
-    boolean isVanilla();
 
     double getScale();
 
@@ -33,14 +32,26 @@ public interface TextRenderer {
 
     void setAlpha(double alpha);
 
-    void begin(double scale, boolean scaleOnly, boolean big);
+    boolean getShadow();
+
+    void setShadow(boolean shadow);
+
+    void begin(double scale, boolean scaleOnly, boolean big, boolean shadow);
+
+    default void begin(double scale, boolean scaleOnly, boolean big) {
+        begin(scale, scaleOnly, big, false);
+    }
+
+    default void begin(double scale, boolean shadow) {
+        begin(scale, false, false, shadow);
+    }
 
     default void begin(double scale) {
-        begin(scale, false, false);
+        begin(scale, false, false, false);
     }
 
     default void begin() {
-        begin(1, false, false);
+        begin(1, false, false, false);
     }
 
     default void beginBig() {
@@ -61,11 +72,9 @@ public interface TextRenderer {
         return getHeight(false);
     }
 
-    double render(String text, double x, double y, Color color, boolean shadow);
+    double render(String text, double x, double y, Color color);
 
-    default double render(String text, double x, double y, Color color) {
-        return render(text, x, y, color, false);
-    }
+    double render(String text, double x, double y, Color color, boolean shadow);
 
     boolean isBuilding();
 
