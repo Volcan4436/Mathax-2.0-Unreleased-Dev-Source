@@ -89,7 +89,7 @@ public class Profiles extends System<Profiles> implements Iterable<Profile> {
     public void load(File folder) {
         folder = new File(MatHax.VERSION_FOLDER, "Profiles");
         File[] profileFolders = folder.listFiles();
-        if (profileFolders.length < 1) {
+        if (profileFolders == null || profileFolders.length < 1) {
             return;
         }
 

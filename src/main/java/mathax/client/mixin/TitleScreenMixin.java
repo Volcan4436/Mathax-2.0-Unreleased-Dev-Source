@@ -82,12 +82,12 @@ public class TitleScreenMixin extends Screen {
             return;
         }
 
-        RENDERER.begin(Systems.get(Themes.class).getTheme().scale(0.5), 0, true);
+        /*RENDERER.begin(Systems.get(Themes.class).getTheme().scale(0.5), 0, true);
 
         //TODO: Only vanilla text renderer works atm
         RENDERER.text("TEST", 2, 2, Color.WHITE);
 
-        RENDERER.end();
+        RENDERER.end();*/
 
         // OLD CODE
         double y = 2;

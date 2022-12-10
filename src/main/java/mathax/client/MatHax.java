@@ -62,6 +62,7 @@ public class MatHax implements ClientModInitializer {
     public static final Logger LOG = LoggerFactory.getLogger(NAME);
 
     public static List<String> getSplashes() {
+        String username = MinecraftClient.getInstance().getSession().getUsername();
         return Arrays.asList(
                 // SPLASHES
                 Formatting.RED + "MatHax on top!",
@@ -88,9 +89,9 @@ public class MatHax implements ClientModInitializer {
                 Formatting.YELLOW + "bigrat.monster",
 
                 // PERSONALIZED
-                Formatting.YELLOW + "You're cool, " + Formatting.GRAY + MinecraftClient.getInstance().getSession().getUsername(),
-                Formatting.YELLOW + "Owning with " + Formatting.GRAY + MinecraftClient.getInstance().getSession().getUsername(),
-                Formatting.YELLOW + "Who is " + Formatting.GRAY + MinecraftClient.getInstance().getSession().getUsername() + Formatting.YELLOW + "?"
+                Formatting.YELLOW + "You're cool, " + Formatting.GRAY + username,
+                Formatting.YELLOW + "Owning with " + Formatting.GRAY + username,
+                Formatting.YELLOW + "Who is " + Formatting.GRAY + username + Formatting.YELLOW + "?"
         );
     }
 

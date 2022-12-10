@@ -7,7 +7,6 @@ import mathax.client.events.render.Render3DEvent;
 import mathax.client.renderer.Renderer2D;
 import mathax.client.renderer.ShapeMode;
 import mathax.client.settings.*;
-import mathax.client.systems.config.Config;
 import mathax.client.systems.enemies.Enemies;
 import mathax.client.systems.friends.Friends;
 import mathax.client.systems.modules.Category;
@@ -409,7 +408,9 @@ public class ESP extends Module {
         if (distanceSetting.get()) {
             if (friendOverride.get() && entity instanceof PlayerEntity && Friends.get().contains((PlayerEntity) entity)) {
                 return Friends.get().colorSetting.get();
-            } else return EntityUtils.getColorFromDistance(entity);
+            } else {
+                return EntityUtils.getColorFromDistance(entity);
+            }
         } else if (entity instanceof PlayerEntity) {
             return PlayerUtils.getPlayerColor(((PlayerEntity) entity), playersColorSetting.get());
         } else {
@@ -421,6 +422,10 @@ public class ESP extends Module {
                 default -> miscColorSetting.get();
             };
         }
+    }
+
+    public boolean isShader() {
+        return isEnabled() && modeSetting.get() == Mode.Shader;
     }
 
     @Override

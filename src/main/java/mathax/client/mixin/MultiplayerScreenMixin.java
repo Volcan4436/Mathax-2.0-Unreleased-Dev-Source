@@ -72,11 +72,11 @@ public class MultiplayerScreenMixin extends Screen {
 
         // NEW CODE
 
-        RENDERER.begin(Systems.get(Themes.class).getTheme().scale(0.5), 0, true);
+        /*RENDERER.begin(Systems.get(Themes.class).getTheme().scale(0.5), 0, true);
 
         RENDERER.text("TEST", 2, 2, Color.WHITE);
 
-        RENDERER.end();
+        RENDERER.end();*/
     }
 
     @Inject(at = @At("HEAD"), method = "connect(Lnet/minecraft/client/network/ServerInfo;)V")
