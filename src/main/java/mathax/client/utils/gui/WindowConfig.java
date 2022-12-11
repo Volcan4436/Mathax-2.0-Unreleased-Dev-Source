@@ -8,7 +8,11 @@ public class WindowConfig implements ISerializable<WindowConfig> {
 
     public double x = -1, y = -1;
 
-    // Saving
+    public WindowConfig() {}
+
+    public WindowConfig(JSONObject json) {
+        fromJson(json);
+    }
 
     @Override
     public JSONObject toJson() {

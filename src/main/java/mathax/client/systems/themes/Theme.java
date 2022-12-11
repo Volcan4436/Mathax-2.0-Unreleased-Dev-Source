@@ -1,5 +1,6 @@
 package mathax.client.systems.themes;
 
+import mathax.client.MatHax;
 import mathax.client.gui.DefaultSettingsWidgetFactory;
 import mathax.client.gui.WidgetScreen;
 import mathax.client.gui.renderer.packer.GuiTexture;
@@ -627,11 +628,11 @@ public class Theme implements ISerializable<Theme> {
             settings.fromJson(json.getJSONObject("settings"));
         }
 
-        if (json.has("window-configs") && JSONUtils.isValidJSONArray(json, "window-config")) {
+        if (json.has("window-configs") && JSONUtils.isValidJSONArray(json, "window-configs")) {
             for (Object object : json.getJSONArray("window-configs")) {
                 if (object instanceof JSONObject windowConfigJson) {
                     if (windowConfigJson.has("id") && windowConfigJson.has("config")) {
-                        windowConfigs.put(windowConfigJson.getString("id"), new WindowConfig().fromJson(windowConfigJson.getJSONObject("config")));
+                        windowConfigs.put(windowConfigJson.getString("id"), new WindowConfig(windowConfigJson.getJSONObject("config")));
                     }
                 }
             }

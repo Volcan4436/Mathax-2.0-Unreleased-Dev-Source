@@ -19,8 +19,7 @@ public class CrashReportMixin {
     @Inject(method = "addStackTrace", at = @At("TAIL"))
     private void onAddStackTrace(StringBuilder stringBuilder, CallbackInfo info) {
         if (Modules.get() != null) {
-            stringBuilder.append("\n\n<---| MatHax |--->\n");
-            stringBuilder.append("Version: ").append(Versions.getStylized()).append("\n");
+            stringBuilder.append("\n\n<---| MatHax ").append(Versions.getStylized()).append(" |--->\n");
 
             boolean modulesActive = false;
             for (Category category : Modules.loopCategories()) {
@@ -41,15 +40,9 @@ public class CrashReportMixin {
                 }
 
                 if (active) {
-                    boolean printCategory = true;
                     stringBuilder.append("\n[").append(category.name).append("]\n");
 
                     for (Module module : modules) {
-                        if (printCategory) {
-                            stringBuilder.append("\n");
-                            printCategory = false;
-                        }
-
                         if (module != null && module.isEnabled()) {
                             stringBuilder.append(module.name).append("\n");
                         }

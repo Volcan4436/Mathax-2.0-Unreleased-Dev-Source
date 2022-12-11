@@ -185,6 +185,7 @@ public class Modules extends System<Modules> {
         add(new BetterBeacons(misc));
         add(new BetterTab(misc));
         add(new MountBypass(misc));
+        add(new NameProtect(misc));
         add(new Notebot(misc));
         add(new PingSpoof(misc));
         add(new PortalChat(misc));
