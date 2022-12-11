@@ -113,7 +113,7 @@ public class FakePlayersTab extends Tab {
         private void initTable(WTable table) {
             table.clear();
 
-            if (Enemies.get().isEmpty()) {
+            if (FakePlayerManager.count() < 1) {
                 return;
             }
 
