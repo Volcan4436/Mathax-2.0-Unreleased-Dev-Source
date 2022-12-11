@@ -66,14 +66,14 @@ public abstract class GameRendererMixin {
             renderer = new Renderer3D();
         }
 
-        Render3DEvent event = Render3DEvent.get(matrixStack2, renderer, tickDelta, camera.getPos().x, camera.getPos().y, camera.getPos().z);
+        Render3DEvent event = Render3DEvent.get(matrixStack, renderer, tickDelta, camera.getPos().x, camera.getPos().y, camera.getPos().z);
 
         RenderUtils.updateScreenCenter();
-        NametagUtils.onRender(matrixStack2, matrix4f);
+        NametagUtils.onRender(matrixStack, matrix4f);
 
         renderer.begin();
         MatHax.EVENT_BUS.post(event);
-        renderer.render(matrixStack2);
+        renderer.render(matrixStack);
 
         RenderSystem.applyModelViewMatrix();
         client.getProfiler().pop();

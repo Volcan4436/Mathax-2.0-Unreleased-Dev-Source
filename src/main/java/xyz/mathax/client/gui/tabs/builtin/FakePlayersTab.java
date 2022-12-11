@@ -102,7 +102,10 @@ public class FakePlayersTab extends Tab {
             };
 
             WButton clear = horizontalList.add(theme.button("Clear")).widget();
-            clear.action = FakePlayerManager::clear;
+            clear.action = () -> {
+                FakePlayerManager.clear();
+                reload();
+            };
 
             add(horizontalList);
 
