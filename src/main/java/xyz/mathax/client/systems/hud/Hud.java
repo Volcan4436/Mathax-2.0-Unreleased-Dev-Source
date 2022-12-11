@@ -239,10 +239,8 @@ public class Hud extends System<Hud> implements Iterable<HudElement> {
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-
         json.put("enabled", enabled);
         json.put("settings", settings.toJson());
-
         return json;
     }
 

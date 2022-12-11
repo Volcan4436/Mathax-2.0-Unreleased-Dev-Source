@@ -53,8 +53,8 @@ public class Accounts extends System<Accounts> implements Iterable<Account<?>> {
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-
         json.put("accounts", new JSONArray());
+
         accounts.forEach(account -> json.append("accounts", account.toJson()));
 
         return json;

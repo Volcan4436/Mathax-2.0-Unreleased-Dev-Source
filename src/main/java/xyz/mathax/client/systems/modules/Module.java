@@ -175,14 +175,12 @@ public abstract class Module implements ISerializable<Module>, Comparable<Module
         }
 
         JSONObject json = new JSONObject();
-
         json.put("enabled", enabled);
         json.put("chat-feedback", chatFeedback);
         json.put("toasts", toasts);
         json.put("favorite", favorite);
         json.put("keybind", keybind.toJson());
         json.put("settings", settings.toJson());
-
         return json;
     }
 

@@ -193,10 +193,8 @@ public class Modules extends System<Modules> {
 
         // Client
         Category client = Categories.Client;
-        add(new CapesModule(client));
         add(new DiscordRPC(client));
         add(new GUIBackground(client));
-        add(new IRC(client));
         add(new MiddleClickFriend(client));
     }
 

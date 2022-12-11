@@ -62,8 +62,8 @@ public class Enemy implements ISerializable<Enemy>, Comparable<Enemy> {
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-
         json.put("name", name);
+
         if (uuid != null) {
             json.put("uuid", UUIDTypeAdapter.fromUUID(uuid));
         }

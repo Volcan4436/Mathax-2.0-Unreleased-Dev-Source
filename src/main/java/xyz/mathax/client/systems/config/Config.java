@@ -5,6 +5,7 @@ import xyz.mathax.client.settings.*;
 import xyz.mathax.client.systems.System;
 import xyz.mathax.client.systems.Systems;
 import xyz.mathax.client.utils.json.JSONUtils;
+import xyz.mathax.client.utils.network.Capes;
 import xyz.mathax.client.utils.player.TotemPopUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -19,10 +20,52 @@ public class Config extends System<Config> {
 
     public final Settings settings = new Settings();
 
+    private final SettingGroup networkSettings = settings.createGroup("Network");
     private final SettingGroup chatSettings = settings.createGroup("Chat");
     private final SettingGroup toastSettings = settings.createGroup("Toasts");
     private final SettingGroup moduleSettings = settings.createGroup("Modules");
     private final SettingGroup miscSettings = settings.createGroup("Misc");
+
+    // Network
+
+    public final Setting<Boolean> onlineSetting = networkSettings.add(new BoolSetting.Builder()
+            .name("Online")
+            .description("Connect to the MatHax API.")
+            .defaultValue(true)
+            .build()
+    );
+
+    public final Setting<Boolean> ircSetting = networkSettings.add(new BoolSetting.Builder()
+            .name("IRC")
+            .description("Connect to the MatHax IRC chat to communicate with other MatHax users in-game.")
+            .defaultValue(false)
+            .visible(onlineSetting::get)
+            .build()
+    );
+
+    public final Setting<Boolean> capesSetting = networkSettings.add(new BoolSetting.Builder()
+            .name("Capes")
+            .description("Render MatHax capes on people who own them.")
+            .defaultValue(true)
+            .onChanged(value -> {
+                if (value) {
+                    Capes.refresh();
+                } else {
+                    Capes.clear();
+                }
+            })
+            .build()
+    );
+
+    public final Setting<Integer> capesAutoReloadDelaySetting = networkSettings.add(new IntSetting.Builder()
+            .name("Cape auto reload delay")
+            .description("Delay between cape reloads in ticks. (-1 to disable)")
+            .defaultValue(12000)
+            .min(-1)
+            .sliderRange(6000, 36000)
+            .visible(capesSetting::get)
+            .build()
+    );
 
     // Chat
 
@@ -86,20 +129,6 @@ public class Config extends System<Config> {
 
     // Misc
 
-    public final Setting<TotemPopUtils.TotemPopMemoryDeletion> totemPopMemoryDeletionSetting = miscSettings.add(new EnumSetting.Builder<TotemPopUtils.TotemPopMemoryDeletion>()
-            .name("Totem pop memory deletion")
-            .description("How to delete player totem pop memory.")
-            .defaultValue(TotemPopUtils.TotemPopMemoryDeletion.Different_Server)
-            .build()
-    );
-
-    public final Setting<Boolean> onlineSetting = miscSettings.add(new BoolSetting.Builder()
-            .name("Online")
-            .description("Add your UUID to the MatHax API so other online users can see you're using MatHax.")
-            .defaultValue(true)
-            .build()
-    );
-
     public final Setting<Boolean> customWindowTitleAndIconSetting = miscSettings.add(new BoolSetting.Builder()
             .name("Custom window title and icon")
             .description("Change Minecraft window title and icon to " + MatHax.NAME + ".")
@@ -112,6 +141,13 @@ public class Config extends System<Config> {
             .name("Title screen credits and splashes")
             .description("Add " + MatHax.NAME + " credits and splashes to the Minecraft title screen.")
             .defaultValue(true)
+            .build()
+    );
+
+    public final Setting<TotemPopUtils.TotemPopMemoryDeletion> totemPopMemoryDeletionSetting = miscSettings.add(new EnumSetting.Builder<TotemPopUtils.TotemPopMemoryDeletion>()
+            .name("Totem pop memory deletion")
+            .description("How to delete player totem pop memory.")
+            .defaultValue(TotemPopUtils.TotemPopMemoryDeletion.Different_Server)
             .build()
     );
 
@@ -140,9 +176,9 @@ public class Config extends System<Config> {
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-
         json.put("settings", settings.toJson());
         json.put("dont-show-again-prompts", new JSONArray());
+
         dontShowAgainPrompts.forEach(dontShowAgainPrompt -> json.append("dont-show-again-prompts", dontShowAgainPrompt));
 
         return json;

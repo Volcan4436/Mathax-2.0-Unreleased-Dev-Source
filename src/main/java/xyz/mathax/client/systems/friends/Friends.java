@@ -131,9 +131,9 @@ public class Friends extends System<Friends> implements Iterable<Friend> {
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-
         json.put("settings", settings.toJson());
         json.put("friends", new JSONArray());
+
         friends.forEach(friend -> json.append("friends", friend.toJson()));
 
         return json;

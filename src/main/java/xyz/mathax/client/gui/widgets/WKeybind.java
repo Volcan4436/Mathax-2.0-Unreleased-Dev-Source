@@ -3,6 +3,7 @@ package xyz.mathax.client.gui.widgets;
 import xyz.mathax.client.gui.renderer.GuiRenderer;
 import xyz.mathax.client.gui.widgets.containers.WHorizontalList;
 import xyz.mathax.client.gui.widgets.pressable.WButton;
+import xyz.mathax.client.gui.widgets.pressable.WMinus;
 import xyz.mathax.client.systems.modules.Modules;
 import xyz.mathax.client.utils.input.KeyBind;
 
@@ -35,7 +36,7 @@ public class WKeybind extends WHorizontalList {
             }
         };
 
-        WButton reset = add(theme.button(GuiRenderer.RESET)).expandCellX().right().widget();
+        WMinus reset = add(theme.minus()).expandCellX().right().widget();
         reset.action = this::resetBind;
 
         refreshLabel();

@@ -228,8 +228,8 @@ public class Waypoints extends System<Waypoints> implements Iterable<Waypoint> {
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-
         json.put("waypoints", new JSONArray());
+
         waypoints.forEach((name, waypoint) -> {
             JSONObject waypointJson = new JSONObject();
             waypointJson.put("name", name);

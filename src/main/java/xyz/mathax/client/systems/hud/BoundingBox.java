@@ -153,12 +153,10 @@ public class BoundingBox implements ISerializable<BoundingBox> {
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-
         json.put("x", x.name());
         json.put("y", y.name());
-        json.put("xOffset", xOffset);
-        json.put("yOffset", yOffset);
-
+        json.put("x-offset", xOffset);
+        json.put("y-offset", yOffset);
         return json;
     }
 
@@ -166,8 +164,8 @@ public class BoundingBox implements ISerializable<BoundingBox> {
     public BoundingBox fromJson(JSONObject json) {
         x = Alignment.X.valueOf(json.getString("x"));
         y = Alignment.Y.valueOf(json.getString("y"));
-        xOffset = json.getDouble("xOffset");
-        yOffset = json.getDouble("yOffset");
+        xOffset = json.getDouble("x-offset");
+        yOffset = json.getDouble("y-offset");
 
         return this;
     }

@@ -190,9 +190,7 @@ public class Waypoint implements ISerializable<Waypoint> {
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-
         json.put("settings", settings.toJson());
-
         return json;
     }
 

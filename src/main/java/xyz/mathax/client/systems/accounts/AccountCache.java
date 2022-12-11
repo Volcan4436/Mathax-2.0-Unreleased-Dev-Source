@@ -24,10 +24,8 @@ public class AccountCache implements ISerializable<AccountCache> {
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-
         json.put("username", username);
         json.put("uuid", uuid);
-
         return json;
     }
 

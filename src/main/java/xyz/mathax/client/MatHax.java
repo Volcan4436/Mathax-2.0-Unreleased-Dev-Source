@@ -12,7 +12,6 @@ import xyz.mathax.client.events.mathax.MouseButtonEvent;
 import xyz.mathax.client.events.world.TickEvent;
 import xyz.mathax.client.init.PostInit;
 import xyz.mathax.client.init.PreInit;
-import xyz.mathax.client.systems.modules.client.CapesModule;
 import xyz.mathax.client.systems.modules.client.DiscordRPC;
 import xyz.mathax.client.systems.modules.render.Zoom;
 import xyz.mathax.client.systems.themes.Themes;

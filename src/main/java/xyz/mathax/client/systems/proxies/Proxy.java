@@ -168,9 +168,7 @@ public class Proxy implements ISerializable<Proxy> {
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-
         json.put("settings", settings.toJson());
-
         return json;
     }
 

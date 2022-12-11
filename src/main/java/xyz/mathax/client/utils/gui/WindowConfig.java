@@ -17,11 +17,9 @@ public class WindowConfig implements ISerializable<WindowConfig> {
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-
         json.put("expanded", expanded);
         json.put("x", x);
         json.put("y", y);
-
         return json;
     }
 

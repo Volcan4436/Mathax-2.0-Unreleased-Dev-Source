@@ -118,8 +118,8 @@ public class Settings implements ISerializable<Settings>, Iterable<SettingGroup>
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-
         json.put("groups", new JSONArray());
+
         groups.forEach(group -> json.append("groups", group.toJson()));
 
         return json;

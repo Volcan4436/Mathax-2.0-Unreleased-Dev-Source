@@ -81,16 +81,12 @@ public class SBlockData implements ICopyable<SBlockData>, ISerializable<SBlockDa
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-
         json.put("shape-mode", shapeMode.name());
         json.put("line-color", lineColor.toJson());
         json.put("side-color", sideColor.toJson());
-
         json.put("tracer", tracer);
         json.put("tracer-color", tracerColor.toJson());
-
         json.put("changed", changed);
-
         return json;
     }
 

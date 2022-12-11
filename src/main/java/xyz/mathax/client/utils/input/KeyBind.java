@@ -117,10 +117,8 @@ public class KeyBind implements ISerializable<KeyBind>, ICopyable<KeyBind> {
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-
         json.put("is-key", isKey);
         json.put("value", value);
-
         return json;
     }
 

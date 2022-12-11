@@ -49,9 +49,9 @@ public class SettingGroup implements ISerializable<SettingGroup>, Iterable<Setti
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-
         json.put("name", name);
         json.put("section-expanded", sectionExpanded);
+
         json.put("settings", new JSONArray());
         for (Setting<?> setting : this) {
             json.append("settings", setting.toJson());

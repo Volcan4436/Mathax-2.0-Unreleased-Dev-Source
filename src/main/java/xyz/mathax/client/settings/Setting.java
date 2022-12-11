@@ -120,8 +120,8 @@ public abstract class Setting<T> implements IGetter<T>, ISerializable<T> {
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-
         json.put("name", name);
+
         save(json);
 
         return json;

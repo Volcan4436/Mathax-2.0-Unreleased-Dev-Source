@@ -74,11 +74,9 @@ public abstract class HudElement implements ISerializable<HudElement> {
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-
         json.put("enabled", enabled);
         json.put("settings", settings.toJson());
         json.put("box", box.toJson());
-
         return json;
     }
 

@@ -4,6 +4,7 @@ import com.mojang.util.UUIDTypeAdapter;
 import xyz.mathax.client.MatHax;
 import xyz.mathax.client.eventbus.EventHandler;
 import xyz.mathax.client.events.world.TickEvent;
+import xyz.mathax.client.systems.config.Config;
 import xyz.mathax.client.utils.json.JSONUtils;
 import xyz.mathax.client.utils.misc.MatHaxIdentifier;
 import net.minecraft.client.texture.NativeImage;
@@ -26,8 +27,12 @@ public class Capes {
     private static final List<Cape> TO_RETRY = new ArrayList<>();
     private static final List<Cape> TO_REMOVE = new ArrayList<>();
 
+    private static int timer = 0;
+
     public static void refresh() {
         clear();
+
+        timer = 0;
 
         Executor.execute(() -> {
             String response = Http.get(MatHax.API_URL + "/capes/metadata.json").sendString();
@@ -202,5 +207,19 @@ public class Capes {
         public boolean isDownloaded() {
             return downloaded;
         }
+    }
+
+    @EventHandler
+    private void onTick(TickEvent.Pre event) {
+        if (!Config.get().capesSetting.get() || Config.get().capesAutoReloadDelaySetting.get() == -1) {
+            return;
+        }
+
+        if (timer >= Config.get().capesAutoReloadDelaySetting.get()) {
+            timer = 0;
+            Capes.refresh();
+        }
+
+        timer++;
     }
 }

@@ -599,9 +599,9 @@ public class Theme implements ISerializable<Theme> {
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-
         json.put("settings", settings.toJson());
         json.put("window-configs", new JSONArray());
+
         windowConfigs.forEach((id, config) -> {
             JSONObject windowConfigJson = new JSONObject();
             windowConfigJson.put("id", id);

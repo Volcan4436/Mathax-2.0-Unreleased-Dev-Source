@@ -59,11 +59,9 @@ public abstract class Account<T extends Account<?>> implements ISerializable<T> 
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-
         json.put("type", type.name());
         json.put("name", name);
         json.put("cache", cache.toJson());
-
         return json;
     }
 

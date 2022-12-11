@@ -131,9 +131,9 @@ public class Enemies extends System<Enemies> implements Iterable<Enemy> {
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-
         json.put("settings", settings.toJson());
         json.put("enemies", new JSONArray());
+
         enemies.forEach(enemy -> json.append("enemies", enemy.toJson()));
 
         return json;

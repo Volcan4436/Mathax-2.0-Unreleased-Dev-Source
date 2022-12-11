@@ -345,14 +345,12 @@ public class Color implements ICopyable<Color>, ISerializable<Color> {
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-
         JSONArray jsonArray = new JSONArray();
         jsonArray.put(r);
         jsonArray.put(g);
         jsonArray.put(b);
         jsonArray.put(a);
         json.put("value", jsonArray);
-
         return json;
     }
 
