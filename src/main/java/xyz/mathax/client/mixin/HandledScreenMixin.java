@@ -1,6 +1,7 @@
 package xyz.mathax.client.mixin;
 
 import xyz.mathax.client.systems.modules.Modules;
+import xyz.mathax.client.systems.modules.misc.InventoryTweaks;
 import xyz.mathax.client.systems.modules.render.BetterTooltips;
 import xyz.mathax.client.utils.Utils;
 import net.minecraft.client.gui.screen.Screen;
@@ -52,9 +53,9 @@ public abstract class HandledScreenMixin<T extends ScreenHandler> extends Screen
         super(title);
     }
 
-    /*@Inject(method = "mouseDragged", at = @At("TAIL"))
+    @Inject(method = "mouseDragged", at = @At("TAIL"))
     private void onMouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY, CallbackInfoReturnable<Boolean> infoReturnable) {
-        if (button != GLFW_MOUSE_BUTTON_LEFT || doubleClicking || !Modules.get().get(InventoryTweaks.class).mouseDragItemMove()) {
+        if (button != GLFW.GLFW_MOUSE_BUTTON_LEFT || doubleClicking || !Modules.get().get(InventoryTweaks.class).mouseDragItemMove()) {
             return;
         }
 
@@ -62,7 +63,7 @@ public abstract class HandledScreenMixin<T extends ScreenHandler> extends Screen
         if (slot != null && slot.hasStack() && hasShiftDown()) {
             onMouseClick(slot, slot.id, button, SlotActionType.QUICK_MOVE);
         }
-    }*/
+    }
 
     @Inject(method = "mouseClicked", at = @At("HEAD"), cancellable = true)
     private void mouseClicked(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> infoReturnable) {

@@ -17,10 +17,10 @@ import java.util.List;
 public class Settings implements ISerializable<Settings>, Iterable<SettingGroup> {
     public final List<SettingGroup> groups = new ArrayList<>(1);
 
-    public void onActivated() {
+    public void onEnabled() {
         for (SettingGroup group : groups) {
             for (Setting<?> setting : group) {
-                setting.onActivated();
+                setting.onEnabled();
             }
         }
     }

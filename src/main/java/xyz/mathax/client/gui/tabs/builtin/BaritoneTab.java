@@ -61,7 +61,7 @@ public class BaritoneTab extends Tab {
                         .description(getDescription(setting.getName()))
                         .defaultValue((boolean) setting.defaultValue)
                         .onChanged(aBoolean -> setting.value = aBoolean)
-                        .onModuleActivated(booleanSetting -> booleanSetting.set((Boolean) setting.value))
+                        .onModuleEnabled(booleanSetting -> booleanSetting.set((Boolean) setting.value))
                         .build()
                     );
                 } else if (value instanceof Double) {
@@ -70,7 +70,7 @@ public class BaritoneTab extends Tab {
                         .description(getDescription(setting.getName()))
                         .defaultValue((double) setting.defaultValue)
                         .onChanged(aDouble -> setting.value = aDouble)
-                        .onModuleActivated(doubleSetting -> doubleSetting.set((Double) setting.value))
+                        .onModuleEnabled(doubleSetting -> doubleSetting.set((Double) setting.value))
                         .build()
                     );
                 } else if (value instanceof Float) {
@@ -79,7 +79,7 @@ public class BaritoneTab extends Tab {
                         .description(getDescription(setting.getName()))
                         .defaultValue(((Float) setting.defaultValue).doubleValue())
                         .onChanged(aDouble -> setting.value = aDouble.floatValue())
-                        .onModuleActivated(doubleSetting -> doubleSetting.set(((Float) setting.value).doubleValue()))
+                        .onModuleEnabled(doubleSetting -> doubleSetting.set(((Float) setting.value).doubleValue()))
                         .build()
                     );
                 } else if (value instanceof Integer) {
@@ -88,7 +88,7 @@ public class BaritoneTab extends Tab {
                         .description(getDescription(setting.getName()))
                         .defaultValue((int) setting.defaultValue)
                         .onChanged(integer -> setting.value = integer)
-                        .onModuleActivated(integerSetting -> integerSetting.set((Integer) setting.value))
+                        .onModuleEnabled(integerSetting -> integerSetting.set((Integer) setting.value))
                         .build()
                     );
                 } else if (value instanceof Long) {
@@ -97,7 +97,7 @@ public class BaritoneTab extends Tab {
                         .description(getDescription(setting.getName()))
                         .defaultValue(((Long) setting.defaultValue).intValue())
                         .onChanged(integer -> setting.value = integer.longValue())
-                        .onModuleActivated(integerSetting -> integerSetting.set(((Long) setting.value).intValue()))
+                        .onModuleEnabled(integerSetting -> integerSetting.set(((Long) setting.value).intValue()))
                         .build()
                     );
                 } else if (value instanceof String) {
@@ -106,7 +106,7 @@ public class BaritoneTab extends Tab {
                             .description(getDescription(setting.getName()))
                             .defaultValue((String) setting.defaultValue)
                             .onChanged(string -> setting.value = string)
-                            .onModuleActivated(stringSetting -> stringSetting.set((String) setting.value))
+                            .onModuleEnabled(stringSetting -> stringSetting.set((String) setting.value))
                             .build()
                     );
                 } else if (value instanceof Color) {
@@ -116,7 +116,7 @@ public class BaritoneTab extends Tab {
                         .description(getDescription(setting.getName()))
                         .defaultValue(new SettingColor(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()))
                         .onChanged(colorValue -> setting.value = new Color(colorValue.r, colorValue.g, colorValue.b, colorValue.a))
-                        .onModuleActivated(colorSetting -> colorSetting.set(new SettingColor(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha())))
+                        .onModuleEnabled(colorSetting -> colorSetting.set(new SettingColor(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha())))
                         .build()
                     );
                 } else if (value instanceof List) {
@@ -128,7 +128,7 @@ public class BaritoneTab extends Tab {
                                 .description(getDescription(setting.getName()))
                                 .defaultValue((List<Block>) setting.defaultValue)
                                 .onChanged(blockList -> setting.value = blockList)
-                                .onModuleActivated(blockListSetting -> blockListSetting.set((List<Block>) setting.value))
+                                .onModuleEnabled(blockListSetting -> blockListSetting.set((List<Block>) setting.value))
                                 .build()
                         );
                     } else if (type == Item.class) {
@@ -137,7 +137,7 @@ public class BaritoneTab extends Tab {
                                 .description(getDescription(setting.getName()))
                                 .defaultValue((List<Item>) setting.defaultValue)
                                 .onChanged(itemList -> setting.value = itemList)
-                                .onModuleActivated(itemListSetting -> itemListSetting.set((List<Item>) setting.value))
+                                .onModuleEnabled(itemListSetting -> itemListSetting.set((List<Item>) setting.value))
                                 .build()
                         );
                     }
@@ -184,7 +184,7 @@ public class BaritoneTab extends Tab {
         public BaritoneScreen(Theme theme, Tab tab) {
             super(theme, tab);
 
-            getSettings().onActivated();
+            getSettings().onEnabled();
         }
 
         @Override

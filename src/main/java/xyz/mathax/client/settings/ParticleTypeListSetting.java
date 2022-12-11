@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class ParticleTypeListSetting extends Setting<List<ParticleType<?>>> {
-    public ParticleTypeListSetting(String name, String description, List<ParticleType<?>> defaultValue, Consumer<List<ParticleType<?>>> onChanged, Consumer<Setting<List<ParticleType<?>>>> onModuleActivated, IVisible visible) {
-        super(name, description, defaultValue, onChanged, onModuleActivated, visible);
+    public ParticleTypeListSetting(String name, String description, List<ParticleType<?>> defaultValue, Consumer<List<ParticleType<?>>> onChanged, Consumer<Setting<List<ParticleType<?>>>> onModuleEnabled, IVisible visible) {
+        super(name, description, defaultValue, onChanged, onModuleEnabled, visible);
     }
 
     @Override
@@ -93,7 +93,7 @@ public class ParticleTypeListSetting extends Setting<List<ParticleType<?>>> {
 
         @Override
         public ParticleTypeListSetting build() {
-            return new ParticleTypeListSetting(name, description, defaultValue, onChanged, onModuleActivated, visible);
+            return new ParticleTypeListSetting(name, description, defaultValue, onChanged, onModuleEnabled, visible);
         }
     }
 }

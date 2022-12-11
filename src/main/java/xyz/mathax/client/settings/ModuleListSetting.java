@@ -14,8 +14,8 @@ import java.util.function.Consumer;
 public class ModuleListSetting extends Setting<List<Module>> {
     private static List<String> suggestions;
 
-    public ModuleListSetting(String name, String description, List<Module> defaultValue, Consumer<List<Module>> onChanged, Consumer<Setting<List<Module>>> onModuleActivated, IVisible visible) {
-        super(name, description, defaultValue, onChanged, onModuleActivated, visible);
+    public ModuleListSetting(String name, String description, List<Module> defaultValue, Consumer<List<Module>> onChanged, Consumer<Setting<List<Module>>> onModuleEnabled, IVisible visible) {
+        super(name, description, defaultValue, onChanged, onModuleEnabled, visible);
     }
 
     @Override
@@ -105,7 +105,7 @@ public class ModuleListSetting extends Setting<List<Module>> {
 
         @Override
         public ModuleListSetting build() {
-            return new ModuleListSetting(name, description, defaultValue, onChanged, onModuleActivated, visible);
+            return new ModuleListSetting(name, description, defaultValue, onChanged, onModuleEnabled, visible);
         }
     }
 }

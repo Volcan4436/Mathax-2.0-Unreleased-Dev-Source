@@ -18,8 +18,8 @@ import java.util.function.Consumer;
 public class EntityTypeListSetting extends Setting<Object2BooleanMap<EntityType<?>>> {
     public final boolean onlyAttackable;
 
-    public EntityTypeListSetting(String name, String description, Object2BooleanMap<EntityType<?>> defaultValue, Consumer<Object2BooleanMap<EntityType<?>>> onChanged, Consumer<Setting<Object2BooleanMap<EntityType<?>>>> onModuleActivated, IVisible visible, boolean onlyAttackable) {
-        super(name, description, defaultValue, onChanged, onModuleActivated, visible);
+    public EntityTypeListSetting(String name, String description, Object2BooleanMap<EntityType<?>> defaultValue, Consumer<Object2BooleanMap<EntityType<?>>> onChanged, Consumer<Setting<Object2BooleanMap<EntityType<?>>>> onModuleEnabled, IVisible visible, boolean onlyAttackable) {
+        super(name, description, defaultValue, onChanged, onModuleEnabled, visible);
 
         this.onlyAttackable = onlyAttackable;
     }
@@ -104,7 +104,7 @@ public class EntityTypeListSetting extends Setting<Object2BooleanMap<EntityType<
 
         @Override
         public EntityTypeListSetting build() {
-            return new EntityTypeListSetting(name, description, defaultValue, onChanged, onModuleActivated, visible, onlyAttackable);
+            return new EntityTypeListSetting(name, description, defaultValue, onChanged, onModuleEnabled, visible, onlyAttackable);
         }
     }
 }

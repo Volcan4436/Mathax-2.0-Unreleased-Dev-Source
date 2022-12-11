@@ -1,10 +1,17 @@
 package xyz.mathax.client.mixin;
 
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import xyz.mathax.client.systems.modules.Modules;
+import xyz.mathax.client.systems.modules.misc.InventoryTweaks;
 
 @Mixin(targets = "net/minecraft/screen/PlayerScreenHandler$1")
 public class PlayerArmorSlotMixin {
-    /*@Inject(method = "getMaxItemCount", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getMaxItemCount", at = @At("HEAD"), cancellable = true)
     private void onGetMaxItemCount(CallbackInfoReturnable<Integer> infoReturnable) {
         if (Modules.get().get(InventoryTweaks.class).armorStorage()) {
             infoReturnable.setReturnValue(64);
@@ -23,5 +30,5 @@ public class PlayerArmorSlotMixin {
         if (Modules.get().get(InventoryTweaks.class).armorStorage()) {
             infoReturnable.setReturnValue(true);
         }
-    }*/
+    }
 }

@@ -20,8 +20,8 @@ import java.util.function.Consumer;
 public class BlockDataSetting<T extends ICopyable<T> & ISerializable<T> & IChangeable & IBlockData<T>> extends Setting<Map<Block, T>> {
     public final IGetter<T> defaultData;
 
-    public BlockDataSetting(String name, String description, Map<Block, T> defaultValue, Consumer<Map<Block, T>> onChanged, Consumer<Setting<Map<Block, T>>> onModuleActivated, IGetter<T> defaultData, IVisible visible) {
-        super(name, description, defaultValue, onChanged, onModuleActivated, visible);
+    public BlockDataSetting(String name, String description, Map<Block, T> defaultValue, Consumer<Map<Block, T>> onChanged, Consumer<Setting<Map<Block, T>>> onModuleEnabled, IGetter<T> defaultData, IVisible visible) {
+        super(name, description, defaultValue, onChanged, onModuleEnabled, visible);
 
         this.defaultData = defaultData;
     }
@@ -86,7 +86,7 @@ public class BlockDataSetting<T extends ICopyable<T> & ISerializable<T> & IChang
 
         @Override
         public BlockDataSetting<T> build() {
-            return new BlockDataSetting<>(name, description, defaultValue, onChanged, onModuleActivated, defaultData, visible);
+            return new BlockDataSetting<>(name, description, defaultValue, onChanged, onModuleEnabled, defaultData, visible);
         }
     }
 }

@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class EnchantmentListSetting extends Setting<List<Enchantment>> {
-    public EnchantmentListSetting(String name, String description, List<Enchantment> defaultValue, Consumer<List<Enchantment>> onChanged, Consumer<Setting<List<Enchantment>>> onModuleActivated, IVisible visible) {
-        super(name, description, defaultValue, onChanged, onModuleActivated, visible);
+    public EnchantmentListSetting(String name, String description, List<Enchantment> defaultValue, Consumer<List<Enchantment>> onChanged, Consumer<Setting<List<Enchantment>>> onModuleEnabled, IVisible visible) {
+        super(name, description, defaultValue, onChanged, onModuleEnabled, visible);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class EnchantmentListSetting extends Setting<List<Enchantment>> {
 
         @Override
         public EnchantmentListSetting build() {
-            return new EnchantmentListSetting(name, description, defaultValue, onChanged, onModuleActivated, visible);
+            return new EnchantmentListSetting(name, description, defaultValue, onChanged, onModuleEnabled, visible);
         }
     }
 }

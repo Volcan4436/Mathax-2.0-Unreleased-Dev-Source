@@ -22,8 +22,8 @@ public class StringListSetting extends Setting<List<String>> {
 
     public final CharFilter filter;
 
-    public StringListSetting(String name, String description, List<String> defaultValue, Consumer<List<String>> onChanged, Consumer<Setting<List<String>>> onModuleActivated, IVisible visible, Class<? extends WTextBox.Renderer> renderer, CharFilter filter) {
-        super(name, description, defaultValue, onChanged, onModuleActivated, visible);
+    public StringListSetting(String name, String description, List<String> defaultValue, Consumer<List<String>> onChanged, Consumer<Setting<List<String>>> onModuleEnabled, IVisible visible, Class<? extends WTextBox.Renderer> renderer, CharFilter filter) {
+        super(name, description, defaultValue, onChanged, onModuleEnabled, visible);
 
         this.renderer = renderer;
         this.filter = filter;
@@ -138,7 +138,7 @@ public class StringListSetting extends Setting<List<String>> {
 
         @Override
         public StringListSetting build() {
-            return new StringListSetting(name, description, defaultValue, onChanged, onModuleActivated, visible, renderer, filter);
+            return new StringListSetting(name, description, defaultValue, onChanged, onModuleEnabled, visible, renderer, filter);
         }
     }
 }

@@ -9,8 +9,8 @@ import java.util.function.Supplier;
 public class ProvidedStringSetting extends StringSetting {
     public final Supplier<String[]> supplier;
 
-    public ProvidedStringSetting(String name, String description, String defaultValue, Consumer<String> onChanged, Consumer<Setting<String>> onModuleActivated, IVisible visible, Class<? extends WTextBox.Renderer> renderer, boolean wide, Supplier<String[]> supplier) {
-        super(name, description, defaultValue, onChanged, onModuleActivated, visible, renderer, null, wide);
+    public ProvidedStringSetting(String name, String description, String defaultValue, Consumer<String> onChanged, Consumer<Setting<String>> onModuleEnabled, IVisible visible, Class<? extends WTextBox.Renderer> renderer, boolean wide, Supplier<String[]> supplier) {
+        super(name, description, defaultValue, onChanged, onModuleEnabled, visible, renderer, null, wide);
 
         this.supplier = supplier;
     }
@@ -42,7 +42,7 @@ public class ProvidedStringSetting extends StringSetting {
 
         @Override
         public ProvidedStringSetting build() {
-            return new ProvidedStringSetting(name, description, defaultValue, onChanged, onModuleActivated, visible, renderer, wide, supplier);
+            return new ProvidedStringSetting(name, description, defaultValue, onChanged, onModuleEnabled, visible, renderer, wide, supplier);
         }
     }
 }

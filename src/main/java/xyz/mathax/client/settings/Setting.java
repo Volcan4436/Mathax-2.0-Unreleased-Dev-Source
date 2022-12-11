@@ -23,19 +23,19 @@ public abstract class Setting<T> implements IGetter<T>, ISerializable<T> {
     protected final T defaultValue;
     protected T value;
 
-    public final Consumer<Setting<T>> onModuleActivated;
+    public final Consumer<Setting<T>> onModuleEnabled;
     private final Consumer<T> onChanged;
 
     public Module module;
     public boolean lastWasVisible;
 
-    public Setting(String name, String description, T defaultValue, Consumer<T> onChanged, Consumer<Setting<T>> onModuleActivated, IVisible visible) {
+    public Setting(String name, String description, T defaultValue, Consumer<T> onChanged, Consumer<Setting<T>> onModuleEnabled, IVisible visible) {
         this.name = name;
         this.command = Utils.nameToCommand(name);
         this.description = description;
         this.defaultValue = defaultValue;
         this.onChanged = onChanged;
-        this.onModuleActivated = onModuleActivated;
+        this.onModuleEnabled = onModuleEnabled;
         this.visible = visible;
 
         resetImpl();
@@ -93,9 +93,9 @@ public abstract class Setting<T> implements IGetter<T>, ISerializable<T> {
         }
     }
 
-    public void onActivated() {
-        if (onModuleActivated != null) {
-            onModuleActivated.accept(this);
+    public void onEnabled() {
+        if (onModuleEnabled != null) {
+            onModuleEnabled.accept(this);
         }
     }
 
@@ -183,7 +183,7 @@ public abstract class Setting<T> implements IGetter<T>, ISerializable<T> {
         protected V defaultValue;
         protected IVisible visible;
         protected Consumer<V> onChanged;
-        protected Consumer<Setting<V>> onModuleActivated;
+        protected Consumer<Setting<V>> onModuleEnabled;
 
         protected SettingBuilder(V defaultValue) {
             this.defaultValue = defaultValue;
@@ -214,8 +214,8 @@ public abstract class Setting<T> implements IGetter<T>, ISerializable<T> {
             return (B) this;
         }
 
-        public B onModuleActivated(Consumer<Setting<V>> onModuleActivated) {
-            this.onModuleActivated = onModuleActivated;
+        public B onModuleEnabled(Consumer<Setting<V>> onModuleEnabled) {
+            this.onModuleEnabled = onModuleEnabled;
             return (B) this;
         }
 

@@ -35,7 +35,7 @@ public class Chams extends Module {
             .name("Shader")
             .description("Render a shader over of the entities.")
             .defaultValue(Shader.Image)
-            .onModuleActivated(setting -> updateShader(setting.get()))
+            .onModuleEnabled(setting -> updateShader(setting.get()))
             .onChanged(this::updateShader)
             .build()
     );

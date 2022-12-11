@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import xyz.mathax.client.utils.Utils;
 
 @Mixin(TotemParticle.class)
 public abstract class TotemParticleMixin extends AnimatedParticle {
@@ -27,8 +28,7 @@ public abstract class TotemParticleMixin extends AnimatedParticle {
 
         Vec3d firstColor = confetti.getFirstColor();
         Vec3d secondColor = confetti.getSecondColor();
-
-        if (random.nextInt(4) == 0) {
+        if (Utils.random(0, 4) == 0) {
             this.setColor((float) firstColor.x, (float) firstColor.y, (float) firstColor.z);
         } else {
             this.setColor((float) secondColor.x, (float) secondColor.y, (float) secondColor.z);

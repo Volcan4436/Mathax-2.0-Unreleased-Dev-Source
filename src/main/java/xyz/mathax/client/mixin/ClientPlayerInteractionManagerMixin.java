@@ -1,9 +1,12 @@
 package xyz.mathax.client.mixin;
 
+import net.minecraft.screen.PlayerScreenHandler;
+import net.minecraft.screen.ScreenHandler;
 import xyz.mathax.client.MatHax;
 import xyz.mathax.client.events.entity.DropItemsEvent;
 import xyz.mathax.client.mixininterface.IClientPlayerInteractionManager;
 import xyz.mathax.client.systems.modules.Modules;
+import xyz.mathax.client.systems.modules.misc.InventoryTweaks;
 import xyz.mathax.client.systems.modules.player.Reach;
 import xyz.mathax.client.utils.player.Rotations;
 import xyz.mathax.client.utils.world.BlockUtils;
@@ -52,7 +55,7 @@ public abstract class ClientPlayerInteractionManagerMixin implements IClientPlay
         }
     }
 
-    /*@Inject(method = "clickSlot", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "clickSlot", at = @At("HEAD"), cancellable = true)
     public void onClickArmorSlot(int syncId, int slotId, int button, SlotActionType actionType, PlayerEntity player, CallbackInfo info) {
         if (!Modules.get().get(InventoryTweaks.class).armorStorage()) {
             return;
@@ -63,17 +66,17 @@ public abstract class ClientPlayerInteractionManagerMixin implements IClientPlay
             if (slotId >= 5 && slotId <= 8) {
                 int armorSlot = (8 - slotId) + 36;
                 if (actionType == SlotActionType.PICKUP && !screenHandler.getCursorStack().isEmpty()) {
-                    clickSlot(syncId, 17, armorSlot, SlotActionType.SWAP, player); // armor slot <-> inv slot
-                    clickSlot(syncId, 17, button, SlotActionType.PICKUP, player); // inv slot <-> cursor slot
-                    clickSlot(syncId, 17, armorSlot, SlotActionType.SWAP, player); // armor slot <-> inv slot
+                    clickSlot(syncId, 17, armorSlot, SlotActionType.SWAP, player);
+                    clickSlot(syncId, 17, button, SlotActionType.PICKUP, player);
+                    clickSlot(syncId, 17, armorSlot, SlotActionType.SWAP, player);
                     info.cancel();
                 } else if (actionType == SlotActionType.SWAP) {
-                    clickSlot(syncId, 36 + button, armorSlot, SlotActionType.SWAP, player); // invert swap
+                    clickSlot(syncId, 36 + button, armorSlot, SlotActionType.SWAP, player);
                     info.cancel();
                 }
             }
         }
-    }*/
+    }
 
     @Inject(method = "attackBlock", at = @At("HEAD"), cancellable = true)
     private void onAttackBlock(BlockPos blockPos, Direction direction, CallbackInfoReturnable<Boolean> infoReturnable) {

@@ -32,7 +32,7 @@ public class ConfigTab extends Tab {
             super(theme, tab);
 
             settings = Config.get().settings;
-            settings.onActivated();
+            settings.onEnabled();
 
             onClosed(() -> {
                 String prefix = Config.get().prefixSetting.get();

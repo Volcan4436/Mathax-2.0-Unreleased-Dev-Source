@@ -18,8 +18,8 @@ public class KeyBindSetting extends Setting<KeyBind> {
 
     public WKeybind widget;
 
-    public KeyBindSetting(String name, String description, KeyBind defaultValue, Consumer<KeyBind> onChanged, Consumer<Setting<KeyBind>> onModuleActivated, IVisible visible, Runnable action) {
-        super(name, description, defaultValue, onChanged, onModuleActivated, visible);
+    public KeyBindSetting(String name, String description, KeyBind defaultValue, Consumer<KeyBind> onChanged, Consumer<Setting<KeyBind>> onModuleEnabled, IVisible visible, Runnable action) {
+        super(name, description, defaultValue, onChanged, onModuleEnabled, visible);
 
         this.action = action;
 
@@ -109,7 +109,7 @@ public class KeyBindSetting extends Setting<KeyBind> {
 
         @Override
         public KeyBindSetting build() {
-            return new KeyBindSetting(name, description, defaultValue, onChanged, onModuleActivated, visible, action);
+            return new KeyBindSetting(name, description, defaultValue, onChanged, onModuleEnabled, visible, action);
         }
     }
 }

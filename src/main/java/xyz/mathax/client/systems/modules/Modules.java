@@ -25,6 +25,7 @@ import xyz.mathax.client.systems.modules.client.MiddleClickFriend;
 import xyz.mathax.client.systems.modules.combat.*;
 import xyz.mathax.client.systems.modules.movement.*;
 import xyz.mathax.client.systems.modules.player.*;
+import xyz.mathax.client.systems.modules.render.search.Search;
 import xyz.mathax.client.systems.modules.world.Timer;
 import xyz.mathax.client.utils.Utils;
 import xyz.mathax.client.utils.input.KeyBind;
@@ -121,6 +122,7 @@ public class Modules extends System<Modules> {
         add(new Nametags(render));
         add(new NoRender(render));
         add(new PopChams(render));
+        add(new Search(render));
         add(new StorageESP(render));
         add(new Tracers(render));
         add(new Trail(render));
@@ -182,6 +184,7 @@ public class Modules extends System<Modules> {
         add(new AutoReconnect(misc));
         add(new BetterBeacons(misc));
         add(new BetterTab(misc));
+        add(new InventoryTweaks(misc));
         add(new MountBypass(misc));
         add(new NameProtect(misc));
         add(new Notebot(misc));

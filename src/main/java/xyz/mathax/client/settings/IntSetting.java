@@ -10,8 +10,8 @@ public class IntSetting extends Setting<Integer> {
     public final int sliderMin, sliderMax;
     public final boolean noSlider;
 
-    private IntSetting(String name, String description, int defaultValue, Consumer<Integer> onChanged, Consumer<Setting<Integer>> onModuleActivated, IVisible visible, int min, int max, int sliderMin, int sliderMax, boolean noSlider) {
-        super(name, description, defaultValue, onChanged, onModuleActivated, visible);
+    private IntSetting(String name, String description, int defaultValue, Consumer<Integer> onChanged, Consumer<Setting<Integer>> onModuleEnabled, IVisible visible, int min, int max, int sliderMin, int sliderMax, boolean noSlider) {
+        super(name, description, defaultValue, onChanged, onModuleEnabled, visible);
 
         this.min = min;
         this.max = max;
@@ -97,7 +97,7 @@ public class IntSetting extends Setting<Integer> {
 
         @Override
         public IntSetting build() {
-            return new IntSetting(name, description, defaultValue, onChanged, onModuleActivated, visible, min, max, sliderMin, sliderMax, noSlider);
+            return new IntSetting(name, description, defaultValue, onChanged, onModuleEnabled, visible, min, max, sliderMin, sliderMax, noSlider);
         }
     }
 }

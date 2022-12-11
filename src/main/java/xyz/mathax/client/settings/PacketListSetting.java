@@ -19,8 +19,8 @@ public class PacketListSetting extends Setting<Set<Class<? extends Packet<?>>>> 
 
     private static List<String> suggestions;
 
-    public PacketListSetting(String name, String description, Set<Class<? extends Packet<?>>> defaultValue, Consumer<Set<Class<? extends Packet<?>>>> onChanged, Consumer<Setting<Set<Class<? extends Packet<?>>>>> onModuleActivated, Predicate<Class<? extends Packet<?>>> filter, IVisible visible) {
-        super(name, description, defaultValue, onChanged, onModuleActivated, visible);
+    public PacketListSetting(String name, String description, Set<Class<? extends Packet<?>>> defaultValue, Consumer<Set<Class<? extends Packet<?>>>> onChanged, Consumer<Setting<Set<Class<? extends Packet<?>>>>> onModuleEnabled, Predicate<Class<? extends Packet<?>>> filter, IVisible visible) {
+        super(name, description, defaultValue, onChanged, onModuleEnabled, visible);
 
         this.filter = filter;
     }
@@ -111,7 +111,7 @@ public class PacketListSetting extends Setting<Set<Class<? extends Packet<?>>>> 
 
         @Override
         public PacketListSetting build() {
-            return new PacketListSetting(name, description, defaultValue, onChanged, onModuleActivated, filter, visible);
+            return new PacketListSetting(name, description, defaultValue, onChanged, onModuleEnabled, filter, visible);
         }
     }
 }

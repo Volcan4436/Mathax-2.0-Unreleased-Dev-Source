@@ -14,8 +14,8 @@ import org.json.JSONObject;
 import java.util.function.Consumer;
 
 public class StatusEffectAmplifierMapSetting extends Setting<Object2IntMap<StatusEffect>> {
-    public StatusEffectAmplifierMapSetting(String name, String description, Object2IntMap<StatusEffect> defaultValue, Consumer<Object2IntMap<StatusEffect>> onChanged, Consumer<Setting<Object2IntMap<StatusEffect>>> onModuleActivated, IVisible visible) {
-        super(name, description, defaultValue, onChanged, onModuleActivated, visible);
+    public StatusEffectAmplifierMapSetting(String name, String description, Object2IntMap<StatusEffect> defaultValue, Consumer<Object2IntMap<StatusEffect>> onChanged, Consumer<Setting<Object2IntMap<StatusEffect>>> onModuleEnabled, IVisible visible) {
+        super(name, description, defaultValue, onChanged, onModuleEnabled, visible);
     }
 
     @Override
@@ -90,7 +90,7 @@ public class StatusEffectAmplifierMapSetting extends Setting<Object2IntMap<Statu
 
         @Override
         public StatusEffectAmplifierMapSetting build() {
-            return new StatusEffectAmplifierMapSetting(name, description, defaultValue, onChanged, onModuleActivated, visible);
+            return new StatusEffectAmplifierMapSetting(name, description, defaultValue, onChanged, onModuleEnabled, visible);
         }
     }
 }
