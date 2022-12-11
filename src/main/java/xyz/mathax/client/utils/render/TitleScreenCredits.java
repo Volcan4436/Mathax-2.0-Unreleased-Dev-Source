@@ -23,30 +23,6 @@ public class TitleScreenCredits {
             add(addon);
         }
 
-        MatHaxAddon matHaxAddon = new MatHaxAddon() {
-            @Override
-            public void onInitialize() {}
-
-            @Override
-            public String getPackage() {
-                return "xdd";
-            }
-
-            @Override
-            public String getWebsite() {
-                return "xdddd";
-            }
-        };
-
-        matHaxAddon.name = "Sex Addon";
-        matHaxAddon.version = new Version("4.2.0");
-        matHaxAddon.authors = new String[] {
-                "69420"
-        };
-        matHaxAddon.color.parse("255,0,0");
-
-        add(matHaxAddon);
-
         credits.sort(Comparator.comparingInt(value -> value.sections.get(0).text.equals("MatHax ") ? Integer.MIN_VALUE : -value.width));
     }
 
