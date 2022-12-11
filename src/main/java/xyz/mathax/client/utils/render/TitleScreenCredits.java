@@ -31,11 +31,11 @@ public class TitleScreenCredits {
 
         credit.sections.add(new Section(addon.name, addon.color));
         credit.sections.add(new Section(" " + Versions.getStylized(addon.version), Color.WHITE));
-        credit.sections.add(new Section(" by ", Color.GRAY));
+        credit.sections.add(new Section(" by ", Color.LIGHT_GRAY));
 
         for (int i = 0; i < addon.authors.length; i++) {
             if (i > 0) {
-                credit.sections.add(new Section(i == addon.authors.length - 1 ? " & " : ", ", Color.GRAY));
+                credit.sections.add(new Section(i == addon.authors.length - 1 ? " & " : ", ", Color.LIGHT_GRAY));
             }
 
             credit.sections.add(new Section(addon.authors[i], Color.WHITE));

@@ -136,7 +136,7 @@ public class VeinMiner extends Module {
     );
 
     public VeinMiner(Category category) {
-        super(category, "Vein miner", "Mines all nearby blocks with this type");
+        super(category, "Vein Miner", "Mines all nearby blocks with this type");
     }
 
     @Override

@@ -74,7 +74,7 @@ public class Search extends Module {
     );
 
     public Search(Category category) {
-        super(category, "search", "Searches for specified blocks.");
+        super(category, "Search", "Searches for specified blocks.");
 
         RainbowColors.register(this::onTickRainbow);
     }
