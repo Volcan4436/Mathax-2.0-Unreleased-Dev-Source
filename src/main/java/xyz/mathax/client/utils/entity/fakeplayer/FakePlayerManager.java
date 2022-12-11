@@ -26,6 +26,12 @@ public class FakePlayerManager {
             return;
         }
 
+        for (FakePlayerEntity fakePlayerEntity : ENTITIES) {
+            if (name.equals(fakePlayerEntity.getEntityName())) {
+                return;
+            }
+        }
+
         FakePlayerEntity fakePlayer = new FakePlayerEntity(MatHax.mc.player, name, health, copyInv);
         fakePlayer.spawn();
 
@@ -34,7 +40,7 @@ public class FakePlayerManager {
 
     public static void remove(FakePlayerEntity fakePlayer) {
         ENTITIES.removeIf(fakePlayer1 -> {
-            if (fakePlayer.getEntityName().equals(fakePlayer.getEntityName())) {
+            if (fakePlayer1.getEntityName().equals(fakePlayer.getEntityName())) {
                 fakePlayer.despawn();
                 return true;
             }
@@ -49,6 +55,7 @@ public class FakePlayerManager {
         }
 
         ENTITIES.forEach(FakePlayerEntity::despawn);
+
         ENTITIES.clear();
     }
 
@@ -56,6 +63,10 @@ public class FakePlayerManager {
         for (FakePlayerEntity fakePlayer : ENTITIES) {
             action.accept(fakePlayer);
         }
+    }
+
+    public static boolean empty() {
+        return ENTITIES.size() == 0;
     }
 
     public static int count() {

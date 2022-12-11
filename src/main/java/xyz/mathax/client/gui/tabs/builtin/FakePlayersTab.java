@@ -43,6 +43,7 @@ package xyz.mathax.client.gui.tabs.builtin;
 
 
 import net.minecraft.client.gui.screen.Screen;
+import xyz.mathax.client.MatHax;
 import xyz.mathax.client.gui.tabs.Tab;
 import xyz.mathax.client.gui.tabs.TabScreen;
 import xyz.mathax.client.gui.tabs.WindowTabScreen;
@@ -96,9 +97,8 @@ public class FakePlayersTab extends Tab {
 
             WButton spawn = horizontalList.add(theme.button("Spawn")).widget();
             spawn.action = () -> {
-                if (mc.world != null && mc.player != null) {
-                    FakePlayerManager.add(FakePlayerSettings.nameSetting.get(), FakePlayerSettings.healthSetting.get(), FakePlayerSettings.copyInventorySetting.get());
-                }
+                FakePlayerManager.add(FakePlayerSettings.nameSetting.get(), FakePlayerSettings.healthSetting.get(), FakePlayerSettings.copyInventorySetting.get());
+                reload();
             };
 
             WButton clear = horizontalList.add(theme.button("Clear")).widget();
@@ -113,7 +113,7 @@ public class FakePlayersTab extends Tab {
         private void initTable(WTable table) {
             table.clear();
 
-            if (FakePlayerManager.count() < 1) {
+            if (FakePlayerManager.empty()) {
                 return;
             }
 

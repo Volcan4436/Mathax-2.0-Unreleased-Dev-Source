@@ -1,5 +1,6 @@
 package xyz.mathax.client.utils.entity.fakeplayer;
 
+import com.mojang.authlib.GameProfile;
 import net.minecraft.client.network.OtherClientPlayerEntity;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,7 +15,7 @@ public class FakePlayerEntity extends OtherClientPlayerEntity {
     private @Nullable PlayerHeadTexture headTexture;
 
     public FakePlayerEntity(PlayerEntity player, String name, float health, boolean copyInv) {
-        super(MatHax.mc.world, player.getGameProfile());
+        super(MatHax.mc.world, new GameProfile(player.getUuid(), name));
 
         copyPositionAndRotation(player);
 
