@@ -88,8 +88,8 @@ public class MacrosTab extends Tab {
             }
 
             if (isNew) {
-                for (Macro m : Macros.get()) {
-                    if (value.equals(m)) {
+                for (Macro macro : Macros.get()) {
+                    if (value.equals(macro)) {
                         return false;
                     }
                 }

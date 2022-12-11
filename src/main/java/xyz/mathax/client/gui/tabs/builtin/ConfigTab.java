@@ -36,7 +36,6 @@ public class ConfigTab extends Tab {
 
             onClosed(() -> {
                 String prefix = Config.get().prefixSetting.get();
-
                 if (prefix.isBlank()) {
                     YesNoPrompt.create(theme, this.parent)
                         .title("Empty command prefix")
@@ -46,8 +45,7 @@ public class ConfigTab extends Tab {
                         .onYes(() -> Config.get().prefixSetting.set("."))
                         .id("empty-command-prefix")
                         .show();
-                }
-                else if (prefix.equals("/")) {
+                } else if (prefix.equals("/")) {
                     YesNoPrompt.create(theme, this.parent)
                         .title("Potential prefix conflict")
                         .message("You have set your command prefix to '/', which is used by minecraft.")
@@ -56,8 +54,7 @@ public class ConfigTab extends Tab {
                         .onYes(() -> Config.get().prefixSetting.set("."))
                         .id("minecraft-prefix-conflict")
                         .show();
-                }
-                else if (prefix.length() > 7) {
+                } else if (prefix.length() > 7) {
                     YesNoPrompt.create(theme, this.parent)
                         .title("Long command prefix")
                         .message("You have set your command prefix to a very long string.")

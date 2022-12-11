@@ -7,6 +7,8 @@ import xyz.mathax.client.renderer.ShapeMode;
 import xyz.mathax.client.settings.*;
 import xyz.mathax.client.systems.modules.Category;
 import xyz.mathax.client.systems.modules.Module;
+import xyz.mathax.client.systems.modules.Modules;
+import xyz.mathax.client.systems.modules.player.AutoEat;
 import xyz.mathax.client.systems.modules.player.AutoTool;
 import xyz.mathax.client.utils.misc.HorizontalDirection;
 import xyz.mathax.client.utils.misc.MBlockPos;
@@ -277,11 +279,11 @@ public class HighwayBuilder extends Module {
             return;
         }
 
-        /*if (Modules.get().get(AutoEat.class).eating) {
+        if (Modules.get().get(AutoEat.class).eating) {
             return;
         }
 
-        if (Modules.get().get(AutoGap.class).isEating()) {
+        /*if (Modules.get().get(AutoGap.class).isEating()) {
             return;
         }*/
 

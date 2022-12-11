@@ -18,10 +18,7 @@ import xyz.mathax.client.settings.SettingGroup;
 import xyz.mathax.client.systems.System;
 import xyz.mathax.client.systems.Systems;
 import xyz.mathax.client.systems.modules.chat.Spam;
-import xyz.mathax.client.systems.modules.client.CapesModule;
-import xyz.mathax.client.systems.modules.client.DiscordRPC;
-import xyz.mathax.client.systems.modules.client.FakePlayer;
-import xyz.mathax.client.systems.modules.client.MiddleClickFriend;
+import xyz.mathax.client.systems.modules.client.*;
 import xyz.mathax.client.systems.modules.combat.*;
 import xyz.mathax.client.systems.modules.movement.*;
 import xyz.mathax.client.systems.modules.player.*;
@@ -198,7 +195,8 @@ public class Modules extends System<Modules> {
         Category client = Categories.Client;
         add(new CapesModule(client));
         add(new DiscordRPC(client));
-        add(new FakePlayer(client));
+        add(new GUIBackground(client));
+        add(new IRC(client));
         add(new MiddleClickFriend(client));
     }
 

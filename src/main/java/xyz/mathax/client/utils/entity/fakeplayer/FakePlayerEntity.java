@@ -5,9 +5,13 @@ import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.entity.player.PlayerEntity;
 import org.jetbrains.annotations.Nullable;
 import xyz.mathax.client.MatHax;
+import xyz.mathax.client.utils.render.PlayerHeadTexture;
+import xyz.mathax.client.utils.render.PlayerHeadUtils;
 
 public class FakePlayerEntity extends OtherClientPlayerEntity {
     public boolean doNotPush, hideWhenInsideCamera;
+
+    private @Nullable PlayerHeadTexture headTexture;
 
     public FakePlayerEntity(PlayerEntity player, String name, float health, boolean copyInv) {
         super(MatHax.mc.world, player.getGameProfile());
@@ -41,6 +45,12 @@ public class FakePlayerEntity extends OtherClientPlayerEntity {
         if (copyInv) {
             getInventory().clone(player.getInventory());
         }
+
+        this.headTexture = PlayerHeadUtils.fetchHead(uuid);
+    }
+
+    public PlayerHeadTexture getHead() {
+        return headTexture != null ? headTexture : PlayerHeadUtils.STEVE_HEAD;
     }
 
     public void spawn() {

@@ -19,6 +19,7 @@ public class Tabs {
         add(new EnemiesTab());
         add(new MacrosTab());
         add(new ProfilesTab());
+        add(new FakePlayersTab());
         add(new BaritoneTab());
     }
 
