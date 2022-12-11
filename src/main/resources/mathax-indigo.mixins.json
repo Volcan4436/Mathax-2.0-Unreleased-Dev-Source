@@ -1,8 +1,8 @@
 {
   "required": false,
-  "package": "mathax.client.mixin.indigo",
+  "package": "xyz.mathax.client.mixin.indigo",
   "compatibilityLevel": "JAVA_17",
-  "plugin": "mathax.client.MixinPlugin",
+  "plugin": "xyz.mathax.client.MixinPlugin",
   "client": [
     "AbstractQuadRendererMixin",
     "TerrainRenderContextMixin"

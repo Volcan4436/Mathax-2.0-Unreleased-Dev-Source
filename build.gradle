@@ -111,11 +111,7 @@ shadowJar {
 
 processResources {
     filesMatching("fabric.mod.json") {
-        expand "version": project.version
-
-        filter {
-            line -> line.replace("@mc_version@", project.minecraft_version)
-        }
+        expand "version": project.version, "minecraft_version": "${project.minecraft_version}"
     }
 }
 
@@ -123,7 +119,7 @@ jar {
     from "LICENSE"
 
     manifest {
-        attributes("Main-Class": project.maven_group + ".Main")
+        attributes("Main-Class": project.maven_group + ".main.Main")
     }
 }
 

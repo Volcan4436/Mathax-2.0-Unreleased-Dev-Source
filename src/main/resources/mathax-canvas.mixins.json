@@ -1,8 +1,8 @@
 {
   "required": false,
-  "package": "mathax.client.mixin.canvas",
+  "package": "xyz.mathax.client.mixin.canvas",
   "compatibilityLevel": "JAVA_17",
-  "plugin": "mathax.client.MixinPlugin",
+  "plugin": "xyz.mathax.client.MixinPlugin",
   "client": [
 
   ],

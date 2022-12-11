@@ -15,10 +15,18 @@
     "discord": "https://mathaxclient.xyz/Discord",
     "issues": "https://github.com/MatHax/Client/issues"
   },
+  "custom": {
+    "mathax:color": "230,75,100",
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://meteorclient.com/discord"
+      }
+    }
+  },
   "environment": "client",
   "entrypoints": {
     "client": [
-      "mathax.client.MatHax"
+      "xyz.mathax.client.MatHax"
     ]
   },
   "mixins": [
@@ -31,7 +39,7 @@
   "accessWidener": "mathax.accesswidener",
   "depends": {
     "java": ">=17",
-    "minecraft": ">=@mc_version@",
+    "minecraft": ">=${minecraft_version}",
     "fabricloader": ">=0.14.11"
   },
   "breaks": {

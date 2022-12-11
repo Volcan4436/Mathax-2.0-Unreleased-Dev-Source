@@ -1,8 +1,8 @@
 {
   "required": true,
-  "package": "mathax.client.mixin.baritone",
+  "package": "xyz.mathax.client.mixin.baritone",
   "compatibilityLevel": "JAVA_17",
-  "plugin": "mathax.client.MixinPlugin",
+  "plugin": "xyz.mathax.client.MixinPlugin",
   "client": [
     "ComeCommandMixin"
   ],
