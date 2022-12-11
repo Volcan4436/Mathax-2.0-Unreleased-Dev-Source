@@ -36,7 +36,7 @@ public class HudTab extends Tab {
             super(theme, tab);
 
             hud = Hud.get();
-            hud.settings.onActivated();
+            hud.settings.onEnabled();
         }
 
         @Override

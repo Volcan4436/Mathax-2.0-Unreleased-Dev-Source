@@ -25,7 +25,7 @@ public class GuiTab extends Tab {
         public GuiScreen(Theme theme, Tab tab) {
             super(theme, tab);
 
-            theme.settings.onActivated();
+            theme.settings.onEnabled();
         }
 
         @Override
