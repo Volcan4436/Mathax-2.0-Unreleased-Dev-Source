@@ -1,19 +1,5 @@
-package xyz.mathax.client.systems.modules.client;
+package xyz.mathax.client.utils.network;
 
-import xyz.mathax.client.eventbus.EventHandler;
-import xyz.mathax.client.events.world.TickEvent;
-import xyz.mathax.client.gui.WidgetScreen;
-import xyz.mathax.client.settings.BoolSetting;
-import xyz.mathax.client.settings.IntSetting;
-import xyz.mathax.client.settings.Setting;
-import xyz.mathax.client.settings.SettingGroup;
-import xyz.mathax.client.systems.modules.Category;
-import xyz.mathax.client.systems.modules.Module;
-import xyz.mathax.client.systems.modules.Modules;
-import xyz.mathax.client.systems.modules.misc.NameProtect;
-import xyz.mathax.client.utils.Utils;
-import xyz.mathax.client.utils.network.versions.Versions;
-import xyz.mathax.client.utils.player.PlayerUtils;
 import meteordevelopment.discordipc.DiscordIPC;
 import meteordevelopment.discordipc.RichPresence;
 import net.minecraft.client.gui.screen.*;
@@ -26,68 +12,41 @@ import net.minecraft.client.gui.screen.world.EditWorldScreen;
 import net.minecraft.client.gui.screen.world.SelectWorldScreen;
 import net.minecraft.client.realms.gui.screen.RealmsScreen;
 import net.minecraft.util.Pair;
+import xyz.mathax.client.MatHax;
+import xyz.mathax.client.eventbus.EventHandler;
+import xyz.mathax.client.events.world.TickEvent;
+import xyz.mathax.client.gui.WidgetScreen;
+import xyz.mathax.client.init.PreInit;
+import xyz.mathax.client.systems.config.Config;
+import xyz.mathax.client.systems.modules.Modules;
+import xyz.mathax.client.systems.modules.misc.NameProtect;
+import xyz.mathax.client.utils.Utils;
+import xyz.mathax.client.utils.network.versions.Versions;
+import xyz.mathax.client.utils.player.PlayerUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DiscordRPC extends Module {
+import static xyz.mathax.client.MatHax.mc;
+
+public class DiscordRPC {
     public static final List<Pair<String, String>> customStates = new ArrayList<>();
 
     private static final RichPresence rpc = new RichPresence();
 
-    private int ticks;
+    private static int ticks;
 
-    private final SettingGroup generalSettings = settings.createGroup("General");
-    private final SettingGroup detailSettings = settings.createGroup("Details");
-    private final SettingGroup stateSettings = settings.createGroup("State");
-
-    // General
-
-    private final Setting<Integer> updateDelaySetting = generalSettings.add(new IntSetting.Builder()
-            .name("Update delay")
-            .description("How fast to update the status in ticks.")
-            .defaultValue(100)
-            .min(10)
-            .sliderRange(10, 200)
-            .build()
-    );
-
-    // Details
-
-    public final Setting<Boolean> nameSetting = detailSettings.add(new BoolSetting.Builder()
-            .name("Name")
-            .description("Show your name in the status.")
-            .defaultValue(true)
-            .build()
-    );
-
-    public final Setting<Boolean> healthSetting = detailSettings.add(new BoolSetting.Builder()
-            .name("Health")
-            .description("Show your health in the status.")
-            .defaultValue(true)
-            .build()
-    );
-
-    // State
-
-    public final Setting<Boolean> worldNameSetting = stateSettings.add(new BoolSetting.Builder()
-            .name("World name")
-            .description("Show current world name or server IP address.")
-            .defaultValue(true)
-            .build()
-    );
-
-    public DiscordRPC(Category category) {
-        super(category, "Discord RPC", "Shows MatHax as your Discord status.", true);
+    @PreInit
+    public static void init() {
+        MatHax.EVENT_BUS.subscribe(DiscordRPC.class);
 
         registerCustomState("com.terraformersmc.modmenu.gui", "Browsing mods");
         registerCustomState("me.jellysquid.mods.sodium.client", "Changing options");
         registerCustomState("de.maxhenkel.voicechat.gui", "Changing voice chat options");
     }
 
-    @Override
-    public void onEnable() {
-        DiscordIPC.start(878967665501306920L, null);
+    public static void initRPC() {
+        DiscordIPC.start(MatHax.DISCORD_RPC_ID, null);
 
         rpc.setStart(System.currentTimeMillis() / 1000L);
 
@@ -97,13 +56,19 @@ public class DiscordRPC extends Module {
     }
 
     @EventHandler
-    private void onTick(TickEvent.Post event) {
-        update();
+    private static void onTick(TickEvent.Post event) {
+        if (Config.get().discordRPCSetting.get()) {
+            if (!DiscordIPC.isConnected()) {
+                initRPC();
+            } else {
+                update();
+            }
+        }
     }
 
-    private void update() {
-        if (ticks >= updateDelaySetting.get()) {
-            rpc.setDetails(getVersions() + (nameSetting.get() ? " | " + getUsername() : "") + (healthSetting.get() && mc.world != null && mc.player != null ? " | " + getHealth() : ""));
+    private static void update() {
+        if (ticks >= Config.get().discordRPCUpdateDelaySetting.get()) {
+            rpc.setDetails(getVersions() + (Config.get().discordRPCNameSetting.get() ? " | " + getUsername() : "") + (Config.get().discordRPCHealthSetting.get() && mc.world != null && mc.player != null ? " | " + getHealth() : ""));
             rpc.setLargeImage("mathax", "MatHax " + getVersions());
             rpc.setState(getState());
 
@@ -115,15 +80,15 @@ public class DiscordRPC extends Module {
         }
     }
 
-    private String getVersions() {
+    private static String getVersions() {
         return Versions.getStylized() + " - " + Versions.getMinecraft();
     }
 
-    private String getUsername() {
+    private static String getUsername() {
         return Modules.get().get(NameProtect.class).getName();
     }
 
-    private String getHealth() {
+    private static String getHealth() {
         String text = "";
         if (mc.world != null && mc.player != null) {
             if (mc.player.isDead()) {
@@ -140,10 +105,10 @@ public class DiscordRPC extends Module {
         return text;
     }
 
-    private String getState() {
+    private static String getState() {
         String state = null;
         if (mc.world != null && mc.player != null) {
-            state = "Playing" + (worldNameSetting.get() ? " on " + Utils.getWorldName() : "") + " (" + (mc.isInSingleplayer() ? "Singleplayer" : "Multiplayer") + ")";
+            state = "Playing" + (Config.get().discordRPCWorldNameSetting.get() ? " on " + Utils.getWorldName() : "") + " (" + (mc.isInSingleplayer() ? "Singleplayer" : "Multiplayer") + ")";
         } else if (mc.getOverlay() instanceof SplashOverlay && mc.world == null && mc.player == null) {
             state = "Loading...";
         } else if (mc.currentScreen instanceof TitleScreen) {
@@ -189,8 +154,7 @@ public class DiscordRPC extends Module {
         return state;
     }
 
-    @Override
-    public void onDisable() {
+    public static void disableRPC() {
         rpc.setState("Shutting down...");
 
         DiscordIPC.setActivity(rpc);

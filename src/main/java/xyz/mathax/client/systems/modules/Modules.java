@@ -18,7 +18,6 @@ import xyz.mathax.client.settings.SettingGroup;
 import xyz.mathax.client.systems.System;
 import xyz.mathax.client.systems.Systems;
 import xyz.mathax.client.systems.modules.chat.Spam;
-import xyz.mathax.client.systems.modules.client.*;
 import xyz.mathax.client.systems.modules.combat.*;
 import xyz.mathax.client.systems.modules.movement.*;
 import xyz.mathax.client.systems.modules.player.*;
@@ -183,28 +182,22 @@ public class Modules extends System<Modules> {
         add(new AutoReconnect(misc));
         add(new BetterBeacons(misc));
         add(new BetterTab(misc));
+        add(new GUIBackground(misc));
         add(new InventoryTweaks(misc));
+        add(new MiddleClickFriend(misc));
         add(new MountBypass(misc));
         add(new NameProtect(misc));
         add(new Notebot(misc));
         add(new PingSpoof(misc));
         add(new PortalChat(misc));
         add(new VanillaSpoof(misc));
-
-        // Client
-        Category client = Categories.Client;
-        add(new DiscordRPC(client));
-        add(new GUIBackground(client));
-        add(new MiddleClickFriend(client));
     }
 
     public void add(Module module) {
-        // Check if the module's category is registered
         if (!CATEGORIES.contains(module.category)) {
             throw new RuntimeException("Modules.addModule - Module's category was not registered.");
         }
 
-        // Remove the previous module with the same name
         AtomicReference<Module> removedModule = new AtomicReference<>();
         if (moduleInstances.values().removeIf(module1 -> {
             if (module1.name.equals(module.name)) {
@@ -219,12 +212,10 @@ public class Modules extends System<Modules> {
             getGroup(removedModule.get().category).remove(removedModule.get());
         }
 
-        // Add the module
         moduleInstances.put(module.getClass(), module);
         modules.add(module);
         getGroup(module.category).add(module);
 
-        // Register color settings for the module
         module.settings.registerColorSettings(module);
     }
 

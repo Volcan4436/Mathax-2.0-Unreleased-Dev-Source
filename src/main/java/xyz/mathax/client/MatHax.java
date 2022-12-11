@@ -12,7 +12,6 @@ import xyz.mathax.client.events.mathax.MouseButtonEvent;
 import xyz.mathax.client.events.world.TickEvent;
 import xyz.mathax.client.init.PostInit;
 import xyz.mathax.client.init.PreInit;
-import xyz.mathax.client.systems.modules.client.DiscordRPC;
 import xyz.mathax.client.systems.modules.render.Zoom;
 import xyz.mathax.client.systems.themes.Themes;
 import xyz.mathax.client.gui.WidgetScreen;
@@ -26,6 +25,7 @@ import xyz.mathax.client.utils.Utils;
 import xyz.mathax.client.utils.input.KeyAction;
 import xyz.mathax.client.utils.input.KeyBinds;
 import xyz.mathax.client.utils.misc.MatHaxIdentifier;
+import xyz.mathax.client.utils.network.DiscordRPC;
 import xyz.mathax.client.utils.network.OnlinePlayers;
 import xyz.mathax.client.utils.network.versions.Versions;
 import xyz.mathax.client.utils.window.Icon;
@@ -52,6 +52,8 @@ public class MatHax implements ClientModInitializer {
     public static final String NAME = "MatHax";
     public static final String ID = NAME.toLowerCase(Locale.ROOT);
     public static final ModMetadata META = FabricLoader.getInstance().getModContainer(ID).get().getMetadata();
+
+    public static final long DISCORD_RPC_ID = 878967665501306920L;
 
     public static final String URL = "https://" + ID + "client.xyz/";
     public static final String API_URL = URL + "api/";
@@ -134,14 +136,9 @@ public class MatHax implements ClientModInitializer {
             VERSION_FOLDER.mkdir();
 
             Systems.addPreLoadTask(() -> {
-                Modules.get().get(CapesModule.class).forceToggle(true);
-
                 Modules.get().get(Zoom.class).keybind.set(true, GLFW.GLFW_KEY_C);
                 Modules.get().get(Zoom.class).toggleOnBindRelease = true;
                 Modules.get().get(Zoom.class).chatFeedback = false;
-
-                Modules.get().get(DiscordRPC.class).forceToggle(true);
-                //TODO: Pre-enable modules.
             });
         }
 
@@ -187,6 +184,7 @@ public class MatHax implements ClientModInitializer {
 
         // Shutdown hook
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            DiscordRPC.disableRPC();
             OnlinePlayers.leave();
             Systems.save();
         }));

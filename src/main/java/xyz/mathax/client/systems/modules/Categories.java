@@ -11,7 +11,6 @@ public class Categories {
     public static final Category World = new Category("World", Items.GRASS_BLOCK, new Color(0, 150, 0, 255));
     public static final Category Chat = new Category("Chat", Items.OAK_SIGN, new Color(255, 255, 255, 255));
     public static final Category Misc = new Category("Misc", Items.BEACON, new Color(0, 50, 175, 255));
-    public static final Category Client = new Category("Client", Items.COMMAND_BLOCK, Color.MATHAX);
 
     public static boolean REGISTERING;
 
@@ -25,7 +24,6 @@ public class Categories {
         Modules.registerCategory(World);
         Modules.registerCategory(Chat);
         Modules.registerCategory(Misc);
-        Modules.registerCategory(Client);
 
         REGISTERING = false;
     }

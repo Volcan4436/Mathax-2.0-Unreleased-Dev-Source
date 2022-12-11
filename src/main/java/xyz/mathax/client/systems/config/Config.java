@@ -1,17 +1,20 @@
 package xyz.mathax.client.systems.config;
 
 import xyz.mathax.client.MatHax;
+import xyz.mathax.client.eventbus.EventHandler;
 import xyz.mathax.client.settings.*;
 import xyz.mathax.client.systems.System;
 import xyz.mathax.client.systems.Systems;
 import xyz.mathax.client.utils.json.JSONUtils;
 import xyz.mathax.client.utils.network.Capes;
+import xyz.mathax.client.utils.network.DiscordRPC;
 import xyz.mathax.client.utils.player.TotemPopUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static xyz.mathax.client.MatHax.mc;
 
@@ -21,6 +24,7 @@ public class Config extends System<Config> {
     public final Settings settings = new Settings();
 
     private final SettingGroup networkSettings = settings.createGroup("Network");
+    private final SettingGroup discordRPCSettings = settings.createGroup("Discord RPC");
     private final SettingGroup chatSettings = settings.createGroup("Chat");
     private final SettingGroup toastSettings = settings.createGroup("Toasts");
     private final SettingGroup moduleSettings = settings.createGroup("Modules");
@@ -30,14 +34,14 @@ public class Config extends System<Config> {
 
     public final Setting<Boolean> onlineSetting = networkSettings.add(new BoolSetting.Builder()
             .name("Online")
-            .description("Connect to the MatHax API.")
+            .description("Connect to the API.")
             .defaultValue(true)
             .build()
     );
 
     public final Setting<Boolean> ircSetting = networkSettings.add(new BoolSetting.Builder()
             .name("IRC")
-            .description("Connect to the MatHax IRC chat to communicate with other MatHax users in-game.")
+            .description("Connect to the IRC chat to communicate with other users in-game.")
             .defaultValue(false)
             .visible(onlineSetting::get)
             .build()
@@ -45,7 +49,7 @@ public class Config extends System<Config> {
 
     public final Setting<Boolean> capesSetting = networkSettings.add(new BoolSetting.Builder()
             .name("Capes")
-            .description("Render MatHax capes on people who own them.")
+            .description("Render capes on people who own them.")
             .defaultValue(true)
             .onChanged(value -> {
                 if (value) {
@@ -64,6 +68,52 @@ public class Config extends System<Config> {
             .min(-1)
             .sliderRange(6000, 36000)
             .visible(capesSetting::get)
+            .build()
+    );
+
+    // Discord RPC
+
+    public final Setting<Boolean> discordRPCSetting = discordRPCSettings.add(new BoolSetting.Builder()
+            .name("Enabled")
+            .description("Shows MatHax as your Discord status.")
+            .defaultValue(true)
+            .onChanged(value -> {
+                if (value) {
+                    DiscordRPC.initRPC();
+                } else {
+                    DiscordRPC.disableRPC();
+                }
+            })
+            .build()
+    );
+
+    public final Setting<Integer> discordRPCUpdateDelaySetting = discordRPCSettings.add(new IntSetting.Builder()
+            .name("Update delay")
+            .description("How fast to update the status in ticks.")
+            .defaultValue(100)
+            .min(10)
+            .sliderRange(10, 200)
+            .build()
+    );
+
+    public final Setting<Boolean> discordRPCNameSetting = discordRPCSettings.add(new BoolSetting.Builder()
+            .name("Name")
+            .description("Show your name in the status.")
+            .defaultValue(true)
+            .build()
+    );
+
+    public final Setting<Boolean> discordRPCHealthSetting = discordRPCSettings.add(new BoolSetting.Builder()
+            .name("Health")
+            .description("Show your health in the status.")
+            .defaultValue(true)
+            .build()
+    );
+
+    public final Setting<Boolean> discordRPCWorldNameSetting = discordRPCSettings.add(new BoolSetting.Builder()
+            .name("World name")
+            .description("Show current world name or server IP address.")
+            .defaultValue(true)
             .build()
     );
 

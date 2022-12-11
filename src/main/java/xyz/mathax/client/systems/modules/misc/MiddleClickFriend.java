@@ -1,4 +1,4 @@
-package xyz.mathax.client.systems.modules.client;
+package xyz.mathax.client.systems.modules.misc;
 
 import xyz.mathax.client.eventbus.EventHandler;
 import xyz.mathax.client.events.mathax.MouseButtonEvent;
