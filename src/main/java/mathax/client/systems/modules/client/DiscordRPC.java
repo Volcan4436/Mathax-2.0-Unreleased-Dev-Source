@@ -45,7 +45,7 @@ public class DiscordRPC extends Module {
 
     private final Setting<Integer> updateDelaySetting = generalSettings.add(new IntSetting.Builder()
             .name("Update delay")
-            .description("How fast to update the first line in ticks.")
+            .description("How fast to update the status in ticks.")
             .defaultValue(100)
             .min(10)
             .sliderRange(10, 200)
