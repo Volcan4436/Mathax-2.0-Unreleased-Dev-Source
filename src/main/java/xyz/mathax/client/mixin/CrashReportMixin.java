@@ -20,7 +20,7 @@ public class CrashReportMixin {
     private void onAddStackTrace(StringBuilder stringBuilder, CallbackInfo info) {
         if (Modules.get() != null) {
             String title = "---| MatHax " + Versions.getStylized() + " |---";
-            stringBuilder.append("\n\n<").append(title).append("\n");
+            stringBuilder.append("\n\n<").append(title).append(">\n");
 
             boolean modulesActive = false;
             for (Category category : Modules.loopCategories()) {
