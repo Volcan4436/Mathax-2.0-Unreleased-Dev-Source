@@ -3,8 +3,8 @@ package mathax.client.settings;
 import mathax.client.utils.json.JSONUtils;
 import mathax.client.utils.settings.IVisible;
 import net.minecraft.item.Item;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -33,7 +33,7 @@ public class ItemListSetting extends Setting<List<Item>> {
 
         try {
             for (String value : values) {
-                Item item = parseId(Registry.ITEM, value);
+                Item item = parseId(Registries.ITEM, value);
                 if (item != null && (filter == null || filter.test(item))) {
                     items.add(item);
                 }
@@ -55,7 +55,7 @@ public class ItemListSetting extends Setting<List<Item>> {
 
     @Override
     public Iterable<Identifier> getIdentifierSuggestions() {
-        return Registry.ITEM.getIds();
+        return Registries.ITEM.getIds();
     }
 
     @Override
@@ -63,7 +63,7 @@ public class ItemListSetting extends Setting<List<Item>> {
         json.put("value", new JSONArray());
         for (Item item : get()) {
             if (bypassFilterWhenSavingAndLoading || (filter == null || filter.test(item))) {
-                json.append("value", Registry.ITEM.getId(item).toString());
+                json.append("value", Registries.ITEM.getId(item).toString());
             }
         }
 
@@ -77,7 +77,7 @@ public class ItemListSetting extends Setting<List<Item>> {
         if (json.has("value") && JSONUtils.isValidJSONArray(json, "value")) {
             for (Object object : json.getJSONArray("value")) {
                 if (object instanceof String id) {
-                    Item item = Registry.ITEM.get(new Identifier(id));
+                    Item item = Registries.ITEM.get(new Identifier(id));
                     if (bypassFilterWhenSavingAndLoading || (filter == null || filter.test(item))) {
                         get().add(item);
                     }

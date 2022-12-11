@@ -15,7 +15,6 @@ import mathax.client.utils.Utils;
 import mathax.client.utils.files.StreamUtils;
 import mathax.client.utils.json.JSONUtils;
 import mathax.client.utils.misc.MatHaxIdentifier;
-import mathax.client.utils.misc.Vec3;
 import mathax.client.utils.player.PlayerUtils;
 import mathax.client.utils.render.NametagUtils;
 import mathax.client.utils.render.color.Color;
@@ -24,6 +23,7 @@ import net.minecraft.client.texture.AbstractTexture;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.util.math.BlockPos;
+import org.joml.Vector3d;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -145,7 +145,7 @@ public class Waypoints extends System<Waypoints> implements Iterable<Waypoint> {
         }
 
         TextRenderer text = TextRenderer.get();
-        Vec3 center = new Vec3(mc.getWindow().getFramebufferWidth() / 2.0, mc.getWindow().getFramebufferHeight() / 2.0, 0);
+        Vector3d center = new Vector3d(mc.getWindow().getFramebufferWidth() / 2.0, mc.getWindow().getFramebufferHeight() / 2.0, 0);
         int textRenderDistance = module.textRenderDistanceSetting.get();
 
         for (Waypoint waypoint : this) {
@@ -154,7 +154,7 @@ public class Waypoints extends System<Waypoints> implements Iterable<Waypoint> {
             }
 
             BlockPos blockPos = waypoint.getPos();
-            Vec3 pos = new Vec3(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5);
+            Vector3d pos = new Vector3d(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5);
             double dist = PlayerUtils.distanceToCamera(pos.x, pos.y, pos.z);
             if (dist > waypoint.maxVisibleSetting.get()) {
                 continue;
@@ -164,7 +164,7 @@ public class Waypoints extends System<Waypoints> implements Iterable<Waypoint> {
                 continue;
             }
 
-            double distToCenter = pos.distanceTo(center);
+            double distToCenter = pos.distance(center);
             double a = 1;
             if (dist < 20) {
                 a = (dist - 10) / 10;
@@ -179,7 +179,6 @@ public class Waypoints extends System<Waypoints> implements Iterable<Waypoint> {
             waypoint.renderIcon(-16, -16, a, 32);
 
             if (distToCenter <= textRenderDistance) {
-                // Setup text rendering
                 int preTextA = TEXT.a;
                 TEXT.a *= a;
                 text.begin();

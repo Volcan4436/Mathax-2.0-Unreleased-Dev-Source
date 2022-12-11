@@ -9,7 +9,7 @@ import mathax.client.systems.modules.Module;
 import mathax.client.utils.player.Rotations;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.RotationAxis;
 
 public class HandView extends Module {
     private final SettingGroup generalSettings = settings.createGroup("General");
@@ -323,15 +323,15 @@ public class HandView extends Module {
         }
 
         if (event.hand == Hand.MAIN_HAND) {
-            event.matrixStack.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(rotationXMainSetting.get().floatValue()));
-            event.matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(rotationYMainSetting.get().floatValue()));
-            event.matrixStack.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(rotationZMainSetting.get().floatValue()));
+            event.matrixStack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(rotationXMainSetting.get().floatValue()));
+            event.matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(rotationYMainSetting.get().floatValue()));
+            event.matrixStack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(rotationZMainSetting.get().floatValue()));
             event.matrixStack.scale(scaleXMainSetting.get().floatValue(), scaleYMainSetting.get().floatValue(), scaleZMainSetting.get().floatValue());
             event.matrixStack.translate(posXMainSetting.get().floatValue(), posYMainSetting.get().floatValue(), posZMainSetting.get().floatValue());
         } else {
-            event.matrixStack.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(rotationXOffSetting.get().floatValue()));
-            event.matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(rotationYOffSetting.get().floatValue()));
-            event.matrixStack.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(rotationZOffSetting.get().floatValue()));
+            event.matrixStack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(rotationXOffSetting.get().floatValue()));
+            event.matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(rotationYOffSetting.get().floatValue()));
+            event.matrixStack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(rotationZOffSetting.get().floatValue()));
             event.matrixStack.scale(scaleXOffSetting.get().floatValue(), scaleYOffSetting.get().floatValue(), scaleZOffSetting.get().floatValue());
             event.matrixStack.translate(posXOffSetting.get().floatValue(), posYOffSetting.get().floatValue(), posZOffSetting.get().floatValue());
         }
@@ -347,16 +347,16 @@ public class HandView extends Module {
             return;
         }
 
-        event.matrixStack.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(rotationXArmSetting.get().floatValue()));
-        event.matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(rotationYArmSetting.get().floatValue()));
-        event.matrixStack.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(rotationZArmSetting.get().floatValue()));
+        event.matrixStack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(rotationXArmSetting.get().floatValue()));
+        event.matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(rotationYArmSetting.get().floatValue()));
+        event.matrixStack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(rotationZArmSetting.get().floatValue()));
         event.matrixStack.scale(scaleXArmSetting.get().floatValue(), scaleYArmSetting.get().floatValue(), scaleZArmSetting.get().floatValue());
         event.matrixStack.translate(posXArmSetting.get().floatValue(), posYArmSetting.get().floatValue(), posZArmSetting.get().floatValue());
     }
 
     private void applyServerRotations(MatrixStack matrixStack) {
-        matrixStack.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(mc.player.getPitch() - Rotations.serverPitch));
-        matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(mc.player.getYaw() - Rotations.serverYaw));
+        matrixStack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(mc.player.getPitch() - Rotations.serverPitch));
+        matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(mc.player.getYaw() - Rotations.serverYaw));
     }
 
     public enum SwingMode {

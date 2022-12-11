@@ -4,6 +4,7 @@ import mathax.client.gui.renderer.OverlayRenderer;
 import mathax.client.systems.Systems;
 import mathax.client.systems.proxies.Proxies;
 import mathax.client.systems.proxies.Proxy;
+import mathax.client.systems.themes.Theme;
 import mathax.client.systems.themes.Themes;
 import mathax.client.utils.network.LastServerInfo;
 import mathax.client.utils.render.color.Color;
@@ -28,18 +29,14 @@ public class MultiplayerScreenMixin extends Screen {
 
     @Inject(method = "init", at = @At("TAIL"))
     private void onInit(CallbackInfo info) {
-        addDrawableChild(new ButtonWidget(this.width - 75 - 3, 3, 75, 20, Text.literal("Accounts"), button -> {
-            client.setScreen(Systems.get(Themes.class).getTheme().accountsScreen());
-        }));
+        Theme theme = Systems.get(Themes.class).getTheme();
 
-        addDrawableChild(new ButtonWidget(this.width - 75 - 3 - 75 - 2, 3, 75, 20, Text.literal("Proxies"), button -> {
-            client.setScreen(Systems.get(Themes.class).getTheme().proxiesScreen());
-        }));
+        addDrawableChild(new ButtonWidget.Builder(Text.literal("Accounts"), button -> client.setScreen(theme.accountsScreen())).position(this.width - 75 - 3, 3).size(75, 20).build());
+
+        addDrawableChild(new ButtonWidget.Builder(Text.literal("Proxies"), button -> client.setScreen(theme.proxiesScreen())).position(this.width - 75 - 3 - 75 - 2, 3).size(75, 20).build());
 
         if (LastServerInfo.getLastServer() != null) {
-            addDrawableChild(new ButtonWidget(width / 2 - 154, 10, 100, 20, Text.literal("Last Server"), button -> {
-                LastServerInfo.joinLastServer((MultiplayerScreen) (Object) this);
-            }));
+            addDrawableChild(new ButtonWidget.Builder(Text.literal("Accounts"), button -> client.setScreen(theme.accountsScreen())).position(this.width / 2 - 154, 10).size(100, 20).build());
         }
     }
 

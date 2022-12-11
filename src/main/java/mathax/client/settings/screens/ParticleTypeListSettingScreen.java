@@ -6,13 +6,13 @@ import mathax.client.settings.Setting;
 import mathax.client.utils.misc.Names;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleType;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
 
 import java.util.List;
 
 public class ParticleTypeListSettingScreen extends LeftRightListSettingScreen<ParticleType<?>> {
     public ParticleTypeListSettingScreen(Theme theme, Setting<List<ParticleType<?>>> setting) {
-        super(theme, "Select Particles", setting, setting.get(), Registry.PARTICLE_TYPE);
+        super(theme, "Select Particles", setting, setting.get(), Registries.PARTICLE_TYPE);
     }
 
     @Override

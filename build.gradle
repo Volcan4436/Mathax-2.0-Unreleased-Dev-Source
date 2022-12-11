@@ -26,6 +26,15 @@ repositories {
     }
 
     maven {
+        name = "modrinth"
+        url = "https://api.modrinth.com/maven"
+
+        content {
+            includeGroup "maven.modrinth"
+        }
+    }
+
+    maven {
         name = "vram"
         url "https://maven.vram.io"
     }
@@ -52,12 +61,14 @@ dependencies {
 
     // Compat fixes
     modCompileOnly fabricApi.module("fabric-renderer-indigo", project.fabric_api_version)
-    modCompileOnly("me.jellysquid.mods:sodium-fabric:${project.sodium_version}") {
+    modCompileOnly("maven.modrinth:sodium:${project.sodium_version}") {
         transitive = false
     }
-    modCompileOnly("io.vram:canvas-fabric-mc119:1.0.+") {
+
+    //TODO: 1.19.3
+    /*modCompileOnly("io.vram:canvas-fabric-mc119:1.0.+") {
         transitive = false
-    }
+    }*/
 
     // Proxies
     library("io.netty:netty-handler-proxy:${project.netty_version}") {
@@ -76,8 +87,8 @@ dependencies {
     // Baritone integration
     modInclude "baritone:fabric:${project.baritone_version}"
 
-    // Discord RPC
-    library "club.minnced:java-discord-rpc:${project.discord_rpc_version}"
+    // Discord IPC
+    library "meteordevelopment:discord-ipc:${project.discord_ipc_version}"
 
     shadow project(":launch")
 }

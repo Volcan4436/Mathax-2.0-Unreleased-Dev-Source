@@ -2,17 +2,17 @@ package mathax.client.utils.network;
 
 import com.google.common.collect.Iterators;
 import com.mojang.datafixers.util.Pair;
-import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Lifecycle;
 import mathax.client.utils.misc.MatHaxIdentifier;
 import net.minecraft.network.Packet;
-import net.minecraft.tag.TagKey;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.SimpleRegistry;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.entry.RegistryEntryList;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.random.Random;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryEntry;
-import net.minecraft.util.registry.RegistryEntryList;
-import net.minecraft.util.registry.RegistryKey;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -122,8 +122,8 @@ public class PacketUtils {
         C2S_PACKETS_R.put("VehicleMoveC2SPacket", net.minecraft.network.packet.c2s.play.VehicleMoveC2SPacket.class);
         C2S_PACKETS.put(net.minecraft.network.packet.c2s.play.BookUpdateC2SPacket.class, "BookUpdateC2SPacket");
         C2S_PACKETS_R.put("BookUpdateC2SPacket", net.minecraft.network.packet.c2s.play.BookUpdateC2SPacket.class);
-        C2S_PACKETS.put(net.minecraft.network.packet.c2s.play.RequestChatPreviewC2SPacket.class, "RequestChatPreviewC2SPacket");
-        C2S_PACKETS_R.put("RequestChatPreviewC2SPacket", net.minecraft.network.packet.c2s.play.RequestChatPreviewC2SPacket.class);
+        //C2S_PACKETS.put(net.minecraft.network.packet.c2s.play.RequestChatPreviewC2SPacket.class, "RequestChatPreviewC2SPacket");
+        //C2S_PACKETS_R.put("RequestChatPreviewC2SPacket", net.minecraft.network.packet.c2s.play.RequestChatPreviewC2SPacket.class);
         C2S_PACKETS.put(net.minecraft.network.packet.c2s.play.RecipeBookDataC2SPacket.class, "RecipeBookDataC2SPacket");
         C2S_PACKETS_R.put("RecipeBookDataC2SPacket", net.minecraft.network.packet.c2s.play.RecipeBookDataC2SPacket.class);
         C2S_PACKETS.put(net.minecraft.network.packet.c2s.login.LoginQueryResponseC2SPacket.class, "LoginQueryResponseC2SPacket");
@@ -269,8 +269,6 @@ public class PacketUtils {
         S2C_PACKETS_R.put("ClearTitleS2CPacket", net.minecraft.network.packet.s2c.play.ClearTitleS2CPacket.class);
         S2C_PACKETS.put(net.minecraft.network.packet.s2c.play.TitleFadeS2CPacket.class, "TitleFadeS2CPacket");
         S2C_PACKETS_R.put("TitleFadeS2CPacket", net.minecraft.network.packet.s2c.play.TitleFadeS2CPacket.class);
-        S2C_PACKETS.put(net.minecraft.network.packet.s2c.play.ChatPreviewS2CPacket.class, "ChatPreviewS2CPacket");
-        S2C_PACKETS_R.put("ChatPreviewS2CPacket", net.minecraft.network.packet.s2c.play.ChatPreviewS2CPacket.class);
         S2C_PACKETS.put(net.minecraft.network.packet.s2c.play.PlayerSpawnS2CPacket.class, "PlayerSpawnS2CPacket");
         S2C_PACKETS_R.put("PlayerSpawnS2CPacket", net.minecraft.network.packet.s2c.play.PlayerSpawnS2CPacket.class);
         S2C_PACKETS.put(net.minecraft.network.packet.s2c.play.InventoryS2CPacket.class, "InventoryS2CPacket");
@@ -285,8 +283,6 @@ public class PacketUtils {
         S2C_PACKETS_R.put("ScoreboardPlayerUpdateS2CPacket", net.minecraft.network.packet.s2c.play.ScoreboardPlayerUpdateS2CPacket.class);
         S2C_PACKETS.put(net.minecraft.network.packet.s2c.query.QueryPongS2CPacket.class, "QueryPongS2CPacket");
         S2C_PACKETS_R.put("QueryPongS2CPacket", net.minecraft.network.packet.s2c.query.QueryPongS2CPacket.class);
-        S2C_PACKETS.put(net.minecraft.network.packet.s2c.play.ChatPreviewStateChangeS2CPacket.class, "ChatPreviewStateChangeS2CPacket");
-        S2C_PACKETS_R.put("ChatPreviewStateChangeS2CPacket", net.minecraft.network.packet.s2c.play.ChatPreviewStateChangeS2CPacket.class);
         S2C_PACKETS.put(net.minecraft.network.packet.s2c.play.ChatMessageS2CPacket.class, "ChatMessageS2CPacket");
         S2C_PACKETS_R.put("ChatMessageS2CPacket", net.minecraft.network.packet.s2c.play.ChatMessageS2CPacket.class);
         S2C_PACKETS.put(net.minecraft.network.packet.s2c.play.OpenWrittenBookS2CPacket.class, "OpenWrittenBookS2CPacket");
@@ -321,10 +317,6 @@ public class PacketUtils {
         S2C_PACKETS_R.put("ParticleS2CPacket", net.minecraft.network.packet.s2c.play.ParticleS2CPacket.class);
         S2C_PACKETS.put(net.minecraft.network.packet.s2c.play.CloseScreenS2CPacket.class, "CloseScreenS2CPacket");
         S2C_PACKETS_R.put("CloseScreenS2CPacket", net.minecraft.network.packet.s2c.play.CloseScreenS2CPacket.class);
-        S2C_PACKETS.put(net.minecraft.network.packet.s2c.play.ScoreboardDisplayS2CPacket.class, "ScoreboardDisplayS2CPacket");
-        S2C_PACKETS_R.put("ScoreboardDisplayS2CPacket", net.minecraft.network.packet.s2c.play.ScoreboardDisplayS2CPacket.class);
-        S2C_PACKETS.put(net.minecraft.network.packet.s2c.play.PlaySoundIdS2CPacket.class, "PlaySoundIdS2CPacket");
-        S2C_PACKETS_R.put("PlaySoundIdS2CPacket", net.minecraft.network.packet.s2c.play.PlaySoundIdS2CPacket.class);
         S2C_PACKETS.put(net.minecraft.network.packet.s2c.login.LoginSuccessS2CPacket.class, "LoginSuccessS2CPacket");
         S2C_PACKETS_R.put("LoginSuccessS2CPacket", net.minecraft.network.packet.s2c.login.LoginSuccessS2CPacket.class);
         S2C_PACKETS.put(net.minecraft.network.packet.s2c.play.GameMessageS2CPacket.class, "GameMessageS2CPacket");
@@ -397,7 +389,7 @@ public class PacketUtils {
         return C2S_PACKETS.keySet();
     }
 
-    private static class PacketRegistry extends Registry<Class<? extends Packet<?>>> {
+    private static class PacketRegistry extends SimpleRegistry<Class<? extends Packet<?>>> {
         public PacketRegistry() {
             super(RegistryKey.ofRegistry(new MatHaxIdentifier("packets")), Lifecycle.stable());
         }
@@ -474,7 +466,7 @@ public class PacketUtils {
         }
 
         @Override
-        public Optional<RegistryEntry<Class<? extends Packet<?>>>> getRandom(Random random) {
+        public Optional<RegistryEntry.Reference<Class<? extends Packet<?>>>> getRandom(Random random) {
             return Optional.empty();
         }
 
@@ -484,22 +476,17 @@ public class PacketUtils {
         }
 
         @Override
-        public RegistryEntry<Class<? extends Packet<?>>> getOrCreateEntry(RegistryKey<Class<? extends Packet<?>>> key) {
-            return null;
-        }
-
-        @Override
         public RegistryEntry.Reference<Class<? extends Packet<?>>> createEntry(Class<? extends Packet<?>> value) {
             return null;
         }
 
         @Override
-        public Optional<RegistryEntry<Class<? extends Packet<?>>>> getEntry(int rawId) {
+        public Optional<RegistryEntry.Reference<Class<? extends Packet<?>>>> getEntry(int rawId) {
             return Optional.empty();
         }
 
         @Override
-        public Optional<RegistryEntry<Class<? extends Packet<?>>>> getEntry(RegistryKey<Class<? extends Packet<?>>> key) {
+        public Optional<RegistryEntry.Reference<Class<? extends Packet<?>>>> getEntry(RegistryKey<Class<? extends Packet<?>>> key) {
             return Optional.empty();
         }
 
@@ -529,20 +516,11 @@ public class PacketUtils {
         }
 
         @Override
-        public boolean containsTag(TagKey<Class<? extends Packet<?>>> tag) {
-            return false;
-        }
-
-        @Override
         public void clearTags() {}
 
         @Override
         public void populateTags(Map<TagKey<Class<? extends Packet<?>>>, List<RegistryEntry<Class<? extends Packet<?>>>>> tagEntries) {}
 
-        @Override
-        public DataResult<RegistryEntry<Class<? extends Packet<?>>>> getOrCreateEntryDataResult(RegistryKey<Class<? extends Packet<?>>> key) {
-            return null;
-        }
 
         @Override
         public Set<RegistryKey<Class<? extends Packet<?>>>> getKeys() {

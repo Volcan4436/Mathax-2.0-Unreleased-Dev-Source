@@ -5,8 +5,8 @@ import mathax.client.utils.Utils;
 import mathax.client.utils.misc.IGetter;
 import mathax.client.utils.misc.ISerializable;
 import mathax.client.utils.settings.IVisible;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.json.JSONObject;
 
 import java.util.ArrayList;

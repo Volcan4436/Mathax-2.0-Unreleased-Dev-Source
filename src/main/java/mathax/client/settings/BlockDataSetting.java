@@ -8,8 +8,8 @@ import mathax.client.utils.misc.ISerializable;
 import mathax.client.utils.settings.IBlockData;
 import mathax.client.utils.settings.IVisible;
 import net.minecraft.block.Block;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -46,7 +46,7 @@ public class BlockDataSetting<T extends ICopyable<T> & ISerializable<T> & IChang
         json.put("value", new JSONArray());
         for (Block block : get().keySet()) {
             JSONObject valueJson = new JSONObject();
-            valueJson.put("id", Registry.BLOCK.getId(block).toString());
+            valueJson.put("id", Registries.BLOCK.getId(block).toString());
             valueJson.put("key", get().get(block).toJson());
 
             json.append("value", valueJson);
@@ -63,7 +63,7 @@ public class BlockDataSetting<T extends ICopyable<T> & ISerializable<T> & IChang
             for (Object object : json.getJSONArray("value")) {
                 if (object instanceof JSONObject valueJson) {
                     if (valueJson.has("id") && valueJson.has("key")) {
-                        get().put(Registry.BLOCK.get(new Identifier(valueJson.getString("id"))), defaultData.get().copy().fromJson(valueJson.getJSONObject("key")));
+                        get().put(Registries.BLOCK.get(new Identifier(valueJson.getString("id"))), defaultData.get().copy().fromJson(valueJson.getJSONObject("key")));
                     }
                 }
             }

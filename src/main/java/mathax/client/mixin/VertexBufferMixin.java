@@ -1,9 +1,9 @@
 package mathax.client.mixin;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import mathax.client.renderer.GL;
 import net.minecraft.client.gl.VertexBuffer;
 import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.VertexFormat;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,12 +16,12 @@ import java.nio.ByteBuffer;
 public class VertexBufferMixin {
     @Shadow private int indexBufferId;
 
-    @Inject(method = "configureIndexBuffer", at = @At("RETURN"))
-    private void onConfigureIndexBuffer(BufferBuilder.DrawArrayParameters parameters, ByteBuffer data, CallbackInfoReturnable<RenderSystem.IndexBuffer> infoReturnable) {
+    @Inject(method = "uploadIndexBuffer", at = @At("RETURN"))
+    private void onConfigureIndexBuffer(BufferBuilder.DrawParameters parameters, ByteBuffer vertexBuffer, CallbackInfoReturnable<VertexFormat> infoReturnable) {
         if (infoReturnable.getReturnValue() == null) {
             GL.CURRENT_IBO = this.indexBufferId;
         } else {
-            GL.CURRENT_IBO = ((IndexBufferAccessor) (Object) infoReturnable.getReturnValue()).getId();
+            GL.CURRENT_IBO = ((ShapeIndexBufferAccessor) infoReturnable.getReturnValue()).getId();
         }
     }
 }

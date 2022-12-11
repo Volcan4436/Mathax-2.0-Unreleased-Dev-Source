@@ -23,8 +23,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Matrix3f;
-import net.minecraft.util.math.Matrix4f;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -33,13 +33,15 @@ import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
+import java.util.Random;
+
 @Mixin(GameRenderer.class)
 public abstract class GameRendererMixin {
     private boolean freecamSet = false;
 
     @Shadow
     @Final
-    private MinecraftClient client;
+    MinecraftClient client;
 
     @Shadow
     public abstract void updateTargetedEntity(float tickDelta);
@@ -47,12 +49,15 @@ public abstract class GameRendererMixin {
     @Shadow
     public abstract void reset();
 
-    @Shadow @Final private Camera camera;
+    @Shadow
+    @Final
+    private Camera camera;
+
     @Unique
     private Renderer3D renderer;
 
     @Inject(method = "renderWorld", at = @At(value = "INVOKE_STRING", target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V", args = { "ldc=hand" }), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
-    private void onRenderWorld(float tickDelta, long limitTime, MatrixStack matrixStack, CallbackInfo info, boolean bl, Camera camera, MatrixStack matrixStack1, double d, float f, float g, Matrix4f matrix4f, Matrix3f matrix3f) {
+    private void onRenderWorld(float tickDelta, long limitTime, MatrixStack matrixStack, CallbackInfo info, boolean bl, Camera camera, MatrixStack matrixStack2, double d, float f, float g, Matrix4f matrix4f, Matrix3f matrix3f) {
         if (!Utils.canUpdate()) {
             return;
         }
@@ -63,14 +68,14 @@ public abstract class GameRendererMixin {
             renderer = new Renderer3D();
         }
 
-        Render3DEvent event = Render3DEvent.get(matrixStack1, renderer, tickDelta, camera.getPos().x, camera.getPos().y, camera.getPos().z);
+        Render3DEvent event = Render3DEvent.get(matrixStack, renderer, tickDelta, camera.getPos().x, camera.getPos().y, camera.getPos().z);
 
         RenderUtils.updateScreenCenter();
-        NametagUtils.onRender(matrixStack, matrix4f);
+        NametagUtils.onRender(matrixStack2, matrix4f);
 
         renderer.begin();
         MatHax.EVENT_BUS.post(event);
-        renderer.render(matrixStack);
+        renderer.render(matrixStack2);
 
         RenderSystem.applyModelViewMatrix();
         client.getProfiler().pop();

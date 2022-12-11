@@ -2,8 +2,8 @@ package mathax.client.settings;
 
 import mathax.client.utils.settings.IVisible;
 import net.minecraft.block.Block;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.json.JSONObject;
 
 import java.util.function.Consumer;
@@ -20,7 +20,7 @@ public class BlockSetting extends Setting<Block> {
 
     @Override
     protected Block parseImpl(String string) {
-        return parseId(Registry.BLOCK, string);
+        return parseId(Registries.BLOCK, string);
     }
 
     @Override
@@ -30,12 +30,12 @@ public class BlockSetting extends Setting<Block> {
 
     @Override
     public Iterable<Identifier> getIdentifierSuggestions() {
-        return Registry.BLOCK.getIds();
+        return Registries.BLOCK.getIds();
     }
 
     @Override
     protected JSONObject save(JSONObject json) {
-        json.put("value", Registry.BLOCK.getId(get()).toString());
+        json.put("value", Registries.BLOCK.getId(get()).toString());
 
         return json;
     }
@@ -43,10 +43,10 @@ public class BlockSetting extends Setting<Block> {
     @Override
     protected Block load(JSONObject json) {
         if (json.has("value")) {
-            value = Registry.BLOCK.get(new Identifier(json.getString("value")));
+            value = Registries.BLOCK.get(new Identifier(json.getString("value")));
 
             if (filter != null && !filter.test(value)) {
-                for (Block block : Registry.BLOCK) {
+                for (Block block : Registries.BLOCK) {
                     if (filter.test(block)) {
                         value = block;
                         break;

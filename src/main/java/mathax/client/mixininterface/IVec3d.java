@@ -1,7 +1,7 @@
 package mathax.client.mixininterface;
 
-import mathax.client.utils.misc.Vec3;
 import net.minecraft.util.math.Vec3i;
+import org.joml.Vector3d;
 
 public interface IVec3d {
     void set(double x, double y, double z);
@@ -10,7 +10,7 @@ public interface IVec3d {
         set(vec.getX(), vec.getY(), vec.getZ());
     }
 
-    default void set(Vec3 vec) {
+    default void set(Vector3d vec) {
         set(vec.x, vec.y, vec.z);
     }
 

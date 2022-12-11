@@ -7,8 +7,8 @@ import mathax.client.utils.entity.EntityUtils;
 import mathax.client.utils.json.JSONUtils;
 import mathax.client.utils.settings.IVisible;
 import net.minecraft.entity.EntityType;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -36,7 +36,7 @@ public class EntityTypeListSetting extends Setting<Object2BooleanMap<EntityType<
 
         try {
             for (String value : values) {
-                EntityType<?> entity = parseId(Registry.ENTITY_TYPE, value);
+                EntityType<?> entity = parseId(Registries.ENTITY_TYPE, value);
                 if (entity != null) {
                     entities.put(entity, true);
                 }
@@ -53,7 +53,7 @@ public class EntityTypeListSetting extends Setting<Object2BooleanMap<EntityType<
 
     @Override
     public Iterable<Identifier> getIdentifierSuggestions() {
-        return Registry.ENTITY_TYPE.getIds();
+        return Registries.ENTITY_TYPE.getIds();
     }
 
     @Override
@@ -61,7 +61,7 @@ public class EntityTypeListSetting extends Setting<Object2BooleanMap<EntityType<
         json.put("value", new JSONArray());
         for (EntityType<?> entityType : get().keySet()) {
             if (get().getBoolean(entityType)) {
-                json.append("value", Registry.ENTITY_TYPE.getId(entityType).toString());
+                json.append("value", Registries.ENTITY_TYPE.getId(entityType).toString());
             }
         }
 
@@ -75,7 +75,7 @@ public class EntityTypeListSetting extends Setting<Object2BooleanMap<EntityType<
         if (json.has("value") && JSONUtils.isValidJSONArray(json, "value")) {
             for (Object object : json.getJSONArray("value")) {
                 if (object instanceof String id) {
-                    EntityType<?> type = Registry.ENTITY_TYPE.get(new Identifier(id));
+                    EntityType<?> type = Registries.ENTITY_TYPE.get(new Identifier(id));
                     if (!onlyAttackable || EntityUtils.isAttackable(type)) {
                         get().put(type, true);
                     }

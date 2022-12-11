@@ -52,7 +52,7 @@ public class MapTooltipComponent implements TooltipComponent, MatHaxTooltipData 
         matrixStack.translate(x, y, z);
         matrixStack.scale((float) (scale) * 2, (float) (scale) * 2, 0);
         matrixStack.scale((64 + 8) / 64f, (64 + 8) / 64f, 0);
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         RenderSystem.setShaderTexture(0, TEXTURE_MAP_BACKGROUND);
         DrawableHelper.drawTexture(matrixStack, 0, 0, 0, 0, 0, 64, 64, 64, 64);
         matrixStack.pop();

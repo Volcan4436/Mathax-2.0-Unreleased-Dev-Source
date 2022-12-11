@@ -13,7 +13,7 @@ import mathax.client.utils.misc.ICopyable;
 import mathax.client.utils.misc.ISerializable;
 import mathax.client.utils.misc.Names;
 import net.minecraft.block.Block;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -52,7 +52,7 @@ public class BlockDataSettingScreen extends WindowScreen {
     }
 
     public <T extends ICopyable<T> & ISerializable<T> & IChangeable & IBlockData<T>> void initTable() {
-        for (Block block : Registry.BLOCK) {
+        for (Block block : Registries.BLOCK) {
             T blockData = (T) setting.get().get(block);
 
             if (blockData != null && blockData.isChanged()) {

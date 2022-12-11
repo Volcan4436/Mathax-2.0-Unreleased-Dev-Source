@@ -2,9 +2,9 @@ package mathax.client.settings;
 
 import mathax.client.utils.json.JSONUtils;
 import mathax.client.utils.settings.IVisible;
+import net.minecraft.registry.Registries;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -30,7 +30,7 @@ public class SoundEventListSetting extends Setting<List<SoundEvent>> {
 
         try {
             for (String value : values) {
-                SoundEvent sound = parseId(Registry.SOUND_EVENT, value);
+                SoundEvent sound = parseId(Registries.SOUND_EVENT, value);
                 if (sound != null) {
                     sounds.add(sound);
                 }
@@ -47,14 +47,14 @@ public class SoundEventListSetting extends Setting<List<SoundEvent>> {
 
     @Override
     public Iterable<Identifier> getIdentifierSuggestions() {
-        return Registry.SOUND_EVENT.getIds();
+        return Registries.SOUND_EVENT.getIds();
     }
 
     @Override
     public JSONObject save(JSONObject json) {
         json.put("value", new JSONArray());
         for (SoundEvent sound : get()) {
-            Identifier id = Registry.SOUND_EVENT.getId(sound);
+            Identifier id = Registries.SOUND_EVENT.getId(sound);
             if (id != null) {
                 json.append("value", id.toString());
             }
@@ -70,7 +70,7 @@ public class SoundEventListSetting extends Setting<List<SoundEvent>> {
         if (json.has("value") && JSONUtils.isValidJSONArray(json, "value")) {
             for (Object object : json.getJSONArray("value")) {
                 if (object instanceof String id) {
-                    SoundEvent soundEvent = Registry.SOUND_EVENT.get(new Identifier(id));
+                    SoundEvent soundEvent = Registries.SOUND_EVENT.get(new Identifier(id));
                     if (soundEvent != null) {
                         get().add(soundEvent);
                     }

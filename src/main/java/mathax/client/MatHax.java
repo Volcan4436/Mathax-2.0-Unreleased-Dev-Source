@@ -11,6 +11,7 @@ import mathax.client.events.world.TickEvent;
 import mathax.client.init.PostInit;
 import mathax.client.init.PreInit;
 import mathax.client.systems.modules.client.CapesModule;
+import mathax.client.systems.modules.client.DiscordRPC;
 import mathax.client.systems.modules.render.Zoom;
 import mathax.client.systems.themes.Themes;
 import mathax.client.gui.WidgetScreen;
@@ -126,7 +127,7 @@ public class MatHax implements ClientModInitializer {
                 Modules.get().get(Zoom.class).toggleOnBindRelease = true;
                 Modules.get().get(Zoom.class).chatFeedback = false;
 
-                //Modules.get().get(DiscordRPC.class).forceToggle(true);
+                Modules.get().get(DiscordRPC.class).forceToggle(true);
                 //TODO: Pre-enable modules.
             });
         }

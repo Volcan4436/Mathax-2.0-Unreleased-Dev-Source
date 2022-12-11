@@ -1,19 +1,20 @@
 package mathax.client.settings;
 
 import com.mojang.datafixers.util.Pair;
-import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Lifecycle;
 import it.unimi.dsi.fastutil.objects.ObjectIterators;
 import mathax.client.utils.json.JSONUtils;
 import mathax.client.utils.misc.MatHaxIdentifier;
 import mathax.client.utils.settings.IVisible;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.tag.TagKey;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.SimpleRegistry;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.entry.RegistryEntryList;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryEntry;
-import net.minecraft.util.registry.RegistryEntryList;
-import net.minecraft.util.registry.RegistryKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
@@ -57,7 +58,7 @@ public class StorageBlockListSetting extends Setting<List<BlockEntityType<?>>> {
 
         try {
             for (String value : values) {
-                BlockEntityType<?> block = parseId(Registry.BLOCK_ENTITY_TYPE, value);
+                BlockEntityType<?> block = parseId(Registries.BLOCK_ENTITY_TYPE, value);
                 if (block != null) {
                     blocks.add(block);
                 }
@@ -74,7 +75,7 @@ public class StorageBlockListSetting extends Setting<List<BlockEntityType<?>>> {
 
     @Override
     public Iterable<Identifier> getIdentifierSuggestions() {
-        return Registry.BLOCK_ENTITY_TYPE.getIds();
+        return Registries.BLOCK_ENTITY_TYPE.getIds();
     }
 
     @Override
@@ -82,7 +83,7 @@ public class StorageBlockListSetting extends Setting<List<BlockEntityType<?>>> {
         if (json.has("value")) {
             json.put("value", new JSONArray());
             for (BlockEntityType<?> type : get()) {
-                Identifier id = Registry.BLOCK_ENTITY_TYPE.getId(type);
+                Identifier id = Registries.BLOCK_ENTITY_TYPE.getId(type);
                 if (id != null) {
                     json.append("value", id.toString());
                 }
@@ -99,7 +100,7 @@ public class StorageBlockListSetting extends Setting<List<BlockEntityType<?>>> {
         if (json.has("value") && JSONUtils.isValidJSONArray(json, "value")) {
             for (Object object : json.getJSONArray("value")) {
                 if (object instanceof String id) {
-                    BlockEntityType<?> type = Registry.BLOCK_ENTITY_TYPE.get(new Identifier(id));
+                    BlockEntityType<?> type = Registries.BLOCK_ENTITY_TYPE.get(new Identifier(id));
                     if (type != null) {
                         get().add(type);
                     }
@@ -125,14 +126,9 @@ public class StorageBlockListSetting extends Setting<List<BlockEntityType<?>>> {
         }
     }
 
-    private static class SRegistry extends Registry<BlockEntityType<?>> {
+    private static class SRegistry extends SimpleRegistry<BlockEntityType<?>> {
         public SRegistry() {
             super(RegistryKey.ofRegistry(new MatHaxIdentifier("storage-blocks")), Lifecycle.stable());
-        }
-
-        @Override
-        public DataResult<RegistryEntry<BlockEntityType<?>>> getOrCreateEntryDataResult(RegistryKey<BlockEntityType<?>> key) {
-            return null;
         }
 
         @Override
@@ -216,7 +212,7 @@ public class StorageBlockListSetting extends Setting<List<BlockEntityType<?>>> {
         }
 
         @Override
-        public Optional<RegistryEntry<BlockEntityType<?>>> getRandom(net.minecraft.util.math.random.Random random) {
+        public Optional<RegistryEntry.Reference<BlockEntityType<?>>> getRandom(net.minecraft.util.math.random.Random random) {
             return Optional.empty();
         }
 
@@ -226,22 +222,17 @@ public class StorageBlockListSetting extends Setting<List<BlockEntityType<?>>> {
         }
 
         @Override
-        public RegistryEntry<BlockEntityType<?>> getOrCreateEntry(RegistryKey<BlockEntityType<?>> key) {
-            return null;
-        }
-
-        @Override
         public RegistryEntry.Reference<BlockEntityType<?>> createEntry(BlockEntityType<?> value) {
             return null;
         }
 
         @Override
-        public Optional<RegistryEntry<BlockEntityType<?>>> getEntry(int rawId) {
+        public Optional<RegistryEntry.Reference<BlockEntityType<?>>> getEntry(int rawId) {
             return Optional.empty();
         }
 
         @Override
-        public Optional<RegistryEntry<BlockEntityType<?>>> getEntry(RegistryKey<BlockEntityType<?>> key) {
+        public Optional<RegistryEntry.Reference<BlockEntityType<?>>> getEntry(RegistryKey<BlockEntityType<?>> key) {
             return Optional.empty();
         }
 
@@ -268,11 +259,6 @@ public class StorageBlockListSetting extends Setting<List<BlockEntityType<?>>> {
         @Override
         public Stream<TagKey<BlockEntityType<?>>> streamTags() {
             return null;
-        }
-
-        @Override
-        public boolean containsTag(TagKey<BlockEntityType<?>> tag) {
-            return false;
         }
 
         @Override

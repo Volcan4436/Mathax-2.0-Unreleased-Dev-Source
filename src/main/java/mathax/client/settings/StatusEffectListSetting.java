@@ -3,8 +3,8 @@ package mathax.client.settings;
 import mathax.client.utils.json.JSONUtils;
 import mathax.client.utils.settings.IVisible;
 import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -30,7 +30,7 @@ public class StatusEffectListSetting extends Setting<List<StatusEffect>> {
 
         try {
             for (String value : values) {
-                StatusEffect effect = parseId(Registry.STATUS_EFFECT, value);
+                StatusEffect effect = parseId(Registries.STATUS_EFFECT, value);
                 if (effect != null) {
                     effects.add(effect);
                 }
@@ -47,14 +47,14 @@ public class StatusEffectListSetting extends Setting<List<StatusEffect>> {
 
     @Override
     public Iterable<Identifier> getIdentifierSuggestions() {
-        return Registry.STATUS_EFFECT.getIds();
+        return Registries.STATUS_EFFECT.getIds();
     }
 
     @Override
     public JSONObject save(JSONObject json) {
         json.put("value", new JSONArray());
         for (StatusEffect effect : get()) {
-            Identifier id = Registry.STATUS_EFFECT.getId(effect);
+            Identifier id = Registries.STATUS_EFFECT.getId(effect);
             if (id != null) {
                 json.append("value", id.toString());
             }
@@ -70,7 +70,7 @@ public class StatusEffectListSetting extends Setting<List<StatusEffect>> {
         if (json.has("value ") && JSONUtils.isValidJSONArray(json, "value")) {
             for (Object object : json.getJSONArray("value")) {
                 if (object instanceof String id) {
-                    StatusEffect effect = Registry.STATUS_EFFECT.get(new Identifier(id));
+                    StatusEffect effect = Registries.STATUS_EFFECT.get(new Identifier(id));
                     if (effect != null) {
                         get().add(effect);
                     }

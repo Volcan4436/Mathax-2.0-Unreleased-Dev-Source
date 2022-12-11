@@ -4,8 +4,8 @@ import mathax.client.utils.json.JSONUtils;
 import mathax.client.utils.settings.IVisible;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleType;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -31,7 +31,7 @@ public class ParticleTypeListSetting extends Setting<List<ParticleType<?>>> {
 
         try {
             for (String value : values) {
-                ParticleType<?> particleType = parseId(Registry.PARTICLE_TYPE, value);
+                ParticleType<?> particleType = parseId(Registries.PARTICLE_TYPE, value);
                 if (particleType instanceof ParticleEffect) {
                     particleTypes.add(particleType);
                 }
@@ -48,14 +48,14 @@ public class ParticleTypeListSetting extends Setting<List<ParticleType<?>>> {
 
     @Override
     public Iterable<Identifier> getIdentifierSuggestions() {
-        return Registry.PARTICLE_TYPE.getIds();
+        return Registries.PARTICLE_TYPE.getIds();
     }
 
     @Override
     public JSONObject save(JSONObject json) {
         json.put("value", new JSONArray());
         for (ParticleType<?> particleType : get()) {
-            Identifier id = Registry.PARTICLE_TYPE.getId(particleType);
+            Identifier id = Registries.PARTICLE_TYPE.getId(particleType);
             if (id != null) {
                 json.append("value", id.toString());
             }
@@ -71,7 +71,7 @@ public class ParticleTypeListSetting extends Setting<List<ParticleType<?>>> {
         if (json.has("value") && JSONUtils.isValidJSONArray(json, "value")) {
             for (Object object : json.getJSONArray("value")) {
                 if (object instanceof String id) {
-                    ParticleType<?> particleType = Registry.PARTICLE_TYPE.get(new Identifier(id));
+                    ParticleType<?> particleType = Registries.PARTICLE_TYPE.get(new Identifier(id));
                     if (particleType != null) {
                         get().add(particleType);
                     }

@@ -10,7 +10,7 @@ import mathax.client.settings.BlockSetting;
 import mathax.client.utils.misc.Names;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
 import org.apache.commons.lang3.StringUtils;
 
 public class BlockSettingScreen extends WindowScreen {
@@ -44,7 +44,7 @@ public class BlockSettingScreen extends WindowScreen {
     }
 
     private void initTable() {
-        for (Block block : Registry.BLOCK) {
+        for (Block block : Registries.BLOCK) {
             if (setting.filter != null && !setting.filter.test(block)) {
                 continue;
             }
@@ -71,6 +71,6 @@ public class BlockSettingScreen extends WindowScreen {
     }
 
     protected boolean skipValue(Block value) {
-        return value == Blocks.AIR || Registry.BLOCK.getId(value).getPath().endsWith("_wall_banner");
+        return value == Blocks.AIR || Registries.BLOCK.getId(value).getPath().endsWith("_wall_banner");
     }
 }

@@ -1,22 +1,21 @@
 package mathax.client.utils.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import mathax.client.mixininterface.IMatrix4f;
 import mathax.client.utils.Utils;
-import mathax.client.utils.misc.Vec3;
-import mathax.client.utils.misc.Vec4;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.Matrix4f;
+import org.joml.Matrix4f;
+import org.joml.Vector3d;
+import org.joml.Vector4f;
 
 import static mathax.client.MatHax.mc;
 
 public class NametagUtils {
-    private static final Vec4 vec4 = new Vec4();
-    private static final Vec4 mmMat4 = new Vec4();
-    private static final Vec4 pmMat4 = new Vec4();
+    private static final Vector4f vec4 = new Vector4f();
+    private static final Vector4f mmMat4 = new Vector4f();
+    private static final Vector4f pmMat4 = new Vector4f();
 
-    private static final Vec3 camera = new Vec3();
-    private static final Vec3 cameraNegated = new Vec3();
+    private static final Vector3d camera = new Vector3d();
+    private static final Vector3d cameraNegated = new Vector3d();
 
     private static Matrix4f model;
     private static Matrix4f projection;
@@ -26,22 +25,22 @@ public class NametagUtils {
     public static double scale;
 
     public static void onRender(MatrixStack matrixStack, Matrix4f projection) {
-        model = matrixStack.peek().getPositionMatrix().copy();
+        model = new Matrix4f(matrixStack.peek().getPositionMatrix());
 
         NametagUtils.projection = projection;
 
-        camera.set(mc.gameRenderer.getCamera().getPos());
+        Utils.set(camera, mc.gameRenderer.getCamera().getPos());
         cameraNegated.set(camera);
         cameraNegated.negate();
 
         windowScale = mc.getWindow().calculateScaleFactor(1, false);
     }
 
-    public static boolean to2D(Vec3 pos, double scale) {
+    public static boolean to2D(Vector3d pos, double scale) {
         return to2D(pos, scale, true);
     }
 
-    public static boolean to2D(Vec3 pos, double scale, boolean distanceScaling) {
+    public static boolean to2D(Vector3d pos, double scale, boolean distanceScaling) {
         NametagUtils.scale = scale;
         if (distanceScaling) {
             NametagUtils.scale *= getScale(pos);
@@ -49,15 +48,13 @@ public class NametagUtils {
 
         vec4.set(cameraNegated.x + pos.x, cameraNegated.y + pos.y, cameraNegated.z + pos.z, 1);
 
-        ((IMatrix4f) (Object) model).multiplyMatrix(vec4, mmMat4);
-        ((IMatrix4f) (Object) projection).multiplyMatrix(mmMat4, pmMat4);
-
+        vec4.mul(model, mmMat4);
+        mmMat4.mul(projection, pmMat4);
         if (pmMat4.w <= 0.0f) {
             return false;
         }
 
-        pmMat4.toScreen();
-
+        toScreen(pmMat4);
         double x = pmMat4.x * mc.getWindow().getFramebufferWidth();
         double y = pmMat4.y * mc.getWindow().getFramebufferHeight();
         if (Double.isInfinite(x) || Double.isInfinite(y)) {
@@ -69,7 +66,7 @@ public class NametagUtils {
         return true;
     }
 
-    public static void begin(Vec3 pos) {
+    public static void begin(Vector3d pos) {
         MatrixStack matrixStack = RenderSystem.getModelViewStack();
         matrixStack.push();
         matrixStack.translate(pos.x, pos.y, 0);
@@ -80,7 +77,15 @@ public class NametagUtils {
         RenderSystem.getModelViewStack().pop();
     }
 
-    private static double getScale(Vec3 pos) {
-        return Utils.clamp(1 - camera.distanceTo(pos) * 0.01, 0.5, Integer.MAX_VALUE);
+    private static double getScale(Vector3d pos) {
+        return Utils.clamp(1 - camera.distance(pos) * 0.01, 0.5, Integer.MAX_VALUE);
+    }
+
+    private static void toScreen(Vector4f vec) {
+        float newW = 1.0f / vec.w * 0.5f;
+        vec.x = vec.x * newW + 0.5f;
+        vec.y = vec.y * newW + 0.5f;
+        vec.z = vec.z * newW + 0.5f;
+        vec.w = newW;
     }
 }

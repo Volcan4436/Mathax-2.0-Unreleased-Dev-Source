@@ -21,9 +21,9 @@ public class ChatUtils {
         mc.inGameHud.getChatHud().addToMessageHistory(message);
 
         if (message.startsWith("/")) {
-            mc.player.sendCommand(message.substring(1), null);
+            mc.player.networkHandler.sendCommand(message.substring(1));
         } else {
-            mc.player.sendChatMessage(message, null);
+            mc.player.networkHandler.sendChatMessage(message);
         }
     }
 

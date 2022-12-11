@@ -17,7 +17,6 @@ import mathax.client.settings.*;
 import mathax.client.systems.modules.Category;
 import mathax.client.systems.modules.Module;
 import mathax.client.systems.themes.Theme;
-import mathax.client.utils.misc.Vec3;
 import mathax.client.utils.notebot.NotebotUtils;
 import mathax.client.utils.notebot.decoder.SongDecoders;
 import mathax.client.utils.notebot.song.Note;
@@ -41,6 +40,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3d;
 
 import java.io.File;
 import java.util.*;
@@ -357,7 +357,7 @@ public class Notebot extends Module {
             return;
         }
 
-        Vec3 pos = new Vec3();
+        Vector3d pos = new Vector3d();
         for (BlockPos blockPos : noteBlockPositions.values()) {
             BlockState state = mc.world.getBlockState(blockPos);
             if (state.getBlock() != Blocks.NOTE_BLOCK) {
@@ -789,9 +789,9 @@ public class Notebot extends Module {
     private void onTickPreview() {
         for (Note note : song.getNotesMap().get(currentTick)) {
             if (modeSetting.get() == NotebotUtils.NotebotMode.Exact_Instruments) {
-                mc.player.playSound(note.getInstrument().getSound(), 2f, (float) Math.pow(2.0D, (note.getNoteLevel() - 12) / 12.0D));
+                mc.player.playSound(note.getInstrument().getSound().value(), 2f, (float) Math.pow(2.0D, (note.getNoteLevel() - 12) / 12.0D));
             } else {
-                mc.player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_HARP, 2f, (float) Math.pow(2.0D, (note.getNoteLevel() - 12) / 12.0D));
+                mc.player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_HARP.value(), 2f, (float) Math.pow(2.0D, (note.getNoteLevel() - 12) / 12.0D));
             }
         }
     }

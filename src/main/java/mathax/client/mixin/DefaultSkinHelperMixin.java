@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Mixin(DefaultSkinHelper.class)
 public class DefaultSkinHelperMixin {
-    @Inject(method = "shouldUseSlimModel", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getSkin", at = @At("HEAD"), cancellable = true)
     private static void onShouldUseSlimModel(UUID uuid, CallbackInfoReturnable<Boolean> infoReturnable) {
         if (uuid == null) {
             infoReturnable.setReturnValue(false);

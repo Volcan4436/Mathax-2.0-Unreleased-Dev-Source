@@ -6,8 +6,8 @@ import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import mathax.client.MatHax;
 import mathax.client.utils.misc.MatHaxIdentifier;
 import mathax.client.utils.render.color.Color;
-import net.minecraft.util.math.Matrix4f;
 import org.apache.commons.io.IOUtils;
+import org.joml.Matrix4f;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

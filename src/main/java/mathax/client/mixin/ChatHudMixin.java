@@ -123,7 +123,7 @@ public abstract class ChatHudMixin implements IChatHud {
     }
 
     @Inject(method = "render", at = @At("TAIL"))
-    private void onRender(MatrixStack matrixStack, int tickDelta, CallbackInfo info) {
+    private void onRender(MatrixStack matrices, int currentTick, int mouseX, int mouseY, CallbackInfo info) {
         if (!Modules.get().get(BetterChat.class).displayPlayerHeads()) {
             return;
         }
@@ -144,7 +144,7 @@ public abstract class ChatHudMixin implements IChatHud {
         for (int m = 0; m + this.scrolledLines < this.visibleMessages.size() && m < maxLineCount; ++m) {
             ChatHudLine.Visible chatHudLine = this.visibleMessages.get(m + this.scrolledLines);
             if (chatHudLine != null) {
-                int x = tickDelta - chatHudLine.addedTime();
+                int x = currentTick - chatHudLine.addedTime();
                 if (x < 200 || isChatFocused()) {
                     double o = isChatFocused() ? 1.0D : getMessageOpacityMultiplier(x);
                     if (o * d > 0.01D) {

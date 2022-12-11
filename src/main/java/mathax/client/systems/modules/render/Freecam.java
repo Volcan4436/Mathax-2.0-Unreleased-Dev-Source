@@ -19,9 +19,9 @@ import mathax.client.systems.modules.Category;
 import mathax.client.systems.modules.Module;
 import mathax.client.systems.modules.Modules;
 import mathax.client.systems.modules.movement.GuiMove;
+import mathax.client.utils.Utils;
 import mathax.client.utils.input.Input;
 import mathax.client.utils.input.KeyAction;
-import mathax.client.utils.misc.Vec3;
 import mathax.client.utils.player.Rotations;
 import net.minecraft.client.option.Perspective;
 import net.minecraft.entity.Entity;
@@ -31,11 +31,12 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import org.joml.Vector3d;
 import org.lwjgl.glfw.GLFW;
 
 public class Freecam extends Module {
-    public final Vec3 pos = new Vec3();
-    public final Vec3 prevPos = new Vec3();
+    public final Vector3d pos = new Vector3d();
+    public final Vector3d prevPos = new Vector3d();
 
     private Perspective perspective;
 
@@ -141,8 +142,8 @@ public class Freecam extends Module {
         perspective = mc.options.getPerspective();
         speedValue = speedSetting.get();
 
-        pos.set(mc.gameRenderer.getCamera().getPos());
-        prevPos.set(mc.gameRenderer.getCamera().getPos());
+        Utils.set(pos, mc.gameRenderer.getCamera().getPos());
+        Utils.set(prevPos, mc.gameRenderer.getCamera().getPos());
 
         prevYaw = yaw;
         prevPitch = pitch;

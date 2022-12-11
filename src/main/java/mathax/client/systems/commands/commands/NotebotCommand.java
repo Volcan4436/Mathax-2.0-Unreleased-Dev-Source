@@ -135,7 +135,7 @@ public class NotebotCommand extends Command {
 
     @EventHandler
     private void onReadPacket(PacketEvent.Receive event) {
-        if (event.packet instanceof PlaySoundS2CPacket sound && sound.getSound().getId().getPath().contains("note_block")) {
+        if (event.packet instanceof PlaySoundS2CPacket sound && sound.getSound().value().getId().getPath().contains("note_block")) {
             if (ticks == -1) {
                 ticks = 0;
             }
@@ -192,7 +192,7 @@ public class NotebotCommand extends Command {
             return null;
         }
 
-        Instrument instrument = getInstrumentFromSound(soundPacket.getSound());
+        Instrument instrument = getInstrumentFromSound(soundPacket.getSound().value());
         if (instrument == null) {
             error("Can't find the instrument from sound! Sound: " + soundPacket.getSound());
             return null;

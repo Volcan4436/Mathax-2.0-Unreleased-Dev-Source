@@ -9,9 +9,9 @@ import net.minecraft.client.gui.screen.ingame.ShulkerBoxScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.Pair;
-import net.minecraft.util.registry.Registry;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -156,7 +156,7 @@ public class InventorySorter {
             return false;
         }
 
-        int id = Registry.ITEM.getId(bestI.getItem()).compareTo(Registry.ITEM.getId(slotI.getItem()));
+        int id = Registries.ITEM.getId(bestI.getItem()).compareTo(Registries.ITEM.getId(slotI.getItem()));
         if (id == 0) {
             return slotI.getCount() > bestI.getCount();
         }

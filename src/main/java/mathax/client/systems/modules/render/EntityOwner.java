@@ -11,7 +11,7 @@ import mathax.client.settings.Setting;
 import mathax.client.settings.SettingGroup;
 import mathax.client.systems.modules.Category;
 import mathax.client.systems.modules.Module;
-import mathax.client.utils.misc.Vec3;
+import mathax.client.utils.Utils;
 import mathax.client.utils.network.Executor;
 import mathax.client.utils.network.Http;
 import mathax.client.utils.render.NametagUtils;
@@ -21,6 +21,7 @@ import net.minecraft.entity.passive.AbstractHorseEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
+import org.joml.Vector3d;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -30,7 +31,7 @@ import java.util.UUID;
 public class EntityOwner extends Module {
     private final Map<UUID, String> uuidToName = new HashMap<>();
 
-    private final Vec3 pos = new Vec3();
+    private final Vector3d pos = new Vector3d();
 
     private final SettingGroup generalSettings = settings.createGroup("General");
 
@@ -75,7 +76,7 @@ public class EntityOwner extends Module {
             }
 
             if (ownerUuid != null) {
-                pos.set(entity, event.tickDelta);
+                Utils.set(pos, entity, event.tickDelta);
                 pos.add(0, entity.getEyeHeight(entity.getPose()) + 0.75, 0);
 
                 if (NametagUtils.to2D(pos, scaleSetting.get())) {

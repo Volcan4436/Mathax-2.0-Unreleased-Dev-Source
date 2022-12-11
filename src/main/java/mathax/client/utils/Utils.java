@@ -30,22 +30,24 @@ import net.minecraft.client.gui.screen.world.SelectWorldScreen;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.resource.ResourceReloadLogger;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Matrix4f;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.chunk.Chunk;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.SystemUtils;
 import org.jetbrains.annotations.Range;
+import org.joml.Matrix4f;
+import org.joml.Vector3d;
 
 import java.io.*;
 import java.net.InetSocketAddress;
@@ -134,8 +136,7 @@ public class Utils {
             NbtList listTag = itemStack.getItem() == Items.ENCHANTED_BOOK ? EnchantedBookItem.getEnchantmentNbt(itemStack) : itemStack.getEnchantments();
             for (int i = 0; i < listTag.size(); ++i) {
                 NbtCompound tag = listTag.getCompound(i);
-
-                Registry.ENCHANTMENT.getOrEmpty(Identifier.tryParse(tag.getString("id"))).ifPresent((enchantment) -> enchantments.put(enchantment, tag.getInt("lvl")));
+                Registries.ENCHANTMENT.getOrEmpty(Identifier.tryParse(tag.getString("id"))).ifPresent((enchantment) -> enchantments.put(enchantment, tag.getInt("lvl")));
             }
         }
     }
@@ -169,12 +170,12 @@ public class Utils {
     }
 
     public static void unscaledProjection() {
-        RenderSystem.setProjectionMatrix(Matrix4f.projectionMatrix(0, mc.getWindow().getFramebufferWidth(), 0, mc.getWindow().getFramebufferHeight(), 1000, 3000));
+        RenderSystem.setProjectionMatrix(new Matrix4f().setOrtho(0, mc.getWindow().getFramebufferWidth(), mc.getWindow().getFramebufferHeight(), 0, 1000, 3000));
         rendering3D = false;
     }
 
     public static void scaledProjection() {
-        RenderSystem.setProjectionMatrix(Matrix4f.projectionMatrix(0, (float) (mc.getWindow().getFramebufferWidth() / mc.getWindow().getScaleFactor()), 0, (float) (mc.getWindow().getFramebufferHeight() / mc.getWindow().getScaleFactor()), 1000, 3000));
+        RenderSystem.setProjectionMatrix(new Matrix4f().setOrtho(0, (float) (mc.getWindow().getFramebufferWidth() / mc.getWindow().getScaleFactor()), (float) (mc.getWindow().getFramebufferHeight() / mc.getWindow().getScaleFactor()), 0, 1000, 3000));
         rendering3D = true;
     }
 
@@ -250,8 +251,8 @@ public class Utils {
     }
 
     public static Object2IntMap<StatusEffect> createStatusEffectMap() {
-        Object2IntMap<StatusEffect> map = new Object2IntArrayMap<>(Registry.STATUS_EFFECT.getIds().size());
-        Registry.STATUS_EFFECT.forEach(potion -> map.put(potion, 0));
+        Object2IntMap<StatusEffect> map = new Object2IntArrayMap<>(Registries.STATUS_EFFECT.getIds().size());
+        Registries.STATUS_EFFECT.forEach(potion -> map.put(potion, 0));
         return map;
     }
 
@@ -568,7 +569,7 @@ public class Utils {
             listTag = tag.getList("Enchantments", 10);
         }
 
-        String enchantmentId = Registry.ENCHANTMENT.getId(enchantment).toString();
+        String enchantmentId = Registries.ENCHANTMENT.getId(enchantment).toString();
         for (NbtElement element : listTag) {
             NbtCompound compound = (NbtCompound) element;
             if (compound.getString("id").equals(enchantmentId)) {
@@ -602,7 +603,7 @@ public class Utils {
         }
 
         NbtList list = nbt.getList("Enchantments", 10);
-        String enchantmentId = Registry.ENCHANTMENT.getId(enchantment).toString();
+        String enchantmentId = Registries.ENCHANTMENT.getId(enchantment).toString();
         for (Iterator<NbtElement> iterator = list.iterator(); iterator.hasNext();) {
             NbtCompound enchantment1 = (NbtCompound) iterator.next();
             if (enchantment1.getString("id").equals(enchantmentId)) {
@@ -676,6 +677,22 @@ public class Utils {
 
         InetSocketAddress socketAddress = new InetSocketAddress(address, port);
         return !socketAddress.isUnresolved();
+    }
+
+    public static Vector3d set(Vector3d vec, Vec3d v) {
+        vec.x = v.x;
+        vec.y = v.y;
+        vec.z = v.z;
+
+        return vec;
+    }
+
+    public static Vector3d set(Vector3d vec, Entity entity, double tickDelta) {
+        vec.x = MathHelper.lerp(tickDelta, entity.lastRenderX, entity.getX());
+        vec.y = MathHelper.lerp(tickDelta, entity.lastRenderY, entity.getY());
+        vec.z = MathHelper.lerp(tickDelta, entity.lastRenderZ, entity.getZ());
+
+        return vec;
     }
 
     // Filters

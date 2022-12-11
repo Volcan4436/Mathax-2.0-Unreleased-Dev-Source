@@ -2,8 +2,8 @@ package mathax.client.settings;
 
 import mathax.client.utils.settings.IVisible;
 import net.minecraft.item.Item;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.json.JSONObject;
 
 import java.util.function.Consumer;
@@ -20,7 +20,7 @@ public class ItemSetting extends Setting<Item> {
 
     @Override
     protected Item parseImpl(String string) {
-        return parseId(Registry.ITEM, string);
+        return parseId(Registries.ITEM, string);
     }
 
     @Override
@@ -30,12 +30,12 @@ public class ItemSetting extends Setting<Item> {
 
     @Override
     public Iterable<Identifier> getIdentifierSuggestions() {
-        return Registry.ITEM.getIds();
+        return Registries.ITEM.getIds();
     }
 
     @Override
     public JSONObject save(JSONObject json) {
-        json.put("value", Registry.ITEM.getId(get()).toString());
+        json.put("value", Registries.ITEM.getId(get()).toString());
 
         return json;
     }
@@ -43,10 +43,9 @@ public class ItemSetting extends Setting<Item> {
     @Override
     public Item load(JSONObject json) {
         if (json.has("value")) {
-            value = Registry.ITEM.get(new Identifier(json.getString("value")));
-
+            value = Registries.ITEM.get(new Identifier(json.getString("value")));
             if (filter != null && !filter.test(value)) {
-                for (Item item : Registry.ITEM) {
+                for (Item item : Registries.ITEM) {
                     if (filter.test(item)) {
                         value = item;
                         break;

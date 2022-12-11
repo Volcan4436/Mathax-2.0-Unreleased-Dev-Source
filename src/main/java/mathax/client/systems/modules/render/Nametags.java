@@ -18,7 +18,6 @@ import mathax.client.systems.themes.Themes;
 import mathax.client.utils.Utils;
 import mathax.client.utils.entity.EntityUtils;
 import mathax.client.utils.misc.MatHaxIdentifier;
-import mathax.client.utils.misc.Vec3;
 import mathax.client.utils.network.OnlinePlayers;
 import mathax.client.utils.player.ArmorUtils;
 import mathax.client.utils.player.PlayerUtils;
@@ -37,6 +36,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
+import org.joml.Vector3d;
 
 import java.util.*;
 
@@ -47,7 +47,7 @@ public class Nametags extends Module {
 
     private final List<Entity> entityList = new ArrayList<>();
 
-    private final Vec3 pos = new Vec3();
+    private final Vector3d pos = new Vector3d();
 
     private final double[] itemWidths = new double[6];
 
@@ -315,7 +315,7 @@ public class Nametags extends Module {
         for (int i = count - 1; i > -1; i--) {
             Entity entity = entityList.get(i);
 
-            pos.set(entity, event.tickDelta);
+            Utils.set(pos, entity, event.tickDelta);
             pos.add(0, getHeight(entity), 0);
 
             EntityType<?> type = entity.getType();

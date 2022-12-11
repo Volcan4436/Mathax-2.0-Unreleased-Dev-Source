@@ -36,52 +36,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ClientPlayerEntity.class)
 public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity {
-    private boolean ignoreChatMessage;
-
-    @Shadow
-    @Final
-    public ClientPlayNetworkHandler networkHandler;
-
-    @Shadow
-    public abstract void sendChatMessage(String message, @Nullable Text preview);
-
-    public ClientPlayerEntityMixin(ClientWorld world, GameProfile profile, @Nullable PlayerPublicKey publicKey) {
-        super(world, profile, publicKey);
+    public ClientPlayerEntityMixin(ClientWorld world, GameProfile profile) {
+        super(world, profile);
     }
 
     @Inject(method = "dropSelectedItem", at = @At("HEAD"), cancellable = true)
     private void onDropSelectedItem(boolean dropEntireStack, CallbackInfoReturnable<Boolean> infoReturnable) {
         if (MatHax.EVENT_BUS.post(DropItemsEvent.get(getMainHandStack())).isCancelled()) {
             infoReturnable.setReturnValue(false);
-        }
-    }
-
-    @Inject(method = "sendChatMessage(Ljava/lang/String;Lnet/minecraft/text/Text;)V", at = @At("HEAD"), cancellable = true)
-    private void onSendChatMessage(String message, Text preview, CallbackInfo info) {
-        if (ignoreChatMessage) return;
-
-        if (!message.startsWith(Config.get().prefixSetting.get()) && !message.startsWith("/") && !message.startsWith(BaritoneAPI.getSettings().prefix.value)) {
-            SendMessageEvent event = MatHax.EVENT_BUS.post(SendMessageEvent.get(message));
-
-            if (!event.isCancelled()) {
-                ignoreChatMessage = true;
-                sendChatMessage(event.message, preview);
-                ignoreChatMessage = false;
-            }
-
-            info.cancel();
-
-            return;
-        }
-
-        if (message.startsWith(Config.get().prefixSetting.get())) {
-            try {
-                Commands.get().dispatch(message.substring(Config.get().prefixSetting.get().length()));
-            } catch (CommandSyntaxException exception) {
-                ChatUtils.error(exception.getMessage());
-            }
-
-            info.cancel();
         }
     }
 

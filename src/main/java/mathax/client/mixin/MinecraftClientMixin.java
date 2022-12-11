@@ -180,12 +180,7 @@ public abstract class MinecraftClientMixin implements IMinecraftClient {
 
         if (Config.get() != null) {
             if (Config.get().customWindowTitleAndIconSetting.get() && !isCustom) {
-                try {
-                    Icon.setIcon(getResourceManager().getResource(new MatHaxIdentifier("icons/64.png")).get().getInputStream(), getResourceManager().getResource(new MatHaxIdentifier("icons/128.png")).get().getInputStream());
-                } catch (IOException exception) {
-                    exception.printStackTrace();
-                }
-
+                Icon.setIcon(new MatHaxIdentifier("icons/64.png"), new MatHaxIdentifier("icons/128.png"));
                 Title.setTitle(MatHax.NAME + " " + Versions.getStylized() + " - Minecraft " + versionType + " " + Versions.getMinecraft(), true);
                 isCustom = true;
             } else if (!Config.get().customWindowTitleAndIconSetting.get() && isCustom) {

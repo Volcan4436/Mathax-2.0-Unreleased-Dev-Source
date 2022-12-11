@@ -2,7 +2,7 @@ package mathax.client.systems.modules.world;
 
 import mathax.client.eventbus.EventHandler;
 import mathax.client.events.game.OpenScreenEvent;
-import mathax.client.mixin.SignEditScreenAccessor;
+import mathax.client.mixin.AbstractSignEditScreenAccessor;
 import mathax.client.settings.Setting;
 import mathax.client.settings.SettingGroup;
 import mathax.client.settings.StringSetting;
@@ -55,7 +55,7 @@ public class AutoSign extends Module {
             return;
         }
 
-        SignBlockEntity sign = ((SignEditScreenAccessor) event.screen).getSign();
+        SignBlockEntity sign = ((AbstractSignEditScreenAccessor) event.screen).getSign();
         mc.player.networkHandler.sendPacket(new UpdateSignC2SPacket(sign.getPos(), lineOneSetting.get(), lineTwoSetting.get(), lineThreeSetting.get(), lineFourSetting.get()));
 
         event.cancel();

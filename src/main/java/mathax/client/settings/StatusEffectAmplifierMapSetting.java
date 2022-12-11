@@ -6,8 +6,8 @@ import mathax.client.utils.Utils;
 import mathax.client.utils.json.JSONUtils;
 import mathax.client.utils.settings.IVisible;
 import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -32,7 +32,7 @@ public class StatusEffectAmplifierMapSetting extends Setting<Object2IntMap<Statu
             for (String value : values) {
                 String[] split = value.split(" ");
 
-                StatusEffect effect = parseId(Registry.STATUS_EFFECT, split[0]);
+                StatusEffect effect = parseId(Registries.STATUS_EFFECT, split[0]);
                 int level = Integer.parseInt(split[1]);
 
                 effects.put(effect, level);
@@ -51,7 +51,7 @@ public class StatusEffectAmplifierMapSetting extends Setting<Object2IntMap<Statu
     public JSONObject save(JSONObject json) {
         json.put("value", new JSONArray());
         for (StatusEffect statusEffect : get().keySet()) {
-            Identifier id = Registry.STATUS_EFFECT.getId(statusEffect);
+            Identifier id = Registries.STATUS_EFFECT.getId(statusEffect);
             if (id != null) {
                 JSONObject valueJson = new JSONObject();
                 valueJson.put("id", id);
@@ -71,7 +71,7 @@ public class StatusEffectAmplifierMapSetting extends Setting<Object2IntMap<Statu
             for (Object object : json.getJSONArray("value")) {
                 if (object instanceof JSONObject valueJson) {
                     if (valueJson.has("id") && valueJson.has("key")) {
-                        StatusEffect statusEffect = Registry.STATUS_EFFECT.get(new Identifier(valueJson.getString("id")));
+                        StatusEffect statusEffect = Registries.STATUS_EFFECT.get(new Identifier(valueJson.getString("id")));
                         if (statusEffect != null) {
                             get().put(statusEffect, valueJson.getInt("key"));
                         }

@@ -67,8 +67,7 @@ public class PeekScreen extends ShulkerBoxScreen {
     @Override
     protected void drawBackground(MatrixStack matrixStack, float delta, int mouseX, int mouseY) {
         Color color = Utils.getShulkerColor(storageBlock);
-
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         RenderSystem.setShaderColor(color.r / 255f, color.g / 255f, color.b / 255f, color.a / 255f);
         RenderSystem.setShaderTexture(0, TEXTURE);
 

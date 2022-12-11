@@ -10,7 +10,7 @@ import me.jellysquid.mods.sodium.client.render.chunk.compile.buffers.ChunkModelB
 import me.jellysquid.mods.sodium.client.render.pipeline.FluidRenderer;
 import me.jellysquid.mods.sodium.client.util.color.ColorARGB;
 import net.minecraft.fluid.FluidState;
-import net.minecraft.tag.FluidTags;
+import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockRenderView;
@@ -38,7 +38,7 @@ public class SodiumFluidRendererMixin {
     private void onRender(BlockRenderView world, FluidState fluidState, BlockPos pos, BlockPos offset, ChunkModelBuilder buffers, CallbackInfoReturnable<Boolean> infoReturnable) {
         int alpha = Xray.getAlpha(fluidState.getBlockState(), pos);
         if (alpha == 0) {
-            infoReturnable.cancel();
+            infoReturnable.setReturnValue(false);
         } else {
             alphas.set(alpha);
         }

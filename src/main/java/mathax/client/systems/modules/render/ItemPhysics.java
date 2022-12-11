@@ -16,10 +16,10 @@ import net.minecraft.item.AliasedBlockItem;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tag.FluidTags;
+import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3f;
 import net.minecraft.util.shape.VoxelShape;
 
 public class ItemPhysics extends Module {
@@ -56,7 +56,7 @@ public class ItemPhysics extends Module {
 
         if (!renderBlockFlat) {
             event.matrixStack.translate(0, .185, .0);
-            event.matrixStack.multiply(Vec3f.POSITIVE_X.getRadialQuaternion(1.571F));
+            event.matrixStack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(1.571F));
             event.matrixStack.translate(0, -.185, -.0);
         }
 
@@ -65,11 +65,11 @@ public class ItemPhysics extends Module {
             float rotation = ((float) event.itemEntity.getItemAge() + event.tickDelta) / 20.0F + event.itemEntity.uniqueOffset;
             if (!renderBlockFlat) {
                 event.matrixStack.translate(0, .185, .0);
-                event.matrixStack.multiply(Vec3f.POSITIVE_Z.getRadialQuaternion(rotation));
+                event.matrixStack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(rotation));
                 event.matrixStack.translate(0, -.185, .0);
                 rotator.setRotation(new Vec3d(0, 0, rotation));
             } else {
-                event.matrixStack.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion(rotation));
+                event.matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(rotation));
                 rotator.setRotation(new Vec3d(0, rotation, 0));
                 event.matrixStack.translate(0, -.065, 0);
             }
@@ -81,11 +81,11 @@ public class ItemPhysics extends Module {
             }
         } else if (event.itemEntity.getStack().getItem() instanceof AliasedBlockItem) {
             event.matrixStack.translate(0, .185, .0);
-            event.matrixStack.multiply(Vec3f.POSITIVE_Z.getRadialQuaternion((float) rotator.getRotation().z));
+            event.matrixStack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees((float) rotator.getRotation().z));
             event.matrixStack.translate(0, -.185, .0);
             event.matrixStack.translate(0, 0, .195);
         } else if (renderBlockFlat) {
-            event.matrixStack.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion((float) rotator.getRotation().y));
+            event.matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees((float) rotator.getRotation().y));
             event.matrixStack.translate(0, -.065, 0);
         } else {
             if (!(event.itemEntity.getStack().getItem() instanceof BlockItem)) {
@@ -93,7 +93,7 @@ public class ItemPhysics extends Module {
             }
 
             event.matrixStack.translate(0, .185, .0);
-            event.matrixStack.multiply(Vec3f.POSITIVE_Z.getRadialQuaternion((float) rotator.getRotation().z));
+            event.matrixStack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees((float) rotator.getRotation().z));
             event.matrixStack.translate(0, -.185, .0);
         }
 
@@ -107,9 +107,9 @@ public class ItemPhysics extends Module {
             }
         }
 
-        float scaleX = bakedModel.getTransformation().ground.scale.getX();
-        float scaleY = bakedModel.getTransformation().ground.scale.getY();
-        float scaleZ = bakedModel.getTransformation().ground.scale.getZ();
+        float scaleX = bakedModel.getTransformation().ground.scale.x;
+        float scaleY = bakedModel.getTransformation().ground.scale.y;
+        float scaleZ = bakedModel.getTransformation().ground.scale.z;
 
         float x;
         float y;
@@ -132,7 +132,7 @@ public class ItemPhysics extends Module {
                     x = (event.random.nextFloat() * 2.0F - 1.0F) * 0.15F * 0.5F;
                     y = (event.random.nextFloat() * 2.0F - 1.0F) * 0.15F * 0.5F;
                     event.matrixStack.translate(x, y, 0.0D);
-                    event.matrixStack.multiply(Vec3f.POSITIVE_Z.getRadialQuaternion(event.random.nextFloat()));
+                    event.matrixStack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(event.random.nextFloat()));
                 }
             }
 

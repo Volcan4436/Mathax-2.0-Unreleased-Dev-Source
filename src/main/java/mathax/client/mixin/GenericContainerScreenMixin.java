@@ -14,29 +14,14 @@ public abstract class GenericContainerScreenMixin extends HandledScreen<GenericC
         super(container, playerInventory, name);
     }
 
-    /*@Override
+    @Override
     protected void init() {
         super.init();
 
-        InventoryTweaks inventoryTweaks = Modules.get().get(InventoryTweaks.class);
+        /*InventoryTweaks inventoryTweaks = Modules.get().get(InventoryTweaks.class);
         if (inventoryTweaks.isEnabled() && inventoryTweaks.showButtons()) {
-            addDrawableChild(new ContainerButtonWidget(
-                x + backgroundWidth - 88,
-                y + 3,
-                40,
-                12,
-                Text.literal("Steal"),
-                button -> inventoryTweaks.steal(handler))
-            );
-
-            addDrawableChild(new ContainerButtonWidget(
-                x + backgroundWidth - 46,
-                y + 3,
-                40,
-                12,
-                Text.literal("Dump"),
-                button -> inventoryTweaks.dump(handler))
-            );
-        }
-    }*/
+            addDrawableChild(new ButtonWidget.Builder(Text.literal("Steal"), button -> inventoryTweaks.steal(handler)).position(x + backgroundWidth - 88, y + 3).size(40, 12).build());
+            addDrawableChild(new ButtonWidget.Builder(Text.literal("Dump"), button -> inventoryTweaks.dump(handler)).position(x + backgroundWidth - 46, y + 3).size(40, 12).build());
+        }*/
+    }
 }

@@ -3,8 +3,8 @@ package mathax.client.settings;
 import mathax.client.utils.json.JSONUtils;
 import mathax.client.utils.settings.IVisible;
 import net.minecraft.block.Block;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -35,7 +35,7 @@ public class BlockListSetting extends Setting<List<Block>> {
 
         try {
             for (String value : values) {
-                Block block = parseId(Registry.BLOCK, value);
+                Block block = parseId(Registries.BLOCK, value);
                 if (block != null && (filter == null || filter.test(block))) {
                     blocks.add(block);
                 }
@@ -52,14 +52,14 @@ public class BlockListSetting extends Setting<List<Block>> {
 
     @Override
     public Iterable<Identifier> getIdentifierSuggestions() {
-        return Registry.BLOCK.getIds();
+        return Registries.BLOCK.getIds();
     }
 
     @Override
     protected JSONObject save(JSONObject json) {
         json.put("value", new JSONArray());
         for (Block block : get()) {
-            json.append("value", Registry.BLOCK.getId(block).toString());
+            json.append("value", Registries.BLOCK.getId(block).toString());
         }
 
         return json;
@@ -72,7 +72,7 @@ public class BlockListSetting extends Setting<List<Block>> {
         if (json.has("value") && JSONUtils.isValidJSONArray(json, "value")) {
             for (Object object : json.getJSONArray("value")) {
                 if (object instanceof String id) {
-                    Block block = Registry.BLOCK.get(new Identifier(id));
+                    Block block = Registries.BLOCK.get(new Identifier(id));
                     if (filter == null || filter.test(block)) {
                         get().add(block);
                     }

@@ -12,7 +12,6 @@ import mathax.client.systems.friends.Friends;
 import mathax.client.systems.modules.Category;
 import mathax.client.systems.modules.Module;
 import mathax.client.utils.entity.EntityUtils;
-import mathax.client.utils.misc.Vec3;
 import mathax.client.utils.player.PlayerUtils;
 import mathax.client.utils.render.NametagUtils;
 import mathax.client.utils.render.WireframeEntityRenderer;
@@ -23,15 +22,16 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
+import org.joml.Vector3d;
 
 public class ESP extends Module {
     private final Color lineColor = new Color();
     private final Color sideColor = new Color();
     private final Color baseColor = new Color();
 
-    private final Vec3 pos1 = new Vec3();
-    private final Vec3 pos2 = new Vec3();
-    private final Vec3 pos = new Vec3();
+    private final Vector3d pos1 = new Vector3d();
+    private final Vector3d pos2 = new Vector3d();
+    private final Vector3d pos = new Vector3d();
 
     private int count;
 
@@ -315,7 +315,7 @@ public class ESP extends Module {
         Renderer2D.COLOR.render(null);
     }
 
-    private boolean checkCorner(double x, double y, double z, Vec3 min, Vec3 max) {
+    private boolean checkCorner(double x, double y, double z, Vector3d min, Vector3d max) {
         pos.set(x, y, z);
 
         if (!NametagUtils.to2D(pos, 1)) {

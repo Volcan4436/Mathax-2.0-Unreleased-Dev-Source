@@ -46,7 +46,7 @@ public abstract class BookEditScreenMixin extends Screen {
 
     @Inject(method = "init", at = @At("TAIL"))
     private void onInit(CallbackInfo info) {
-        addDrawableChild(new ButtonWidget(4, 4, 120, 20, Text.literal("Copy"), button -> {
+        addDrawableChild(new ButtonWidget.Builder(Text.literal("Copy"), button -> {
             NbtList listTag = new NbtList();
             pages.stream().map(NbtString::of).forEach(listTag::add);
 
@@ -67,9 +67,9 @@ public abstract class BookEditScreenMixin extends Screen {
             } catch (OutOfMemoryError exception) {
                 GLFW.glfwSetClipboardString(mc.getWindow().getHandle(), exception.toString());
             }
-        }));
+        }).position(4, 4).size(120, 20).build());
 
-        addDrawableChild(new ButtonWidget(4, 4 + 20 + 2, 120, 20, Text.literal("Paste"), button -> {
+        addDrawableChild(new ButtonWidget.Builder(Text.literal("Paste"), button -> {
             String clipboard = GLFW.glfwGetClipboardString(mc.getWindow().getHandle());
             if (clipboard == null) {
                 return;
@@ -83,13 +83,14 @@ public abstract class BookEditScreenMixin extends Screen {
             }
 
             DataInputStream in = new DataInputStream(new ByteArrayInputStream(bytes));
+
             try {
                 NbtCompound tag = NbtIo.read(in);
+
                 NbtList listTag = tag.getList("pages", 8).copy();
 
                 pages.clear();
-
-                for (int i = 0; i < listTag.size(); ++i) {
+                for(int i = 0; i < listTag.size(); ++i) {
                     pages.add(listTag.getString(i));
                 }
 
@@ -100,11 +101,10 @@ public abstract class BookEditScreenMixin extends Screen {
                 currentPage = tag.getInt("currentPage");
 
                 dirty = true;
-
                 updateButtons();
             } catch (IOException exception) {
                 exception.printStackTrace();
             }
-        }));
+        }).position(4, 4 + 20 + 2).size(4, 4 + 20 + 2).build());
     }
 }

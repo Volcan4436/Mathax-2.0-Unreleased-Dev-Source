@@ -3,8 +3,8 @@ package mathax.client.settings;
 import mathax.client.utils.json.JSONUtils;
 import mathax.client.utils.settings.IVisible;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -30,7 +30,7 @@ public class EnchantmentListSetting extends Setting<List<Enchantment>> {
 
         try {
             for (String value : values) {
-                Enchantment enchantment = parseId(Registry.ENCHANTMENT, value);
+                Enchantment enchantment = parseId(Registries.ENCHANTMENT, value);
                 if (enchantment != null) {
                     enchantments.add(enchantment);
                 }
@@ -47,14 +47,14 @@ public class EnchantmentListSetting extends Setting<List<Enchantment>> {
 
     @Override
     public Iterable<Identifier> getIdentifierSuggestions() {
-        return Registry.ENCHANTMENT.getIds();
+        return Registries.ENCHANTMENT.getIds();
     }
 
     @Override
     public JSONObject save(JSONObject json) {
         json.put("value", new JSONArray());
         for (Enchantment enchantment : get()) {
-            Identifier id = Registry.ENCHANTMENT.getId(enchantment);
+            Identifier id = Registries.ENCHANTMENT.getId(enchantment);
             if (id != null) {
                 json.append("value", id.toString());
             }
@@ -70,7 +70,7 @@ public class EnchantmentListSetting extends Setting<List<Enchantment>> {
         if (json.has("value") && JSONUtils.isValidJSONArray(json, "value")) {
             for (Object object : json.getJSONArray("value")) {
                 if (object instanceof String id) {
-                    Enchantment enchantment = Registry.ENCHANTMENT.get(new Identifier(id));
+                    Enchantment enchantment = Registries.ENCHANTMENT.get(new Identifier(id));
                     if (enchantment != null) {
                         get().add(enchantment);
                     }

@@ -27,7 +27,6 @@ import mathax.client.utils.entity.EntityUtils;
 import mathax.client.utils.entity.Target;
 import mathax.client.utils.entity.fakeplayer.FakePlayerManager;
 import mathax.client.utils.input.KeyBind;
-import mathax.client.utils.misc.Vec3;
 import mathax.client.utils.player.*;
 import mathax.client.utils.render.NametagUtils;
 import mathax.client.utils.render.color.Color;
@@ -49,6 +48,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.*;
 import net.minecraft.world.RaycastContext;
+import org.joml.Vector3d;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +61,7 @@ public class CrystalAura extends Module {
 
     private final Vec3d vec3d = new Vec3d(0, 0, 0);
     private final Vec3d playerEyePos = new Vec3d(0, 0, 0);
-    private final Vec3 vec3 = new Vec3();
+    private final Vector3d vec3 = new Vector3d();
     private final BlockPos.Mutable blockPos = new BlockPos.Mutable();
     private final Box box = new Box(0, 0, 0, 0, 0, 0);
 

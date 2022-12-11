@@ -6,7 +6,6 @@ import mathax.client.eventbus.EventHandler;
 import mathax.client.events.render.Render3DEvent;
 import mathax.client.events.world.TickEvent;
 import mathax.client.init.PostInit;
-import mathax.client.mixininterface.IMatrix4f;
 import mathax.client.renderer.ShapeMode;
 import mathax.client.utils.misc.Pool;
 import mathax.client.utils.render.color.Color;
@@ -17,8 +16,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3f;
+import org.joml.Matrix3f;
+import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -64,13 +65,13 @@ public class RenderUtils {
     public static void updateScreenCenter() {
         MinecraftClient mc = MinecraftClient.getInstance();
 
-        Vec3d pos = new Vec3d(0, 0, 1);
         //TODO: Nobob
+        Vector3f pos = new Vector3f(0, 0, 1);
         if (mc.options.getBobView().getValue()) {
             MatrixStack bobViewMatrixStack = new MatrixStack();
             bobView(bobViewMatrixStack);
             bobViewMatrixStack.peek().getPositionMatrix().invert();
-            pos = ((IMatrix4f) (Object) bobViewMatrixStack.peek().getPositionMatrix()).mul(pos);
+            pos.mul(bobViewMatrixStack.peek().getPositionMatrix().get3x3(new Matrix3f()));
         }
 
         center = new Vec3d(pos.x, -pos.y, pos.z).rotateX(-(float) Math.toRadians(mc.gameRenderer.getCamera().getPitch())).rotateY(-(float) Math.toRadians(mc.gameRenderer.getCamera().getYaw())).add(mc.gameRenderer.getCamera().getPos());
@@ -85,8 +86,8 @@ public class RenderUtils {
             float i = MathHelper.lerp(f, playerEntity.prevStrideDistance, playerEntity.strideDistance);
 
             matrixStack.translate(-(MathHelper.sin(h * 3.1415927f) * i * 0.5), -(-Math.abs(MathHelper.cos(h * 3.1415927f) * i)), 0);
-            matrixStack.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(MathHelper.sin(h * 3.1415927f) * i * 3));
-            matrixStack.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(Math.abs(MathHelper.cos(h * 3.1415927f - 0.2f) * i) * 5));
+            matrixStack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(MathHelper.sin(h * 3.1415927f) * i * 3));
+            matrixStack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(Math.abs(MathHelper.cos(h * 3.1415927f - 0.2f) * i) * 5));
         }
     }
 
