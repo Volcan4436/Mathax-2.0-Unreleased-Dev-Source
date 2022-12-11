@@ -147,6 +147,7 @@ public class Modules extends System<Modules> {
         // Player
         Category player = Categories.Player;
         add(new AntiCactus(player));
+        add(new AntiHunger(player));
         add(new AutoTool(player));
         add(new ChestSwap(player));
         add(new EndermanLook(player));
@@ -181,6 +182,7 @@ public class Modules extends System<Modules> {
 
         // Misc
         Category misc = Categories.Misc;
+        add(new AutoClicker(misc));
         add(new AutoReconnect(misc));
         add(new BetterBeacons(misc));
         add(new BetterTab(misc));
