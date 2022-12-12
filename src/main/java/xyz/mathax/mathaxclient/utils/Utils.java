@@ -55,6 +55,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 import static org.lwjgl.glfw.GLFW.*;
+import static xyz.mathax.mathaxclient.MatHax.mc;
 
 public class Utils {
     public static final Pattern FILE_NAME_INVALID_CHARS_PATTERN = Pattern.compile("[\\s\\\\/:*?\"<>|]");
@@ -75,8 +76,8 @@ public class Utils {
 
     @EventHandler
     private static void onTick(TickEvent.Post event) {
-        if (screenToOpen != null && MatHax.mc.currentScreen == null) {
-            MatHax.mc.setScreen(screenToOpen);
+        if (screenToOpen != null && mc.currentScreen == null) {
+            mc.setScreen(screenToOpen);
             screenToOpen = null;
         }
     }
@@ -86,12 +87,12 @@ public class Utils {
     }
 
     public static double getPlayerSpeed() {
-        if (MatHax.mc.player == null) {
+        if (mc.player == null) {
             return 0;
         }
 
-        double tX = Math.abs(MatHax.mc.player.getX() - MatHax.mc.player.prevX);
-        double tZ = Math.abs(MatHax.mc.player.getZ() - MatHax.mc.player.prevZ);
+        double tX = Math.abs(mc.player.getX() - mc.player.prevX);
+        double tZ = Math.abs(mc.player.getZ() - mc.player.prevZ);
         double length = Math.sqrt(tX * tX + tZ * tZ);
 
         Timer timer = Modules.get().get(Timer.class);
@@ -103,11 +104,11 @@ public class Utils {
     }
 
     public static String getWorldTime() {
-        if (MatHax.mc.world == null) {
+        if (mc.world == null) {
             return "00:00";
         }
 
-        int ticks = (int) (MatHax.mc.world.getTimeOfDay() % 24000);
+        int ticks = (int) (mc.world.getTimeOfDay() % 24000);
         ticks += 6000;
         if (ticks > 24000) {
             ticks -= 24000;
@@ -157,24 +158,24 @@ public class Utils {
     }
 
     public static int getRenderDistance() {
-        return Math.max(MatHax.mc.options.getViewDistance().getValue(), ((ClientPlayNetworkHandlerAccessor) MatHax.mc.getNetworkHandler()).getChunkLoadDistance());
+        return Math.max(mc.options.getViewDistance().getValue(), ((ClientPlayNetworkHandlerAccessor) mc.getNetworkHandler()).getChunkLoadDistance());
     }
 
     public static int getWindowWidth() {
-        return MatHax.mc.getWindow().getFramebufferWidth();
+        return mc.getWindow().getFramebufferWidth();
     }
 
     public static int getWindowHeight() {
-        return MatHax.mc.getWindow().getFramebufferHeight();
+        return mc.getWindow().getFramebufferHeight();
     }
 
     public static void unscaledProjection() {
-        RenderSystem.setProjectionMatrix(new Matrix4f().setOrtho(0, MatHax.mc.getWindow().getFramebufferWidth(), MatHax.mc.getWindow().getFramebufferHeight(), 0, 1000, 3000));
+        RenderSystem.setProjectionMatrix(new Matrix4f().setOrtho(0, mc.getWindow().getFramebufferWidth(), mc.getWindow().getFramebufferHeight(), 0, 1000, 3000));
         rendering3D = false;
     }
 
     public static void scaledProjection() {
-        RenderSystem.setProjectionMatrix(new Matrix4f().setOrtho(0, (float) (MatHax.mc.getWindow().getFramebufferWidth() / MatHax.mc.getWindow().getScaleFactor()), (float) (MatHax.mc.getWindow().getFramebufferHeight() / MatHax.mc.getWindow().getScaleFactor()), 0, 1000, 3000));
+        RenderSystem.setProjectionMatrix(new Matrix4f().setOrtho(0, (float) (mc.getWindow().getFramebufferWidth() / mc.getWindow().getScaleFactor()), (float) (mc.getWindow().getFramebufferHeight() / mc.getWindow().getScaleFactor()), 0, 1000, 3000));
         rendering3D = true;
     }
 
@@ -188,7 +189,7 @@ public class Utils {
             if (pause) {
                 screenToOpen = new PeekScreen(itemStack, contents);
             } else {
-                MatHax.mc.setScreen(new PeekScreen(itemStack, contents));
+                mc.setScreen(new PeekScreen(itemStack, contents));
             }
 
             return true;
@@ -338,21 +339,21 @@ public class Utils {
     }
 
     public static String getWorldName() {
-        if (MatHax.mc.isInSingleplayer()) {
-            if (MatHax.mc.world == null) {
+        if (mc.isInSingleplayer()) {
+            if (mc.world == null) {
                 return "";
             }
 
-            File folder = ((MinecraftServerAccessor) MatHax.mc.getServer()).getSession().getWorldDirectory(MatHax.mc.world.getRegistryKey()).toFile();
-            if (folder.toPath().relativize(MatHax.mc.runDirectory.toPath()).getNameCount() != 2) {
+            File folder = ((MinecraftServerAccessor) mc.getServer()).getSession().getWorldDirectory(mc.world.getRegistryKey()).toFile();
+            if (folder.toPath().relativize(mc.runDirectory.toPath()).getNameCount() != 2) {
                 folder = folder.getParentFile();
             }
 
             return folder.getName();
         }
 
-        if (MatHax.mc.getCurrentServerEntry() != null) {
-            return MatHax.mc.isConnectedToRealms() ? "realms" : MatHax.mc.getCurrentServerEntry().address;
+        if (mc.getCurrentServerEntry() != null) {
+            return mc.isConnectedToRealms() ? "realms" : mc.getCurrentServerEntry().address;
         }
 
         return "";
@@ -471,19 +472,19 @@ public class Utils {
     }
 
     public static boolean canUpdate() {
-        return MatHax.mc != null && MatHax.mc.world != null && MatHax.mc.player != null;
+        return mc != null && mc.world != null && mc.player != null;
     }
 
     public static boolean canOpenGui() {
         if (canUpdate()) {
-            return MatHax.mc.currentScreen == null;
+            return mc.currentScreen == null;
         }
 
-        return MatHax.mc.currentScreen instanceof TitleScreen || MatHax.mc.currentScreen instanceof MultiplayerScreen || MatHax.mc.currentScreen instanceof SelectWorldScreen;
+        return mc.currentScreen instanceof TitleScreen || mc.currentScreen instanceof MultiplayerScreen || mc.currentScreen instanceof SelectWorldScreen;
     }
 
     public static boolean canCloseGui() {
-        return MatHax.mc.currentScreen instanceof TabScreen;
+        return mc.currentScreen instanceof TabScreen;
     }
 
     public static int random(int min, int max) {
@@ -496,14 +497,14 @@ public class Utils {
 
     public static GameProfile getRandomGameProfile() {
         GameProfile profile = null;
-        Collection<PlayerListEntry> playerListEntries = MatHax.mc.getNetworkHandler().getPlayerList();
+        Collection<PlayerListEntry> playerListEntries = mc.getNetworkHandler().getPlayerList();
         if (playerListEntries.size() <= 1) {
             return null;
         }
 
         int i = 1;
         int randomI = random(1, playerListEntries.size());
-        if (MatHax.mc.world != null) {
+        if (mc.world != null) {
             for (PlayerListEntry playerListEntry : playerListEntries) {
                 if (randomI == i) {
                     profile = playerListEntry.getProfile();
@@ -517,13 +518,13 @@ public class Utils {
     }
 
     public static void leftClick() {
-        MatHax.mc.options.attackKey.setPressed(true);
-        ((MinecraftClientAccessor) MatHax.mc).leftClick();
-        MatHax.mc.options.attackKey.setPressed(false);
+        mc.options.attackKey.setPressed(true);
+        ((MinecraftClientAccessor) mc).leftClick();
+        mc.options.attackKey.setPressed(false);
     }
 
     public static void rightClick() {
-        ((IMinecraftClient) MatHax.mc).rightClick();
+        ((IMinecraftClient) mc).rightClick();
     }
 
     public static boolean isShulker(Item item) {
@@ -627,7 +628,7 @@ public class Utils {
     }
 
     public static boolean isLoading() {
-        ResourceReloadLogger.ReloadState state = ((ResourceReloadLoggerAccessor) ((MinecraftClientAccessor) MatHax.mc).getResourceReloadLogger()).getReloadState();
+        ResourceReloadLogger.ReloadState state = ((ResourceReloadLoggerAccessor) ((MinecraftClientAccessor) mc).getResourceReloadLogger()).getReloadState();
         return state == null || !((ReloadStateAccessor) state).isFinished();
     }
 

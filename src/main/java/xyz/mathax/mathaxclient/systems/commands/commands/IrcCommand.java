@@ -16,12 +16,12 @@ public class IrcCommand extends Command {
     @Override
     public void build(LiteralArgumentBuilder<CommandSource> builder) {
         builder.then(literal("connect").executes(context -> {
-            MatHax.API.irc.connect();
+            MatHax.API.irc.forceToggle(true);
             return SINGLE_SUCCESS;
         }));
 
         builder.then(literal("disconnect").executes(context -> {
-            MatHax.API.irc.disconnect();
+            MatHax.API.irc.forceToggle(false);
             return SINGLE_SUCCESS;
         }));
 
@@ -34,22 +34,12 @@ public class IrcCommand extends Command {
         })));
 
         builder.then(literal("send").then(argument("message", StringArgumentType.greedyString()).executes(context -> {
-            try {
-                MatHax.API.irc.send(context.getArgument("message", String.class));
-            } catch (Exception exception) {
-                throw new RuntimeException(exception);
-            }
-
+            MatHax.API.irc.send(context.getArgument("message", String.class));
             return SINGLE_SUCCESS;
         })));
 
         builder.then(literal("sendDirect").then(argument("user", StringArgumentType.string()).then(argument("message", StringArgumentType.greedyString()).executes(context -> {
-            try {
-                MatHax.API.irc.sendDirect(StringArgumentType.getString(context, "user"), context.getArgument("message", String.class));
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
-
+            MatHax.API.irc.sendDirect(StringArgumentType.getString(context, "user"), context.getArgument("message", String.class));
             return SINGLE_SUCCESS;
         }))));
     }

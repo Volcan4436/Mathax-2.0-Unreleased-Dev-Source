@@ -1,67 +1,101 @@
 package xyz.mathax.mathaxclient.utils.network.irc;
 
-import com.google.gson.Gson;
+import org.json.JSONObject;
+import xyz.mathax.mathaxclient.MatHax;
 import xyz.mathax.mathaxclient.utils.misc.CryptUtils;
+import xyz.mathax.mathaxclient.utils.misc.ISerializable;
 
 import javax.crypto.SecretKey;
 import java.util.Base64;
-import java.util.HashMap;
 
-public class IrcMessage {
+public class IrcMessage implements ISerializable<IrcMessage> {
     public IrcMessageType type;
-    public HashMap<String, String> data;
+
+    public JSONObject data;
 
     public IrcMessage(IrcMessageType type) {
         this.type = type;
-        this.data = new HashMap<>();
+        this.data = new JSONObject();
     }
 
-    public static IrcMessage auth(String username, String pub_key, SecretKey secret, int iv) throws Exception {
-        String key = Base64.getEncoder().encodeToString(secret.getEncoded());
-        IrcMessage obj = new IrcMessage(IrcMessageType.AUTH);
-        obj.data.put("user", username);
-        obj.data.put("token", CryptUtils.encryptRSA(iv + "|" + key, pub_key));
-        return obj;
+    public IrcMessage(JSONObject json) {
+        fromJson(json);
     }
 
-    public static IrcMessage broadcast(String username, String message) {
-        IrcMessage obj = new IrcMessage(IrcMessageType.BROADCAST);
-        obj.data.put("message", message);
-        obj.data.put("from", username);
-        return obj;
+    public static IrcMessage auth(String pub_key, SecretKey secret, int iv) {
+        try {
+            String key = Base64.getEncoder().encodeToString(secret.getEncoded());
+            IrcMessage ircMessage = new IrcMessage(IrcMessageType.AUTH);
+            ircMessage.data.put("token", CryptUtils.encryptRSA(iv + "|" + key, pub_key));
+            return ircMessage;
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+
+        return null;
     }
 
-    public static IrcMessage directMessage(String username, String to, String message) {
-        IrcMessage obj = new IrcMessage(IrcMessageType.DIRECT_MESSAGE);
-        obj.data.put("message", message);
-        obj.data.put("from", username);
-        obj.data.put("to", to);
-        return obj;
+    public static IrcMessage broadcast(String from, String message) {
+        IrcMessage ircMessage = new IrcMessage(IrcMessageType.BROADCAST);
+        ircMessage.data.put("from", from);
+        ircMessage.data.put("message", message);
+        return ircMessage;
     }
 
-    public static IrcMessage ping() {return new IrcMessage(IrcMessageType.PING);}
+    public static IrcMessage directMessage(String from, String to, String message) {
+        IrcMessage ircMessage = new IrcMessage(IrcMessageType.DIRECT_MESSAGE);
+        ircMessage.data.put("from", from);
+        ircMessage.data.put("to", to);
+        ircMessage.data.put("message", message);
+        return ircMessage;
+    }
 
-    public IrcMessage encrypt(SecretKey secret, int iv) throws Exception {
-        if (this.data.containsKey("message")) {
-            this.data.put("message", CryptUtils.encryptAES(this.data.get("message"), secret, iv));
+    public static IrcMessage ping() {
+        return new IrcMessage(IrcMessageType.PING);
+    }
+
+    public IrcMessage encrypt(SecretKey secret, int iv) {
+        try {
+            if (data.has("message")) {
+                data.put("message", CryptUtils.encryptAES(data.getString("message"), secret, iv));
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
         }
 
         return this;
     }
 
-    public IrcMessage decrypt(SecretKey secret, int iv) throws Exception {
-        if (this.data.containsKey("message")) {
-            this.data.put("message", CryptUtils.decryptAES(this.data.get("message"), secret, iv));
+    public IrcMessage decrypt(SecretKey secret, int iv) {
+        try {
+            if (data.has("message")) {
+                data.put("message", CryptUtils.decryptAES(data.getString("message"), secret, iv));
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
         }
 
         return this;
     }
 
-    public String toJSON() {
-        return new Gson().toJson(this);
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("type", type.toString());
+        json.put("data", data);
+        return json;
     }
 
-    public static IrcMessage fromJSON(String json) {
-        return new Gson().fromJson(json, IrcMessage.class);
+    @Override
+    public IrcMessage fromJson(JSONObject json) {
+        if (json.has("type") && json.has("data")) {
+            try {
+                type = IrcMessageType.valueOf(json.getString("type"));
+            } catch (IllegalArgumentException ignored) {}
+
+            data = json.getJSONObject("data");
+        }
+
+        return this;
     }
 }

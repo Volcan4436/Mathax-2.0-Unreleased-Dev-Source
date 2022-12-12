@@ -47,7 +47,7 @@ public class Config extends System<Config> {
                     MatHax.API.createIrc();
                 }
 
-                MatHax.API.irc.enabled = value;
+                MatHax.API.irc.forceToggle(value);
             })
             .build()
     );
