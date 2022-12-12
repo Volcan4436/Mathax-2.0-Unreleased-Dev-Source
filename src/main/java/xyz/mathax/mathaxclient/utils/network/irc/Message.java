@@ -1,5 +1,7 @@
 package xyz.mathax.mathaxclient.utils.network.irc;
 
+import com.google.gson.Gson;
+
 import javax.crypto.SecretKey;
 import java.util.Base64;
 import java.util.HashMap;
@@ -22,29 +24,26 @@ public class Message {
     }
 
     public static Message broadcast(String message) {
-        Message message2 = new Message(MessageType.BROADCAST);
-        message2.data.put("message", message);
-        message2.data.put("from", IrcClient.username);
-        return message2;
+        Message obj = new Message(MessageType.BROADCAST);
+        obj.data.put("message", message);
+        obj.data.put("from", IrcClient.username);
+        return obj;
     }
 
     public static Message directMessage(String to, String message) {
-        Message message2 = new Message(MessageType.DIRECT_MESSAGE);
-        message2.data.put("message", message);
-        message2.data.put("from", IrcClient.username);
-        message2.data.put("to", to);
-        return message2;
+        Message obj = new Message(MessageType.DIRECT_MESSAGE);
+        obj.data.put("message", message);
+        obj.data.put("from", IrcClient.username);
+        obj.data.put("to", to);
+        return obj;
     }
 
-    public static Message ping() {
-        return new Message(MessageType.PING);
-    }
+    public static Message ping() {return new Message(MessageType.PING);}
 
     public Message encrypt(SecretKey secret, int iv) throws Exception {
         if (this.data.containsKey("message")) {
             this.data.put("message", CryptUtils.encryptAES(this.data.get("message"), secret, iv));
         }
-
         return this;
     }
 
@@ -52,15 +51,14 @@ public class Message {
         if (this.data.containsKey("message")) {
             this.data.put("message", CryptUtils.decryptAES(this.data.get("message"), secret, iv));
         }
-
         return this;
     }
 
-    public String toJSON(){
-        return IrcClient.gson.toJson(this);
+    public String toJSON() {
+        return new Gson().toJson(this);
     }
 
     public static Message fromJSON(String json) {
-        return IrcClient.gson.fromJson(json, Message.class);
+        return new Gson().fromJson(json, Message.class);
     }
 }

@@ -5,6 +5,11 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import org.json.JSONObject;
+import xyz.mathax.mathaxclient.MatHax;
+import xyz.mathax.mathaxclient.utils.json.JSONUtils;
+import xyz.mathax.mathaxclient.utils.misc.ISerializable;
+import xyz.mathax.mathaxclient.utils.network.api.Api;
 import xyz.mathax.mathaxclient.utils.render.color.Color;
 
 import java.io.File;
@@ -21,23 +26,18 @@ public class IrcClient {
     protected static String username;
     protected static String password;
 
-    public static Gson gson = new Gson();
     public static MutableText prefix = Text.literal("[IRC] ").formatted(Formatting.BLUE);
 
     public static IrcClientEndpoint endpoint = null;
 
     static {
-        try {
-            File file = FabricLoader.getInstance().getConfigDir().resolve("mathax").resolve("irc.json").toFile();
-            if (file.exists()) {
-                HashMap data = gson.fromJson(new FileReader(file), HashMap.class);
-                username = (String) data.get("username");
-                password = (String) data.get("password");
-            }else{
-                updateAuth("", "");
+        File file = new File(MatHax.FOLDER, "IRC.json");
+        if (file.exists()) {
+            JSONObject json = JSONUtils.loadJSON(file);
+            if (json.has("username") && json.has("password")) {
+                username = json.getString("username");
+                password = json.getString("password");
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -48,18 +48,14 @@ public class IrcClient {
     private static void updateAuth(String username, String password) {
         IrcClient.username = username;
         IrcClient.password = password;
-        try {
-            File file = FabricLoader.getInstance().getConfigDir().resolve("mathax").resolve("irc.json").toFile();
-            file.getParentFile().mkdir();
-            FileWriter fileWriter = new FileWriter(file);
-            HashMap<String, String> data = new HashMap<>();
-            data.put("username", username);
-            data.put("password", password);
-            fileWriter.write(gson.toJson(data));
-            fileWriter.close();
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }
+
+        File file = new File(MatHax.FOLDER, "IRC.json");
+        file.getParentFile().mkdir();
+
+        JSONObject json = new JSONObject();
+        json.put("username", username);
+        json.put("password", password);
+        JSONUtils.saveJSON(json, file);
     }
 
     public static void setAuth(String username, String password) {
@@ -102,7 +98,7 @@ public class IrcClient {
         if (endpoint != null) {
             endpoint.close();
             endpoint = null;
-        }else {
+        } else {
             MutableText text = Text.literal("You are not connected to the IRC server.");
             text.setStyle(text.getStyle().withColor(Color.fromRGBA(Color.RED)));
             sendToChat(text);
@@ -112,7 +108,7 @@ public class IrcClient {
     public static void send(String message) throws Exception {
         if (endpoint != null) {
             endpoint.sendBroadcast(message);
-        }else {
+        } else {
             MutableText text = Text.literal(" You are not connected to the IRC server.");
             text.setStyle(text.getStyle().withColor(Color.fromRGBA(Color.RED)));
             sendToChat(text);
