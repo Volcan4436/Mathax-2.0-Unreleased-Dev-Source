@@ -176,10 +176,11 @@ public abstract class Module implements ISerializable<Module>, Comparable<Module
 
         JSONObject json = new JSONObject();
         json.put("enabled", enabled);
+        json.put("keybind", keybind.toJson());
+        json.put("toggle-on-bind-release", toggleOnBindRelease);
         json.put("chat-feedback", chatFeedback);
         json.put("toasts", toasts);
         json.put("favorite", favorite);
-        json.put("keybind", keybind.toJson());
         json.put("settings", settings.toJson());
         return json;
     }
@@ -208,6 +209,7 @@ public abstract class Module implements ISerializable<Module>, Comparable<Module
             keybind.fromJson(json.getJSONObject("keybind"));
         }
 
+        toggleOnBindRelease = json.has("toggle-on-bind-release") && json.getBoolean("toggle-on-bind-release");
         chatFeedback = json.has("chat-feedback") && json.getBoolean("chat-feedback");
         toasts = json.has("toasts") && json.getBoolean("toasts");
         favorite = json.has("favorite") && json.getBoolean("favorite");

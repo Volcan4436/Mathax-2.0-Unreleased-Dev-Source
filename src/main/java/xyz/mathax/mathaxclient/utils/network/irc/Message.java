@@ -44,6 +44,7 @@ public class Message {
         if (this.data.containsKey("message")) {
             this.data.put("message", CryptUtils.encryptAES(this.data.get("message"), secret, iv));
         }
+
         return this;
     }
 
@@ -51,6 +52,7 @@ public class Message {
         if (this.data.containsKey("message")) {
             this.data.put("message", CryptUtils.decryptAES(this.data.get("message"), secret, iv));
         }
+
         return this;
     }
 

@@ -45,10 +45,14 @@ public class Config extends System<Config> {
             .defaultValue(false)
             .visible(onlineSetting::get)
             .onChanged(value -> {
-                if (value) {
-                    IrcClient.connect();
-                } else {
-                    IrcClient.disconnect();
+                if (Systems.loaded) {
+                    if (value) {
+                        IrcClient.connect();
+                    } else {
+                        IrcClient.disconnect();
+                    }
+                } else if (value) {
+                    Systems.addPostLoadTask(IrcClient::connect);
                 }
             })
             .build()

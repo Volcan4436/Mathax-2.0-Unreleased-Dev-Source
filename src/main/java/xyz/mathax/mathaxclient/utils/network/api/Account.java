@@ -31,6 +31,11 @@ public class Account {
         JSONObject json = Api.getJSON(MatHax.API_URL + "/account/info", token);
         if (json == null || !json.has("username")) {
             Api.loggedAccount = null;
+
+            if (json.has("error")) {
+                MatHax.LOG.error("Error logging into account: " + json.get("error"));
+            }
+
             return;
         }
 

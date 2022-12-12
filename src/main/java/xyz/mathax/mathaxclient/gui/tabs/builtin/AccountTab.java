@@ -53,6 +53,8 @@ public class AccountTab extends Tab {
             add(theme.label("Password")).expandX();
             WTextBox password = add(theme.textBox("")).minWidth(400).expandX().widget();
 
+            add(theme.horizontalSeparator()).expandX();
+
             WButton login = add(theme.button("Log In")).expandX().widget();
             login.action = () -> {
                 Api.login(usernameOrEmail.get(), password.get());
