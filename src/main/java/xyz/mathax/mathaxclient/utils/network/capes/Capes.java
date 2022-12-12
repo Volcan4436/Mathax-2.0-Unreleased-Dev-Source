@@ -1,6 +1,5 @@
 package xyz.mathax.mathaxclient.utils.network.capes;
 
-import com.mojang.util.UUIDTypeAdapter;
 import xyz.mathax.mathaxclient.MatHax;
 import xyz.mathax.mathaxclient.eventbus.EventHandler;
 import xyz.mathax.mathaxclient.events.world.TickEvent;
@@ -16,7 +15,8 @@ import java.util.*;
 
 public class Capes {
     private static final Map<String, Cape> CAPES = new HashMap<>();
-    private static final Map<UUID, Cape> OWNERS = new HashMap<>();
+
+    private static final List<CapeOwner> OWNERS = new ArrayList<>();
 
     public static final List<Cape> TO_REGISTER = new ArrayList<>();
     public static final List<Cape> TO_RETRY = new ArrayList<>();
@@ -79,7 +79,7 @@ public class Capes {
                             continue;
                         }
 
-                        OWNERS.put(UUIDTypeAdapter.fromString(stringUuid), CAPES.get(capeName));
+                        OWNERS.add(new CapeOwner(UUID.fromString(stringUuid), CAPES.get(capeName)));
                     }
                 }
             }
@@ -126,7 +126,15 @@ public class Capes {
     }
 
     public static Identifier get(PlayerEntity player) {
-        Cape cape = OWNERS.get(player.getUuid());
+        Cape cape = null;
+        for (CapeOwner capeOwner : OWNERS) {
+            if (!capeOwner.uuid.equals(player.getGameProfile().getId())) {
+                continue;
+            }
+
+            cape = capeOwner.cape;
+        }
+
         if (cape == null || !CAPES.containsKey(cape.name)) {
             return null;
         }
@@ -140,9 +148,27 @@ public class Capes {
         return null;
     }
 
+    public static boolean selectPlayerCape(UUID uuid, Cape cape) {
+        for (CapeOwner capeOwner : OWNERS) {
+            if (!capeOwner.uuid.equals(uuid)) {
+                continue;
+            }
+
+            capeOwner.cape = cape;
+
+            return true;
+        }
+
+        return false;
+    }
+
     public static Cape getPlayerCape(UUID uuid) {
-        if (OWNERS.containsKey(uuid)) {
-            return OWNERS.get(uuid);
+        for (CapeOwner capeOwner : OWNERS) {
+            if (!capeOwner.uuid.equals(uuid)) {
+                continue;
+            }
+
+            return capeOwner.cape;
         }
 
         return null;

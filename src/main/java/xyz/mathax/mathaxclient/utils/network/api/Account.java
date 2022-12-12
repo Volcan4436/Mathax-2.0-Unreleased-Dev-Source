@@ -31,11 +31,12 @@ public class Account {
         JSONObject json = Api.getJSON(MatHax.API_URL + "/account/info", token);
         if (json == null || !json.has("username")) {
             Api.loggedAccount = null;
+            return;
+        }
 
-            if (json.has("error")) {
-                MatHax.LOG.error("Error logging into account: " + json.get("error"));
-            }
-
+        if (json.has("error")) {
+            MatHax.LOG.error("Error logging into account: " + json.get("error"));
+            Api.loggedAccount = null;
             return;
         }
 
@@ -63,8 +64,7 @@ public class Account {
 
                     if (capeJson.has("selected") && capeJson.getBoolean("selected")) {
                         selectedCape = cape;
-                        //TODO
-                        //Capes.select(selectedCape);
+                        minecraftAccounts.forEach(uuid -> Capes.selectPlayerCape(uuid, selectedCape));
                     }
                 }
             });
