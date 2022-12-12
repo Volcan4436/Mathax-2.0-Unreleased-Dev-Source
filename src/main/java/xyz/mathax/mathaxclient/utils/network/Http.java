@@ -22,13 +22,9 @@ public class Http {
 
     private static final Gson GSON = new GsonBuilder().registerTypeAdapter(Date.class, new JsonDateDeserializer()).create();
 
-    private enum Method {
-        GET,
-        POST
-    }
-
     public static class Request {
         private HttpRequest.Builder builder;
+
         private Method method;
 
         public Request(Method method, String url) {
@@ -121,5 +117,10 @@ public class Http {
 
     public static Request post(String url) {
         return new Request(Method.POST, url);
+    }
+
+    private enum Method {
+        GET,
+        POST
     }
 }
