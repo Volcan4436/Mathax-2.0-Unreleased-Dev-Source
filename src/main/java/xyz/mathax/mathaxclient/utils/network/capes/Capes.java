@@ -9,7 +9,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
 import org.json.JSONObject;
 import xyz.mathax.mathaxclient.utils.network.Executor;
-import xyz.mathax.mathaxclient.utils.network.api.Api;
 
 import java.util.*;
 

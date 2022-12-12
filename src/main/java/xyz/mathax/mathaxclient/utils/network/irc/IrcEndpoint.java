@@ -1,7 +1,5 @@
 package xyz.mathax.mathaxclient.utils.network.irc;
 
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import xyz.mathax.mathaxclient.MatHax;
@@ -27,7 +25,7 @@ public class IrcEndpoint extends WebSocketClient {
 
         iv = new SecureRandom().nextInt() & Integer.MAX_VALUE;
         try {
-            secretKey = CryptUtils.psk2sk(MatHax.API.IRC.password, iv);
+            secretKey = CryptUtils.psk2sk(MatHax.API.irc.password, iv);
         } catch (Exception exception) {
             throw new RuntimeException(exception);
         }
@@ -57,7 +55,7 @@ public class IrcEndpoint extends WebSocketClient {
     @Override
     public void onClose(int code, String reason, boolean remote) {
         ChatUtils.info("IRC", "Disonnected.");
-        MatHax.API.IRC.endpoint = null;
+        MatHax.API.irc.endpoint = null;
     }
 
     @Override

@@ -5,7 +5,6 @@ import xyz.mathax.mathaxclient.init.PreInit;
 import xyz.mathax.mathaxclient.utils.json.JSONUtils;
 import net.minecraft.SharedConstants;
 import org.json.JSONObject;
-import xyz.mathax.mathaxclient.utils.network.api.Api;
 
 public class Versions {
     private static Version version, latestVersion;

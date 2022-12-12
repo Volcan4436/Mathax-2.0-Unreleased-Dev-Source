@@ -9,7 +9,6 @@ import xyz.mathax.mathaxclient.gui.tabs.WindowTabScreen;
 import xyz.mathax.mathaxclient.gui.widgets.input.WTextBox;
 import xyz.mathax.mathaxclient.gui.widgets.pressable.WButton;
 import xyz.mathax.mathaxclient.systems.themes.Theme;
-import xyz.mathax.mathaxclient.utils.network.api.Api;
 
 public class AccountTab extends Tab {
     public AccountTab() {

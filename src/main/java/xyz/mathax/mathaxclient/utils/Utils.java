@@ -13,7 +13,6 @@ import xyz.mathax.mathaxclient.init.PreInit;
 import xyz.mathax.mathaxclient.mixininterface.IMinecraftClient;
 import xyz.mathax.mathaxclient.systems.modules.Modules;
 import xyz.mathax.mathaxclient.systems.modules.world.Timer;
-import xyz.mathax.mathaxclient.utils.network.Executor;
 import xyz.mathax.mathaxclient.utils.player.EChestMemory;
 import xyz.mathax.mathaxclient.utils.render.PeekScreen;
 import xyz.mathax.mathaxclient.utils.render.color.Color;

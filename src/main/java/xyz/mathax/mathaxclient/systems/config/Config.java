@@ -7,7 +7,6 @@ import xyz.mathax.mathaxclient.systems.Systems;
 import xyz.mathax.mathaxclient.utils.json.JSONUtils;
 import xyz.mathax.mathaxclient.utils.network.capes.Capes;
 import xyz.mathax.mathaxclient.utils.network.DiscordRPC;
-import xyz.mathax.mathaxclient.utils.network.irc.Irc;
 import xyz.mathax.mathaxclient.utils.player.TotemPopUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -44,15 +43,11 @@ public class Config extends System<Config> {
             .defaultValue(false)
             .visible(onlineSetting::get)
             .onChanged(value -> {
-                if (Systems.loaded) {
-                    if (value) {
-                        Irc.connect();
-                    } else {
-                        Irc.disconnect();
-                    }
-                } else if (value) {
-                    Systems.addPostLoadTask(Irc::connect);
+                if (MatHax.API.irc == null) {
+                    MatHax.API.createIrc();
                 }
+
+                MatHax.API.irc.enabled = value;
             })
             .build()
     );

@@ -2,6 +2,10 @@ package xyz.mathax.mathaxclient.utils.network.irc;
 
 import org.json.JSONObject;
 import xyz.mathax.mathaxclient.MatHax;
+import xyz.mathax.mathaxclient.eventbus.EventHandler;
+import xyz.mathax.mathaxclient.events.game.GameJoinedEvent;
+import xyz.mathax.mathaxclient.events.game.GameLeftEvent;
+import xyz.mathax.mathaxclient.events.world.TickEvent;
 import xyz.mathax.mathaxclient.utils.json.JSONUtils;
 import xyz.mathax.mathaxclient.utils.text.ChatUtils;
 
@@ -18,6 +22,8 @@ public class Irc {
 
     public IrcEndpoint endpoint = null;
 
+    public boolean enabled = false;
+
     public Irc() {
         File file = new File(MatHax.FOLDER, "IRC.json");
         if (file.exists()) {
@@ -26,6 +32,29 @@ public class Irc {
                 username = json.getString("username");
                 password = json.getString("password");
             }
+        }
+
+        MatHax.EVENT_BUS.subscribe(this);
+    }
+
+    @EventHandler
+    private void onGameJoined(GameJoinedEvent event) {
+        if (enabled && endpoint == null) {
+            connect();
+        }
+    }
+
+    @EventHandler
+    private void onTick(TickEvent.Post event) {
+        if (!enabled && endpoint != null) {
+            disconnect();
+        }
+    }
+
+    @EventHandler
+    private void onGameLeft(GameLeftEvent event) {
+        if (endpoint != null) {
+            disconnect();
         }
     }
 
@@ -60,6 +89,8 @@ public class Irc {
             try {
                 endpoint = new IrcEndpoint(new URI("ws://51.161.192.31:8107/irc"));
                 endpoint.connect();
+
+                enabled = true;
             } catch (URISyntaxException exception) {
                 exception.printStackTrace();
             }
@@ -72,6 +103,8 @@ public class Irc {
         if (endpoint != null) {
             endpoint.close();
             endpoint = null;
+
+            enabled = false;
         } else {
             ChatUtils.error("IRC", "You are not connected.");
         }
