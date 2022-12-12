@@ -54,7 +54,7 @@ public class IrcEndpoint extends WebSocketClient {
 
     @Override
     public void onClose(int code, String reason, boolean remote) {
-        ChatUtils.info("IRC", "Disonnected.");
+        ChatUtils.info("IRC", "Disconnected.");
         MatHax.API.irc.endpoint = null;
     }
 

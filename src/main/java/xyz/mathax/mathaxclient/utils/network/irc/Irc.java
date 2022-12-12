@@ -6,6 +6,7 @@ import xyz.mathax.mathaxclient.eventbus.EventHandler;
 import xyz.mathax.mathaxclient.events.game.GameJoinedEvent;
 import xyz.mathax.mathaxclient.events.game.GameLeftEvent;
 import xyz.mathax.mathaxclient.events.world.TickEvent;
+import xyz.mathax.mathaxclient.systems.config.Config;
 import xyz.mathax.mathaxclient.utils.json.JSONUtils;
 import xyz.mathax.mathaxclient.utils.text.ChatUtils;
 
@@ -105,6 +106,8 @@ public class Irc {
             endpoint = null;
 
             enabled = false;
+
+            Config.get().ircSetting.set(enabled);
         } else {
             ChatUtils.error("IRC", "You are not connected.");
         }
