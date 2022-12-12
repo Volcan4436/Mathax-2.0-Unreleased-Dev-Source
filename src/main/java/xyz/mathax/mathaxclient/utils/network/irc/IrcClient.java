@@ -73,6 +73,7 @@ public class IrcClient extends WebSocketClient {
     }
 
     public void sendDirect(String from, String to, String message) {
+        // TODO: FIX: DISCONNECTS FOR NO REASON??????
         send(IrcMessage.directMessage(from, to, message).encrypt(secretKey, iv).toJson().toString(4));
     }
 }
