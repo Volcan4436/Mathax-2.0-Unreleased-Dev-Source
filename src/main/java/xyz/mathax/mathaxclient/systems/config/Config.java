@@ -5,10 +5,9 @@ import xyz.mathax.mathaxclient.settings.*;
 import xyz.mathax.mathaxclient.systems.System;
 import xyz.mathax.mathaxclient.systems.Systems;
 import xyz.mathax.mathaxclient.utils.json.JSONUtils;
-import xyz.mathax.mathaxclient.utils.network.Executor;
 import xyz.mathax.mathaxclient.utils.network.capes.Capes;
 import xyz.mathax.mathaxclient.utils.network.DiscordRPC;
-import xyz.mathax.mathaxclient.utils.network.irc.IrcClient;
+import xyz.mathax.mathaxclient.utils.network.irc.Irc;
 import xyz.mathax.mathaxclient.utils.player.TotemPopUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -47,12 +46,12 @@ public class Config extends System<Config> {
             .onChanged(value -> {
                 if (Systems.loaded) {
                     if (value) {
-                        IrcClient.connect();
+                        Irc.connect();
                     } else {
-                        IrcClient.disconnect();
+                        Irc.disconnect();
                     }
                 } else if (value) {
-                    Systems.addPostLoadTask(IrcClient::connect);
+                    Systems.addPostLoadTask(Irc::connect);
                 }
             })
             .build()

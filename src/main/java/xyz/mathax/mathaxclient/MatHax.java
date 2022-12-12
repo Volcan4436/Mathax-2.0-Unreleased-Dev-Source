@@ -13,7 +13,6 @@ import xyz.mathax.mathaxclient.events.world.TickEvent;
 import xyz.mathax.mathaxclient.gui.tabs.builtin.ModulesTab;
 import xyz.mathax.mathaxclient.init.PostInit;
 import xyz.mathax.mathaxclient.init.PreInit;
-import xyz.mathax.mathaxclient.renderer.text.Fonts;
 import xyz.mathax.mathaxclient.systems.modules.render.Zoom;
 import xyz.mathax.mathaxclient.systems.themes.Themes;
 import xyz.mathax.mathaxclient.gui.WidgetScreen;
@@ -28,7 +27,7 @@ import xyz.mathax.mathaxclient.utils.input.KeyAction;
 import xyz.mathax.mathaxclient.utils.input.KeyBinds;
 import xyz.mathax.mathaxclient.utils.misc.MatHaxIdentifier;
 import xyz.mathax.mathaxclient.utils.network.DiscordRPC;
-import xyz.mathax.mathaxclient.utils.network.Executor;
+import xyz.mathax.mathaxclient.utils.network.api.Api;
 import xyz.mathax.mathaxclient.utils.network.versions.Versions;
 import xyz.mathax.mathaxclient.utils.window.Icon;
 import xyz.mathax.mathaxclient.utils.window.Title;
@@ -54,6 +53,8 @@ public class MatHax implements ClientModInitializer {
     public static final String NAME = "MatHax";
     public static final String ID = NAME.toLowerCase(Locale.ROOT);
     public static final ModMetadata META = FabricLoader.getInstance().getModContainer(ID).get().getMetadata();
+
+    public static final Api API = new Api();
 
     public static final long DISCORD_RPC_ID = 878967665501306920L;
 
@@ -134,15 +135,17 @@ public class MatHax implements ClientModInitializer {
         Icon.setIcon(new MatHaxIdentifier("icons/64.png"), new MatHaxIdentifier("icons/128.png"));
 
         // Pre-load
-        if (!VERSION_FOLDER.exists()) {
-            VERSION_FOLDER.mkdir();
+        Systems.addPreLoadTask(() -> {
+            API.load();
 
-            Systems.addPreLoadTask(() -> {
+            if (!VERSION_FOLDER.exists()) {
+                VERSION_FOLDER.mkdir();
+
                 Modules.get().get(Zoom.class).keybind.set(true, GLFW.GLFW_KEY_C);
                 Modules.get().get(Zoom.class).toggleOnBindRelease = true;
                 Modules.get().get(Zoom.class).chatFeedback = false;
-            });
-        }
+            }
+        });
 
         // Register addons
         AddonManager.init();
@@ -188,6 +191,7 @@ public class MatHax implements ClientModInitializer {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             DiscordRPC.disableRPC();
             //TODO: Leave API and IRC
+            API.save();
             Systems.save();
         }));
 

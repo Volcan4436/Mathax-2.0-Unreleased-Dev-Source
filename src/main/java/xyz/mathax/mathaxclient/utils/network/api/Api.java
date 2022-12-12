@@ -2,21 +2,40 @@ package xyz.mathax.mathaxclient.utils.network.api;
 
 import org.json.JSONObject;
 import xyz.mathax.mathaxclient.MatHax;
-import xyz.mathax.mathaxclient.utils.misc.ISerializable;
+import xyz.mathax.mathaxclient.utils.json.JSONUtils;
 import xyz.mathax.mathaxclient.utils.network.Http;
+import xyz.mathax.mathaxclient.utils.network.irc.Irc;
 
-public class Api implements ISerializable<Api> {
-    public static Account loggedAccount = null;
+import java.io.File;
 
-    public static String token = "";
+public class Api {
+    private static final File FOLDER = new File(MatHax.FOLDER, "API");
 
-    public static void login(String usernameOrEmail, String password) {
+    public final Irc IRC = new Irc();
+
+    public Account loggedAccount = null;
+
+    public String token = "";
+
+    public void login(String usernameOrEmail, String password) {
         if (usernameOrEmail.isBlank() || password.isBlank()) {
             return;
         }
 
-        String formattedURL = String.format(MatHax.API_URL + "/", usernameOrEmail, password);
-        JSONObject json = getJSON(formattedURL);
+        String formattedURL = String.format(MatHax.API_URL + "/accounts/login?usernameOrEmail=%s&password=%s", usernameOrEmail, password);
+        login(getJSON(formattedURL));
+    }
+
+    public void login(String token) {
+        if (token.isBlank()) {
+            return;
+        }
+
+        String formattedURL = String.format(MatHax.API_URL + "/accounts/login?token=%s", token);
+        login(getJSON(formattedURL));
+    }
+
+    public void login(JSONObject json) {
         if (json == null) {
             return;
         }
@@ -30,15 +49,15 @@ public class Api implements ISerializable<Api> {
         loggedAccount = new Account(token);
     }
 
-    public static JSONObject getVersions() {
+    public JSONObject getVersions() {
         return getJSON(MatHax.API_URL + "/versions/metadata.json");
     }
 
-    public static JSONObject getCapes() {
+    public JSONObject getCapes() {
         return getJSON(MatHax.API_URL + "/capes/metadata.json");
     }
 
-    public static JSONObject getJSON(String URL, String bearer) {
+    public JSONObject getJSON(String URL, String bearer) {
         String response = Http.get(URL).bearer(bearer).sendString();
         if (response == null) {
             return null;
@@ -47,23 +66,27 @@ public class Api implements ISerializable<Api> {
         return new JSONObject(response);
     }
 
-    public static JSONObject getJSON(String URL) {
+    public JSONObject getJSON(String URL) {
         return getJSON(URL, "");
     }
 
-    @Override
-    public JSONObject toJson() {
+    public void save() {
         JSONObject json = new JSONObject();
         json.put("token", token);
-        return json;
+        JSONUtils.saveJSON(json, new File(FOLDER, "Account.json"));
     }
 
-    @Override
-    public Api fromJson(JSONObject json) {
-        if (json.has("token")) {
-            token = json.getString("token");
+    public void load() {
+        File file = new File(FOLDER, "Account.json");
+        if (!file.exists()) {
+            file.getParentFile().mkdirs();
+            return;
         }
 
-        return this;
+        JSONObject json = JSONUtils.loadJSON(file);
+        if (json != null && json.has("token")) {
+            token = json.getString("token");
+            login(token);
+        }
     }
 }

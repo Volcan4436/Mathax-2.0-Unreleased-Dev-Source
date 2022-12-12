@@ -55,7 +55,7 @@ public class Versions {
     }
 
     public static void checkForUpdate() {
-        JSONObject json = Api.getVersions();
+        JSONObject json = MatHax.API.getVersions();
         if (json == null) {
             return;
         }

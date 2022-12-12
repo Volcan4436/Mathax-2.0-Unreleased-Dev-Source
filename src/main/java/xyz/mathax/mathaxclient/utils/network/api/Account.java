@@ -28,15 +28,15 @@ public class Account {
             return;
         }
 
-        JSONObject json = Api.getJSON(MatHax.API_URL + "/account/info", token);
+        JSONObject json = MatHax.API.getJSON(MatHax.API_URL + "/account/info", token);
         if (json == null || !json.has("username")) {
-            Api.loggedAccount = null;
+            MatHax.API.loggedAccount = null;
             return;
         }
 
         if (json.has("error")) {
             MatHax.LOG.error("Error logging into account: " + json.get("error"));
-            Api.loggedAccount = null;
+            MatHax.API.loggedAccount = null;
             return;
         }
 

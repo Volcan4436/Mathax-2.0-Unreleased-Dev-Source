@@ -41,7 +41,7 @@ public class Capes {
         timer = 0;
 
         Executor.execute(() -> {
-            JSONObject json = Api.getCapes();
+            JSONObject json = MatHax.API.getCapes();
             if (json == null) {
                 return;
             }

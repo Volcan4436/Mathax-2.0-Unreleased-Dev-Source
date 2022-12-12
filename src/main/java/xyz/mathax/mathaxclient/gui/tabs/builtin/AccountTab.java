@@ -1,6 +1,7 @@
 package xyz.mathax.mathaxclient.gui.tabs.builtin;
 
 import net.minecraft.client.gui.screen.Screen;
+import xyz.mathax.mathaxclient.MatHax;
 import xyz.mathax.mathaxclient.gui.tabs.Tab;
 import xyz.mathax.mathaxclient.gui.tabs.TabScreen;
 import xyz.mathax.mathaxclient.gui.tabs.Tabs;
@@ -17,7 +18,7 @@ public class AccountTab extends Tab {
 
     @Override
     public TabScreen createScreen(Theme theme) {
-        return Api.token.isBlank() ? new LoginScreen(theme, this) : new AccountScreen(theme, this);
+        return MatHax.API.token.isBlank() ? new LoginScreen(theme, this) : new AccountScreen(theme, this);
     }
 
     @Override
@@ -34,7 +35,7 @@ public class AccountTab extends Tab {
         public void initWidgets() {
             WButton logout = add(theme.button("Log Out")).expandX().widget();
             logout.action = () -> {
-                Api.token = "";
+                MatHax.API.token = "";
                 Tabs.get(AccountTab.class).openScreen(theme);
             };
         }
@@ -57,7 +58,7 @@ public class AccountTab extends Tab {
 
             WButton login = add(theme.button("Log In")).expandX().widget();
             login.action = () -> {
-                Api.login(usernameOrEmail.get(), password.get());
+                MatHax.API.login(usernameOrEmail.get(), password.get());
                 reload();
             };
         }

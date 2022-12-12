@@ -1,4 +1,4 @@
-package xyz.mathax.mathaxclient.utils.network.irc;
+package xyz.mathax.mathaxclient.utils.misc;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -13,8 +13,7 @@ import java.util.Base64;
 
 public class CryptUtils {
     public static SecretKey psk2sk(String psk, int salt) throws Exception {
-        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
-        return new SecretKeySpec(factory.generateSecret(new PBEKeySpec(psk.toCharArray(), String.valueOf(salt).getBytes(), 65536, 256)).getEncoded(), "AES");
+        return new SecretKeySpec(SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256").generateSecret(new PBEKeySpec(psk.toCharArray(), String.valueOf(salt).getBytes(), 65536, 256)).getEncoded(), "AES");
     }
 
     private static IvParameterSpec int2iv(int i) {
