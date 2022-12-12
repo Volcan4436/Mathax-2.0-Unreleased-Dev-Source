@@ -70,6 +70,12 @@ dependencies {
         transitive = false
     }*/
 
+    // Init
+    library "org.reflections:reflections:${project.reflections_version}"
+
+    // IRC
+    library "org.java-websocket:Java-WebSocket:${project.java_websocket_version}"
+
     // Proxies
     library("io.netty:netty-handler-proxy:${project.netty_version}") {
         transitive = false
@@ -78,14 +84,11 @@ dependencies {
         transitive = false
     }
 
-    // Init
-    library "org.reflections:reflections:${project.reflections_version}"
+    // Baritone integration
+    modInclude "baritone:fabric:${project.baritone_version}"
 
     // JSON
     library "org.json:json:${project.json_version}"
-
-    // Baritone integration
-    modInclude "baritone:fabric:${project.baritone_version}"
 
     // Discord IPC
     library "meteordevelopment:discord-ipc:${project.discord_ipc_version}"

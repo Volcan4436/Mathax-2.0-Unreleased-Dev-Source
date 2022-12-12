@@ -26,7 +26,7 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "xyz.mathax.client.MatHax"
+      "xyz.mathax.mathaxclient.MatHax"
     ]
   },
   "mixins": [
