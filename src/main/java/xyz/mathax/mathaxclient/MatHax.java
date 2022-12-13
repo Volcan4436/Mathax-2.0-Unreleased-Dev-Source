@@ -28,6 +28,7 @@ import xyz.mathax.mathaxclient.utils.input.KeyBinds;
 import xyz.mathax.mathaxclient.utils.misc.MatHaxIdentifier;
 import xyz.mathax.mathaxclient.utils.network.DiscordRPC;
 import xyz.mathax.mathaxclient.utils.network.api.Api;
+import xyz.mathax.mathaxclient.utils.network.irc.Irc;
 import xyz.mathax.mathaxclient.utils.network.versions.Versions;
 import xyz.mathax.mathaxclient.utils.window.Icon;
 import xyz.mathax.mathaxclient.utils.window.Title;
@@ -185,6 +186,7 @@ public class MatHax implements ClientModInitializer {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             DiscordRPC.disableRPC();
             //TODO: Leave API and IRC
+            Irc.leave();
             API.save();
             Systems.save();
         }));

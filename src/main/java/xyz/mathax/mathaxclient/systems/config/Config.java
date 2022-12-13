@@ -7,6 +7,7 @@ import xyz.mathax.mathaxclient.systems.Systems;
 import xyz.mathax.mathaxclient.utils.json.JSONUtils;
 import xyz.mathax.mathaxclient.utils.network.capes.Capes;
 import xyz.mathax.mathaxclient.utils.network.DiscordRPC;
+import xyz.mathax.mathaxclient.utils.network.irc.Irc;
 import xyz.mathax.mathaxclient.utils.player.TotemPopUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -42,13 +43,7 @@ public class Config extends System<Config> {
             .description("Connect to the IRC chat to communicate with other users in-game.")
             .defaultValue(false)
             .visible(onlineSetting::get)
-            .onChanged(value -> {
-                if (MatHax.API.irc == null) {
-                    MatHax.API.createIrc();
-                }
-
-                MatHax.API.irc.forceToggle(value);
-            })
+            .onChanged(value -> Irc.enabled = value)
             .build()
     );
 

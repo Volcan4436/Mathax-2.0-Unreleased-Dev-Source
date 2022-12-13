@@ -1,6 +1,6 @@
-package xyz.mathax.mathaxclient.utils.network.irc;
+package xyz.mathax.mathaxclient.utils.network.irc.messages;
 
-public enum IrcMessageType {
+public enum MessageType {
     BROADCAST,
     DIRECT_MESSAGE,
     PUB_KEY,

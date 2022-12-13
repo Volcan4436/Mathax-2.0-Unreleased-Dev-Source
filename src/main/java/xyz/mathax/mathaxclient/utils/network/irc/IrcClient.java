@@ -6,6 +6,8 @@ import org.json.JSONObject;
 import xyz.mathax.mathaxclient.MatHax;
 import xyz.mathax.mathaxclient.systems.config.Config;
 import xyz.mathax.mathaxclient.utils.misc.CryptUtils;
+import xyz.mathax.mathaxclient.utils.network.irc.messages.Message;
+import xyz.mathax.mathaxclient.utils.network.irc.messages.Messages;
 import xyz.mathax.mathaxclient.utils.text.ChatUtils;
 
 import javax.crypto.SecretKey;
@@ -26,8 +28,9 @@ public class IrcClient extends WebSocketClient {
         ChatUtils.info("IRC", "Connected.");
 
         iv = new SecureRandom().nextInt() & Integer.MAX_VALUE;
+
         try {
-            secretKey = CryptUtils.psk2sk(MatHax.API.irc.password, iv);
+            secretKey = CryptUtils.psk2sk(Irc.password, iv);
         } catch (Exception exception) {
             throw new RuntimeException(exception);
         }
@@ -35,7 +38,7 @@ public class IrcClient extends WebSocketClient {
 
     @Override
     public void onMessage(String messageJson) {
-        IrcMessage message = new IrcMessage(new JSONObject(messageJson));
+        Message message = new Message(new JSONObject(messageJson));
         try {
             switch (message.type) {
                 case BROADCAST -> {
@@ -46,8 +49,8 @@ public class IrcClient extends WebSocketClient {
                     message = message.decrypt(secretKey, iv);
                     ChatUtils.info("IRC", "From (highlight)%s(default): %s", message.data.getString("from"), message.data.getString("message"));
                 }
-                case PUB_KEY -> send(IrcMessage.auth(message.data.getString("public_key"), secretKey, iv).toJson().toString(4));
-                case PING -> send(IrcMessage.ping().toJson().toString(4));
+                case PUB_KEY -> send(Messages.auth(message.data.getString("public_key"), secretKey, iv).toJson().toString(4));
+                case PING -> send(Messages.ping().toJson().toString(4));
             }
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -57,7 +60,7 @@ public class IrcClient extends WebSocketClient {
     @Override
     public void onClose(int code, String reason, boolean remote) {
         ChatUtils.info("IRC", "Disconnected.");
-        MatHax.API.irc.ircClient = null;
+        Irc.ircClient = null;
 
         Config.get().ircSetting.set(false);
     }
@@ -69,11 +72,11 @@ public class IrcClient extends WebSocketClient {
     }
 
     public void sendBroadcast(String from, String message) {
-        send(IrcMessage.broadcast(from, message).encrypt(secretKey, iv).toJson().toString(4));
+        send(Messages.broadcast(from, message).encrypt(secretKey, iv).toJson().toString(4));
     }
 
     public void sendDirect(String from, String to, String message) {
         // TODO: FIX: DISCONNECTS FOR NO REASON??????
-        send(IrcMessage.directMessage(from, to, message).encrypt(secretKey, iv).toJson().toString(4));
+        send(Messages.directMessage(from, to, message).encrypt(secretKey, iv).toJson().toString(4));
     }
 }

@@ -6,6 +6,7 @@ import xyz.mathax.mathaxclient.eventbus.EventHandler;
 import xyz.mathax.mathaxclient.events.game.GameJoinedEvent;
 import xyz.mathax.mathaxclient.events.game.GameLeftEvent;
 import xyz.mathax.mathaxclient.events.world.TickEvent;
+import xyz.mathax.mathaxclient.init.PostInit;
 import xyz.mathax.mathaxclient.utils.Utils;
 import xyz.mathax.mathaxclient.utils.json.JSONUtils;
 import xyz.mathax.mathaxclient.utils.text.ChatUtils;
@@ -18,14 +19,15 @@ import java.net.URISyntaxException;
 // TODO: Remove settings saving and loading, won't be needed with accounts.
 
 public class Irc {
-    protected String username = "";
-    protected String password = "";
+    protected static String username = "";
+    protected static String password = "";
 
-    public IrcClient ircClient = null;
+    public static IrcClient ircClient = null;
 
-    private boolean enabled = false;
+    public static boolean enabled = false;
 
-    public Irc() {
+    @PostInit
+    public static void init() {
         File file = new File(MatHax.FOLDER, "IRC.json");
         if (file.exists()) {
             JSONObject json = JSONUtils.loadJSON(file);
@@ -35,53 +37,40 @@ public class Irc {
             }
         }
 
-        MatHax.EVENT_BUS.subscribe(this);
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void forceToggle(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public void toggle() {
-        enabled = !enabled;
+        MatHax.EVENT_BUS.subscribe(Irc.class);
     }
 
     @EventHandler
-    private void onGameJoined(GameJoinedEvent event) {
+    private static void onGameJoined(GameJoinedEvent event) {
         if (enabled && ircClient == null) {
-            connect();
+            join();
         }
     }
 
     @EventHandler
-    private void onTick(TickEvent.Post event) {
+    private static void onTick(TickEvent.Post event) {
         if (!Utils.canUpdate()) {
             return;
         }
 
         if (enabled) {
             if (ircClient == null) {
-                connect();
+                join();
             }
         } else if (ircClient != null) {
-            disconnect();
+            leave();
         }
     }
 
     @EventHandler
-    private void onGameLeft(GameLeftEvent event) {
+    private static void onGameLeft(GameLeftEvent event) {
         if (ircClient != null) {
-            disconnect();
+            leave();
         }
     }
 
-    private void updateAuth(String username, String password) {
-        this.username = username;
-        this.password = password;
+    private static void updateAuth(String username, String password) {
+        Irc.username = username;
 
         File file = new File(MatHax.FOLDER, "IRC.json");
         file.getParentFile().mkdir();
@@ -92,9 +81,13 @@ public class Irc {
         JSONUtils.saveJSON(json, file);
     }
 
-    public void setAuth(String username, String password) {
+    public static void setAuth(String username, String password) {
         if (ircClient != null){
-            ChatUtils.error("IRC", "You can't change your username or password while connected.");
+            if (username.isBlank() && password.isBlank()) {
+                ChatUtils.error("IRC", "You can't clear your username and password while connected.");
+            } else {
+                ChatUtils.error("IRC", "You can't change your username or password while connected.");
+            }
         } else if (username.isEmpty() || password.isEmpty()) {
             ChatUtils.error("IRC", "Username and password can't be empty.");
         } else {
@@ -103,7 +96,7 @@ public class Irc {
         }
     }
 
-    public void connect() {
+    public static void join() {
         if (username.isEmpty() || password.isEmpty()) {
             ChatUtils.error("IRC", "Username and password can't be empty. Use .irc auth <username> <password> to set them.");
         } else if (ircClient == null) {
@@ -120,7 +113,7 @@ public class Irc {
         }
     }
 
-    public void disconnect() {
+    public static void leave() {
         if (ircClient != null) {
             ircClient.close();
             ircClient = null;
@@ -129,7 +122,7 @@ public class Irc {
         }
     }
 
-    public void send(String message) {
+    public static void send(String message) {
         if (ircClient != null) {
             ircClient.sendBroadcast(username, message);
         } else {
@@ -137,14 +130,16 @@ public class Irc {
         }
     }
 
-    public void sendDirect(String user, String message) {
+    public static void sendDirect(String user, String message) {
         if (ircClient != null) {
             if (user.equals(username)) {
                 ChatUtils.error("IRC", "You can't direct message yourself.");
+
                 return;
             }
 
             ircClient.sendDirect(username, user, message);
+
             ChatUtils.info("IRC", "To (highlight)%s(default): %s", user, message);
         } else {
             ChatUtils.error("IRC", "You are not connected.");

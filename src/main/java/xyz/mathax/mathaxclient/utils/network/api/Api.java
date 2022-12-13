@@ -11,15 +11,9 @@ import java.io.File;
 public class Api {
     private static final File FOLDER = new File(MatHax.FOLDER, "API");
 
-    public Irc irc;
-
     public Account loggedAccount = null;
 
     public String token = "";
-
-    public void createIrc() {
-        irc = new Irc();
-    }
 
     public void login(String usernameOrEmail, String password) {
         if (usernameOrEmail.isBlank() || password.isBlank()) {
