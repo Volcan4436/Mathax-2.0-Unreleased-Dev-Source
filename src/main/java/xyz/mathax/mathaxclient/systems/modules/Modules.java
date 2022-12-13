@@ -87,6 +87,8 @@ public class Modules extends System<Modules> {
 
     @Override
     public void init() {
+        Categories.init();
+
         // Combat
         Category combat = Categories.Combat;
         add(new AutoArmor(combat));

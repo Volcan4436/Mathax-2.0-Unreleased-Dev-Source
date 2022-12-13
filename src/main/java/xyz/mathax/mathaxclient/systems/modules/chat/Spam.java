@@ -133,12 +133,18 @@ public class Spam extends Module {
                 text += " " + RandomStringUtils.randomAlphabetic(randomTextLengthSetting.get());
             }
 
-            GameProfile gameProfile = Utils.getRandomGameProfile();
-            if ((text.contains("%player%") && gameProfile == null) || (ignoreSelfSetting.get() && gameProfile == mc.getSession().getProfile())) {
-                return;
+            if (text.contains("%player%")) {
+                GameProfile randomPlayer;
+                do {
+                    randomPlayer = Utils.getRandomGameProfile();
+                } while (randomPlayer == mc.getSession().getProfile());
+
+                if (randomPlayer != null) {
+                    text = text.replace("%player%", randomPlayer.getName());
+                }
             }
 
-            ChatUtils.sendPlayerMessage(text.replace("%player%", gameProfile.getName()));
+            ChatUtils.sendPlayerMessage(text);
 
             timer = delaySetting.get();
         } else {

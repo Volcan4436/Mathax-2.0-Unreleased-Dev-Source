@@ -3,6 +3,8 @@ package xyz.mathax.mathaxclient.systems;
 import xyz.mathax.mathaxclient.MatHax;
 import xyz.mathax.mathaxclient.eventbus.EventHandler;
 import xyz.mathax.mathaxclient.events.game.GameLeftEvent;
+import xyz.mathax.mathaxclient.init.PreInit;
+import xyz.mathax.mathaxclient.renderer.text.Font;
 import xyz.mathax.mathaxclient.systems.accounts.Accounts;
 import xyz.mathax.mathaxclient.systems.commands.Commands;
 import xyz.mathax.mathaxclient.systems.config.Config;
@@ -39,6 +41,7 @@ public class Systems {
         postLoadTasks.add(task);
     }
 
+    @PreInit(dependencies = Font.class)
     public static void init() {
         System<?> config = add(new Config());
         config.init();

@@ -1,10 +1,7 @@
 package xyz.mathax.mathaxclient.utils.text;
 
 import xyz.mathax.mathaxclient.MatHax;
-import xyz.mathax.mathaxclient.renderer.text.Fonts;
-import xyz.mathax.mathaxclient.renderer.text.FontFace;
-import xyz.mathax.mathaxclient.renderer.text.FontFamily;
-import xyz.mathax.mathaxclient.renderer.text.FontInfo;
+import xyz.mathax.mathaxclient.renderer.text.*;
 import xyz.mathax.mathaxclient.utils.Utils;
 import xyz.mathax.mathaxclient.utils.files.StreamUtils;
 import xyz.mathax.mathaxclient.utils.misc.MatHaxIdentifier;
@@ -29,13 +26,20 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static xyz.mathax.mathaxclient.MatHax.mc;
 
 public class FontUtils {
-    public static FontInfo getFontInfo(File file) {
-        InputStream stream = stream(file);
-        if (stream == null) {
+    public static FontInfo getSysFontInfo(File file) {
+        return getFontInfo(stream(file));
+    }
+
+    public static FontInfo getBuiltinFontInfo(String builtin) {
+        return getFontInfo(stream(builtin));
+    }
+
+    public static FontInfo getFontInfo(InputStream in) {
+        if (in == null) {
             return null;
         }
 
-        byte[] bytes = Utils.readBytes(stream);
+        byte[] bytes = Utils.readBytes(in);
         if (bytes.length < 5) {
             return null;
         }
@@ -56,20 +60,19 @@ public class FontUtils {
             return null;
         }
 
-        return new FontInfo(StandardCharsets.UTF_16.decode(nameBuffer).toString(), FontFace.Type.fromString(StandardCharsets.UTF_16.decode(typeBuffer).toString()));
+        return new FontInfo(StandardCharsets.UTF_16.decode(nameBuffer).toString(), FontInfo.Type.fromString(StandardCharsets.UTF_16.decode(typeBuffer).toString()));
     }
 
     public static Set<String> getSearchPaths() {
         Set<String> paths = new HashSet<>();
         paths.add(System.getProperty("java.home") + "/lib/fonts");
-
-        for (File directory : getUFontDirectories()) {
+        for (File directory : getUFontDirs()) {
             if (directory.exists()) {
                 paths.add(directory.getAbsolutePath());
             }
         }
 
-        for (File directory : getSFontDirectories()) {
+        for (File directory : getSFontDirs()) {
             if (directory.exists()) {
                 paths.add(directory.getAbsolutePath());
             }
@@ -78,7 +81,7 @@ public class FontUtils {
         return paths;
     }
 
-    public static List<File> getUFontDirectories() {
+    public static List<File> getUFontDirs() {
         return switch (Util.getOperatingSystem()) {
             case WINDOWS -> List.of(new File(System.getProperty("user.home") + "\\AppData\\Local\\Microsoft\\Windows\\Fonts"));
             case OSX -> List.of(new File(System.getProperty("user.home") + "/Library/Fonts/"));
@@ -86,7 +89,7 @@ public class FontUtils {
         };
     }
 
-    public static List<File> getSFontDirectories() {
+    public static List<File> getSFontDirs() {
         return switch (Util.getOperatingSystem()) {
             case WINDOWS -> List.of(new File(System.getenv("SystemRoot") + "\\Fonts"));
             case OSX -> List.of(new File("/System/Library/Fonts/"));
@@ -94,18 +97,19 @@ public class FontUtils {
         };
     }
 
-    public static File getDirectory(List<File> directories) {
-        for (File directory : directories) {
-            if (directory.exists()) {
-                return directory;
-            }
+    public static void loadBuiltin(List<FontFamily> fontList, String builtin) {
+        FontInfo fontInfo = FontUtils.getBuiltinFontInfo(builtin);
+        if (fontInfo == null) {
+            return;
         }
 
-        directories.get(0).mkdirs();
-        return directories.get(0);
+        FontFace fontFace = new BuiltInFontFace(fontInfo, builtin);
+        if (!addFont(fontList, fontFace)) {
+            MatHax.LOG.warn("Failed to load builtin font {}", fontFace);
+        }
     }
 
-    public static void collectFonts(List<FontFamily> fontList, File directory, Consumer<File> consumer) {
+    public static void loadSystem(List<FontFamily> fontList, File directory) {
         if (!directory.exists() || !directory.isDirectory()) {
             return;
         }
@@ -117,43 +121,55 @@ public class FontUtils {
 
         for (File file : files) {
             if (file.isDirectory()) {
-                collectFonts(fontList, file, consumer);
+                loadSystem(fontList, file);
                 continue;
             }
 
-            FontInfo fontInfo = FontUtils.getFontInfo(file);
-            if (fontInfo != null) {
-                consumer.accept(file);
+            FontInfo fontInfo = FontUtils.getSysFontInfo(file);
+            if (fontInfo == null) {
+                continue;
+            }
 
-                FontFamily family = Fonts.getFamily(fontInfo.family());
-                if (family == null) {
-                    family = new FontFamily(fontInfo.family());
-                    fontList.add(family);
+            boolean isBuiltin = false;
+            for (String builtinFont : Fonts.BUILTIN_FONTS) {
+                if (builtinFont.equals(fontInfo.family())) {
+                    isBuiltin = true;
+                    break;
                 }
+            }
 
-                if (family.add(file) == null) {
-                    MatHax.LOG.warn("Failed to load font {} {}.", fontInfo.family(), fontInfo.type());
-                }
+            if (isBuiltin) {
+                continue;
+            }
+
+            FontFace fontFace = new SystemFontFace(fontInfo, file.toPath());
+            if (!addFont(fontList, fontFace)) {
+                MatHax.LOG.warn("Failed to load system font {}", fontFace);
             }
         }
     }
 
-    public static void copyBuiltin(String name, File target) {
-        try {
-            File fontFile = new File(MatHax.VERSION_FOLDER + "/Temp", name + ".ttf");
-            fontFile.createNewFile();
-            InputStream stream = mc.getResourceManager().getResource(new MatHaxIdentifier("fonts/" + name + ".ttf")).get().getInputStream();
-            StreamUtils.copy(stream, fontFile);
-            Files.copy(fontFile.toPath(), new File(target, fontFile.getName()).toPath(), REPLACE_EXISTING);
-            fontFile.delete();
-        } catch (Exception exception) {
-            MatHax.LOG.error("Failed to copy builtin font {} to {}.", name, target.getAbsolutePath());
-            exception.printStackTrace();
-
-            if (name.equals(Fonts.DEFAULT_FONT_FAMILY)) {
-                throw new RuntimeException("Failed to load default font.");
-            }
+    public static boolean addFont(List<FontFamily> fontList, FontFace font) {
+        if (font == null) {
+            return false;
         }
+
+        FontInfo info = font.info;
+        FontFamily family = Fonts.getFamily(info.family());
+        if (family == null) {
+            family = new FontFamily(info.family());
+            fontList.add(family);
+        }
+
+        if (family.hasType(info.type())) {
+            return false;
+        }
+
+        return family.addFont(font);
+    }
+
+    public static InputStream stream(String builtin) {
+        return FontUtils.class.getResourceAsStream("/assets/" + MatHax.ID + "/fonts/" + builtin + ".ttf");
     }
 
     public static InputStream stream(File file) {

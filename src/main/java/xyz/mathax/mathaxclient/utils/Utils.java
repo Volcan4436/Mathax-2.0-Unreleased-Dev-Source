@@ -496,25 +496,23 @@ public class Utils {
     }
 
     public static GameProfile getRandomGameProfile() {
-        GameProfile profile = null;
-        Collection<PlayerListEntry> playerListEntries = mc.getNetworkHandler().getPlayerList();
-        if (playerListEntries.size() <= 1) {
-            return null;
-        }
+        GameProfile gameProfile = null;
 
-        int i = 1;
-        int randomI = random(1, playerListEntries.size());
-        if (mc.world != null) {
+        Collection<PlayerListEntry> playerListEntries = mc.getNetworkHandler().getPlayerList();
+
+        if (mc.world != null && playerListEntries.size() > 1) {
+            int i = 1;
+            int randomI = random(1, playerListEntries.size());
             for (PlayerListEntry playerListEntry : playerListEntries) {
                 if (randomI == i) {
-                    profile = playerListEntry.getProfile();
+                    gameProfile = playerListEntry.getProfile();
                 } else {
                     i++;
                 }
             }
         }
 
-        return profile;
+        return gameProfile;
     }
 
     public static void leftClick() {

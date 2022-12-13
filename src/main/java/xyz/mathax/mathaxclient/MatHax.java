@@ -166,12 +166,6 @@ public class MatHax implements ClientModInitializer {
         // Pre init
         Init.init(PreInit.class);
 
-        // Register module categories
-        Categories.init();
-
-        // Load systems
-        Systems.init();
-
         // Subscribe
         EVENT_BUS.subscribe(this);
 

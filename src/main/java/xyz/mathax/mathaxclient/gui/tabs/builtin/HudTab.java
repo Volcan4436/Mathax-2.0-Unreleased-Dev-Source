@@ -9,7 +9,7 @@ import xyz.mathax.mathaxclient.gui.widgets.containers.WHorizontalList;
 import xyz.mathax.mathaxclient.gui.widgets.pressable.WButton;
 import xyz.mathax.mathaxclient.gui.widgets.pressable.WCheckbox;
 import xyz.mathax.mathaxclient.systems.hud.Hud;
-import xyz.mathax.mathaxclient.systems.hud.screens.HudEditorScreen;
+import xyz.mathax.mathaxclient.gui.screens.modules.hud.HudEditorScreen;
 import net.minecraft.client.gui.screen.Screen;
 
 import static xyz.mathax.mathaxclient.MatHax.mc;

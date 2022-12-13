@@ -5,7 +5,7 @@ import org.json.JSONObject;
 import xyz.mathax.mathaxclient.gui.WidgetScreen;
 import xyz.mathax.mathaxclient.renderer.ShapeMode;
 import xyz.mathax.mathaxclient.settings.BlockDataSetting;
-import xyz.mathax.mathaxclient.systems.modules.render.search.screens.SBlockDataScreen;
+import xyz.mathax.mathaxclient.gui.screens.modules.search.SBlockDataScreen;
 import xyz.mathax.mathaxclient.systems.themes.Theme;
 import xyz.mathax.mathaxclient.utils.gui.IScreenFactory;
 import xyz.mathax.mathaxclient.utils.misc.IChangeable;
