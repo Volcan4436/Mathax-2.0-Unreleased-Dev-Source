@@ -53,7 +53,7 @@ public class Config extends System<Config> {
             .defaultValue(true)
             .onChanged(value -> {
                 if (Systems.loaded) {
-                    Capes.update();
+                    Capes.update(value);
                 } else {
                     Systems.addPostLoadTask(Capes::update);
                 }

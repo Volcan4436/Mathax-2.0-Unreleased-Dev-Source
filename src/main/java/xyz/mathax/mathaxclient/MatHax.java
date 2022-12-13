@@ -19,7 +19,6 @@ import xyz.mathax.mathaxclient.gui.WidgetScreen;
 import xyz.mathax.mathaxclient.gui.tabs.Tabs;
 import xyz.mathax.mathaxclient.systems.Systems;
 import xyz.mathax.mathaxclient.systems.config.Config;
-import xyz.mathax.mathaxclient.systems.modules.Categories;
 import xyz.mathax.mathaxclient.systems.modules.Modules;
 import xyz.mathax.mathaxclient.init.Init;
 import xyz.mathax.mathaxclient.utils.Utils;
@@ -54,8 +53,6 @@ public class MatHax implements ClientModInitializer {
     public static final String NAME = "MatHax";
     public static final String ID = NAME.toLowerCase(Locale.ROOT);
     public static final ModMetadata META = FabricLoader.getInstance().getModContainer(ID).get().getMetadata();
-
-    public static final Api API = new Api();
 
     public static final long DISCORD_RPC_ID = 878967665501306920L;
 
@@ -137,7 +134,7 @@ public class MatHax implements ClientModInitializer {
 
         // Pre-load
         Systems.addPreLoadTask(() -> {
-            API.load();
+            Api.load();
 
             if (!VERSION_FOLDER.exists()) {
                 VERSION_FOLDER.mkdir();
@@ -187,7 +184,7 @@ public class MatHax implements ClientModInitializer {
             DiscordRPC.disableRPC();
             //TODO: Leave API and IRC
             Irc.leave();
-            API.save();
+            Api.save();
             Systems.save();
         }));
 

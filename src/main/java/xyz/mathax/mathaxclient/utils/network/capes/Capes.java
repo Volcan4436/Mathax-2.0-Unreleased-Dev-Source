@@ -9,6 +9,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
 import org.json.JSONObject;
 import xyz.mathax.mathaxclient.utils.network.Executor;
+import xyz.mathax.mathaxclient.utils.network.api.Api;
 
 import java.util.*;
 
@@ -40,7 +41,7 @@ public class Capes {
         timer = 0;
 
         Executor.execute(() -> {
-            JSONObject json = MatHax.API.getCapes();
+            JSONObject json = Api.getCapes();
             if (json == null) {
                 return;
             }
@@ -178,13 +179,14 @@ public class Capes {
     }
 
     @EventHandler
-    private void onTick(TickEvent.Pre event) {
+    private static void onTick(TickEvent.Pre event) {
         if (Config.get().capesAutoReloadDelaySetting.get() == -1) {
             return;
         }
 
         if (timer >= Config.get().capesAutoReloadDelaySetting.get()) {
             timer = 0;
+
             Capes.update();
         }
 

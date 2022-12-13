@@ -9,6 +9,7 @@ import xyz.mathax.mathaxclient.gui.tabs.WindowTabScreen;
 import xyz.mathax.mathaxclient.gui.widgets.input.WTextBox;
 import xyz.mathax.mathaxclient.gui.widgets.pressable.WButton;
 import xyz.mathax.mathaxclient.systems.themes.Theme;
+import xyz.mathax.mathaxclient.utils.network.api.Api;
 
 public class AccountTab extends Tab {
     public AccountTab() {
@@ -17,7 +18,7 @@ public class AccountTab extends Tab {
 
     @Override
     public TabScreen createScreen(Theme theme) {
-        return MatHax.API.token.isBlank() ? new LoginScreen(theme, this) : new AccountScreen(theme, this);
+        return Api.token.isBlank() ? new LoginScreen(theme, this) : new AccountScreen(theme, this);
     }
 
     @Override
@@ -34,7 +35,7 @@ public class AccountTab extends Tab {
         public void initWidgets() {
             WButton logout = add(theme.button("Log Out")).expandX().widget();
             logout.action = () -> {
-                MatHax.API.token = "";
+                Api.token = "";
                 Tabs.get(AccountTab.class).openScreen(theme);
             };
         }
@@ -57,7 +58,7 @@ public class AccountTab extends Tab {
 
             WButton login = add(theme.button("Log In")).expandX().widget();
             login.action = () -> {
-                MatHax.API.login(usernameOrEmail.get(), password.get());
+                Api.login(usernameOrEmail.get(), password.get());
                 reload();
             };
         }

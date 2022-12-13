@@ -5,6 +5,7 @@ import xyz.mathax.mathaxclient.init.PreInit;
 import xyz.mathax.mathaxclient.utils.json.JSONUtils;
 import net.minecraft.SharedConstants;
 import org.json.JSONObject;
+import xyz.mathax.mathaxclient.utils.network.api.Api;
 
 public class Versions {
     private static Version version, latestVersion;
@@ -54,7 +55,7 @@ public class Versions {
     }
 
     public static void checkForUpdate() {
-        JSONObject json = MatHax.API.getVersions();
+        JSONObject json = Api.getVersions();
         if (json == null) {
             return;
         }
