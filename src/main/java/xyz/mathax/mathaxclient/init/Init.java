@@ -16,6 +16,7 @@ public class Init {
 
     public static void registerPackages(String packageString) {
         packages.add(packageString);
+
         for (MatHaxAddon addon : AddonManager.ADDONS) {
             try {
                 String addonPackage = addon.getPackage();
