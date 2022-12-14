@@ -22,7 +22,7 @@ public class Irc {
     protected static String username = "";
     protected static String password = "";
 
-    public static IrcClient ircClient = null;
+    public static Client client = null;
 
     public static boolean enabled = false;
 
@@ -42,7 +42,7 @@ public class Irc {
 
     @EventHandler
     private static void onGameJoined(GameJoinedEvent event) {
-        if (enabled && ircClient == null) {
+        if (enabled && client == null) {
             join();
         }
     }
@@ -54,17 +54,17 @@ public class Irc {
         }
 
         if (enabled) {
-            if (ircClient == null) {
+            if (client == null) {
                 join();
             }
-        } else if (ircClient != null) {
+        } else if (client != null) {
             leave();
         }
     }
 
     @EventHandler
     private static void onGameLeft(GameLeftEvent event) {
-        if (ircClient != null) {
+        if (client != null) {
             leave();
         }
     }
@@ -82,7 +82,7 @@ public class Irc {
     }
 
     public static void setAuth(String username, String password) {
-        if (ircClient != null){
+        if (client != null){
             if (username.isBlank() && password.isBlank()) {
                 ChatUtils.error("IRC", "You can't clear your username and password while connected.");
             } else {
@@ -92,6 +92,7 @@ public class Irc {
             ChatUtils.error("IRC", "Username and password can't be empty.");
         } else {
             updateAuth(username, password);
+
             ChatUtils.info("IRC", "Username and password updated.");
         }
     }
@@ -99,10 +100,13 @@ public class Irc {
     public static void join() {
         if (username.isEmpty() || password.isEmpty()) {
             ChatUtils.error("IRC", "Username and password can't be empty. Use .irc auth <username> <password> to set them.");
-        } else if (ircClient == null) {
+        } else if (client == null) {
             try {
-                ircClient = new IrcClient(new URI("ws://51.161.192.31:8107/irc"));
-                ircClient.connect();
+                /*String uri = MatHax.API_URL.replace("https", "ws");
+                uri = uri.replace("http", "ws");*/
+                String uri = "ws://51.161.192.31:8107/irc";
+                client = new Client(new URI(uri + "/irc"));
+                client.connect();
 
                 enabled = true;
             } catch (URISyntaxException exception) {
@@ -114,31 +118,31 @@ public class Irc {
     }
 
     public static void leave() {
-        if (ircClient != null) {
-            ircClient.close();
-            ircClient = null;
+        if (client != null) {
+            client.close();
+            client = null;
         } else {
             ChatUtils.error("IRC", "You are not connected.");
         }
     }
 
     public static void send(String message) {
-        if (ircClient != null) {
-            ircClient.sendBroadcast(username, message);
+        if (client != null) {
+            client.sendBroadcast(username, message);
         } else {
             ChatUtils.error("IRC", "You are not connected.");
         }
     }
 
     public static void sendDirect(String user, String message) {
-        if (ircClient != null) {
+        if (client != null) {
             if (user.equals(username)) {
                 ChatUtils.error("IRC", "You can't direct message yourself.");
 
                 return;
             }
 
-            ircClient.sendDirect(username, user, message);
+            client.sendDirect(username, user, message);
 
             ChatUtils.info("IRC", "To (highlight)%s(default): %s", user, message);
         } else {

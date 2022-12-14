@@ -14,12 +14,12 @@ import javax.crypto.SecretKey;
 import java.net.URI;
 import java.security.SecureRandom;
 
-public class IrcClient extends WebSocketClient {
+public class Client extends WebSocketClient {
     protected SecretKey secretKey;
 
     protected int iv;
 
-    public IrcClient(URI uri) {
+    public Client(URI uri) {
         super(uri);
     }
 
@@ -60,7 +60,7 @@ public class IrcClient extends WebSocketClient {
     @Override
     public void onClose(int code, String reason, boolean remote) {
         ChatUtils.info("IRC", "Disconnected.");
-        Irc.ircClient = null;
+        Irc.client = null;
 
         Config.get().ircSetting.set(false);
     }

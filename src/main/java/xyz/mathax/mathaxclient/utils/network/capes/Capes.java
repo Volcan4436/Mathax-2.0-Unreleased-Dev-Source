@@ -121,6 +121,21 @@ public class Capes {
         }
     }
 
+    @EventHandler
+    private static void onTick(TickEvent.Pre event) {
+        if (Config.get().capesAutoReloadDelaySetting.get() == -1) {
+            return;
+        }
+
+        if (timer >= Config.get().capesAutoReloadDelaySetting.get()) {
+            timer = 0;
+
+            Capes.update();
+        }
+
+        timer++;
+    }
+
     public static Cape getCape(String name) {
         return CAPES.get(name);
     }
@@ -176,20 +191,5 @@ public class Capes {
 
     public static Cape getPlayerCape(PlayerEntity player) {
         return getPlayerCape(player.getGameProfile().getId());
-    }
-
-    @EventHandler
-    private static void onTick(TickEvent.Pre event) {
-        if (Config.get().capesAutoReloadDelaySetting.get() == -1) {
-            return;
-        }
-
-        if (timer >= Config.get().capesAutoReloadDelaySetting.get()) {
-            timer = 0;
-
-            Capes.update();
-        }
-
-        timer++;
     }
 }

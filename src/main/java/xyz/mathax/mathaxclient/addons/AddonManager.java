@@ -14,38 +14,8 @@ public class AddonManager {
     public static final List<MatHaxAddon> ADDONS = new ArrayList<>();
 
     public static void init() {
-        {
-            MatHax.ADDON = new MatHaxAddon() {
-                @Override
-                public void onInitialize() {}
+        reigsterMatHax();
 
-                @Override
-                public String getPackage() {
-                    return "xyz.mathax.mathaxclient";
-                }
-
-                @Override
-                public String getWebsite() {
-                    return "https://mathaxclient.xyz";
-                }
-            };
-
-            ModMetadata metadata = FabricLoader.getInstance().getModContainer(MatHax.ID).get().getMetadata();
-
-            MatHax.ADDON.name = metadata.getName();
-            MatHax.ADDON.version = new Version(metadata.getVersion().getFriendlyString());
-            MatHax.ADDON.authors = new String[metadata.getAuthors().size()];
-            if (metadata.containsCustomValue(MatHax.ID + ":color")) {
-                MatHax.ADDON.color.parse(metadata.getCustomValue(MatHax.ID + ":color").getAsString());
-            }
-
-            int i = 0;
-            for (Person author : metadata.getAuthors()) {
-                MatHax.ADDON.authors[i++] = author.getName();
-            }
-        }
-
-        // Addons
         for (EntrypointContainer<MatHaxAddon> entrypoint : FabricLoader.getInstance().getEntrypointContainers("mathax", MatHaxAddon.class)) {
             ModMetadata metadata = entrypoint.getProvider().getMetadata();
             MatHaxAddon addon = entrypoint.getEntrypoint();
@@ -70,6 +40,37 @@ public class AddonManager {
             }
 
             ADDONS.add(addon);
+        }
+    }
+
+    private static void reigsterMatHax() {
+        MatHax.ADDON = new MatHaxAddon() {
+            @Override
+            public void onInitialize() {}
+
+            @Override
+            public String getPackage() {
+                return "xyz.mathax.mathaxclient";
+            }
+
+            @Override
+            public String getWebsite() {
+                return "https://mathaxclient.xyz";
+            }
+        };
+
+        ModMetadata matHaxMetadata = FabricLoader.getInstance().getModContainer(MatHax.ID).get().getMetadata();
+
+        MatHax.ADDON.name = matHaxMetadata.getName();
+        MatHax.ADDON.version = new Version(matHaxMetadata.getVersion().getFriendlyString());
+        MatHax.ADDON.authors = new String[matHaxMetadata.getAuthors().size()];
+        if (matHaxMetadata.containsCustomValue(MatHax.ID + ":color")) {
+            MatHax.ADDON.color.parse(matHaxMetadata.getCustomValue(MatHax.ID + ":color").getAsString());
+        }
+
+        int i = 0;
+        for (Person author : matHaxMetadata.getAuthors()) {
+            MatHax.ADDON.authors[i++] = author.getName();
         }
     }
 }

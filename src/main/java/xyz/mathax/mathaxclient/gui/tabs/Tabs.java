@@ -17,9 +17,9 @@ public class Tabs {
     public static void init() {
         add(new ConfigTab());
         add(new AccountTab());
-        add(new GuiTab());
         add(new ModulesTab());
         add(new HudTab());
+        add(new GuiTab());
         add(new FriendsTab());
         add(new EnemiesTab());
         add(new MacrosTab());

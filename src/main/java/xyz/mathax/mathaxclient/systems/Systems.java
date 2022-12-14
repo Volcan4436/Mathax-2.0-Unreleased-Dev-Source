@@ -41,7 +41,7 @@ public class Systems {
         postLoadTasks.add(task);
     }
 
-    @PreInit(dependencies = Font.class)
+    @PreInit
     public static void init() {
         System<?> config = add(new Config());
         config.init();
@@ -74,8 +74,6 @@ public class Systems {
         return system;
     }
 
-    // Save
-
     @EventHandler
     private static void onGameLeft(GameLeftEvent event) {
         save();
@@ -96,8 +94,6 @@ public class Systems {
     public static void save() {
         save(null);
     }
-
-    // Load
 
     public static void load(File folder) {
         long start = Utils.getCurrentTimeMillis();
