@@ -3,8 +3,6 @@ package xyz.mathax.mathaxclient.utils.text;
 import xyz.mathax.mathaxclient.MatHax;
 import xyz.mathax.mathaxclient.renderer.text.*;
 import xyz.mathax.mathaxclient.utils.Utils;
-import xyz.mathax.mathaxclient.utils.files.StreamUtils;
-import xyz.mathax.mathaxclient.utils.misc.MatHaxIdentifier;
 import net.minecraft.util.Util;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.stb.STBTTFontinfo;
@@ -16,14 +14,9 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Consumer;
-
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
-import static xyz.mathax.mathaxclient.MatHax.mc;
 
 public class FontUtils {
     public static FontInfo getSysFontInfo(File file) {

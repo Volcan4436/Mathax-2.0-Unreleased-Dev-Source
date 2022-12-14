@@ -4,7 +4,6 @@ import xyz.mathax.mathaxclient.MatHax;
 import xyz.mathax.mathaxclient.eventbus.EventHandler;
 import xyz.mathax.mathaxclient.events.game.GameLeftEvent;
 import xyz.mathax.mathaxclient.init.PreInit;
-import xyz.mathax.mathaxclient.renderer.text.Font;
 import xyz.mathax.mathaxclient.systems.accounts.Accounts;
 import xyz.mathax.mathaxclient.systems.commands.Commands;
 import xyz.mathax.mathaxclient.systems.config.Config;

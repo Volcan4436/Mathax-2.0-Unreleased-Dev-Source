@@ -358,8 +358,17 @@ public class PlayerUtils {
         return playerListEntry.getGameMode();
     }
 
+    public static double getTotalHealth(boolean round) {
+        double health = mc.player.getHealth() + mc.player.getAbsorptionAmount();
+        if (round) {
+            health = Math.round(health);
+        }
+
+        return health;
+    }
+
     public static double getTotalHealth() {
-        return mc.player.getHealth() + mc.player.getAbsorptionAmount();
+        return getTotalHealth(false);
     }
 
     public static boolean isAlive() {

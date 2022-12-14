@@ -1,19 +1,5 @@
 package xyz.mathax.mathaxclient.mixin.canvas;
 
-/*import grondag.canvas.render.world.CanvasWorldRenderer;
-import meteordevelopment.meteorclient.systems.modules.Modules;
-import meteordevelopment.meteorclient.systems.modules.render.BlockSelection;
-import meteordevelopment.meteorclient.utils.render.postprocess.PostProcessShaders;
-import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.render.LightmapTextureManager;
-import net.minecraft.client.util.math.MatrixStack;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;*/
-
 // TODO: 1.19.3
 //@Mixin(value = CanvasWorldRenderer.class, remap = false)
 public class CanvasWorldRendererMixin {

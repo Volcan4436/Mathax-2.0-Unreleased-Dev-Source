@@ -1,10 +1,15 @@
 package xyz.mathax.mathaxclient.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.entity.Entity;
+import net.minecraft.scoreboard.ScoreboardObjective;
+import org.spongepowered.asm.mixin.injection.ModifyArgs;
+import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 import xyz.mathax.mathaxclient.MatHax;
 import xyz.mathax.mathaxclient.events.render.Render2DEvent;
 import xyz.mathax.mathaxclient.systems.modules.Modules;
 import xyz.mathax.mathaxclient.systems.modules.render.Freecam;
+import xyz.mathax.mathaxclient.systems.modules.render.NoRender;
 import xyz.mathax.mathaxclient.utils.Utils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.InGameHud;
@@ -47,7 +52,7 @@ public abstract class InGameHudMixin {
         client.getProfiler().pop();
     }
 
-    /*@Inject(method = "renderStatusEffectOverlay", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "renderStatusEffectOverlay", at = @At("HEAD"), cancellable = true)
     private void onRenderStatusEffectOverlay(CallbackInfo info) {
         if (Modules.get().get(NoRender.class).noPotionIcons()) {
             info.cancel();
@@ -94,7 +99,7 @@ public abstract class InGameHudMixin {
         if (Modules.get().get(NoRender.class).noSpyglassOverlay()) {
             info.cancel();
         }
-    }*/
+    }
 
     @Redirect(method = "renderCrosshair", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/Perspective;isFirstPerson()Z"))
     private boolean alwaysRenderCrosshairInFreecam(Perspective perspective) {
@@ -105,7 +110,7 @@ public abstract class InGameHudMixin {
         return perspective.isFirstPerson();
     }
 
-    /*@Inject(method = "renderCrosshair", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "renderCrosshair", at = @At("HEAD"), cancellable = true)
     private void onRenderCrosshair(MatrixStack matrixStack, CallbackInfo info) {
         if (Modules.get().get(NoRender.class).noCrosshair()) {
             info.cancel();
@@ -117,5 +122,5 @@ public abstract class InGameHudMixin {
         if (Modules.get().get(NoRender.class).noHeldItemName()) {
             info.cancel();
         }
-    }*/
+    }
 }

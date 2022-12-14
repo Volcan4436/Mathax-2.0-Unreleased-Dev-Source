@@ -1,12 +1,14 @@
 package xyz.mathax.mathaxclient.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.util.hit.HitResult;
 import xyz.mathax.mathaxclient.MatHax;
 import xyz.mathax.mathaxclient.events.render.Render3DEvent;
 import xyz.mathax.mathaxclient.events.render.RenderAfterWorldEvent;
 import xyz.mathax.mathaxclient.mixininterface.IVec3d;
 import xyz.mathax.mathaxclient.renderer.Renderer3D;
 import xyz.mathax.mathaxclient.systems.modules.Modules;
+import xyz.mathax.mathaxclient.systems.modules.player.LiquidInteract;
 import xyz.mathax.mathaxclient.systems.modules.player.Reach;
 import xyz.mathax.mathaxclient.systems.modules.render.Freecam;
 import xyz.mathax.mathaxclient.systems.modules.render.NoRender;
@@ -90,7 +92,7 @@ public abstract class GameRendererMixin {
             client.getProfiler().pop();
             info.cancel();
         }
-    }
+    }*/
 
     @Redirect(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;raycast(DFZ)Lnet/minecraft/util/hit/HitResult;"))
     private HitResult updateTargetedEntityEntityRayTraceProxy(Entity entity, double maxDistance, float tickDelta, boolean includeFluids) {
@@ -104,7 +106,7 @@ public abstract class GameRendererMixin {
         }
 
         return entity.raycast(maxDistance, tickDelta, includeFluids);
-    }*/
+    }
 
     @Inject(method = "bobViewWhenHurt", at = @At("HEAD"), cancellable = true)
     private void onBobViewWhenHurt(MatrixStack matrixStack, float f, CallbackInfo info) {

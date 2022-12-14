@@ -19,8 +19,8 @@ public class Api {
             return;
         }
 
-        String formattedURL = String.format("accounts/login?usernameOrEmail=%s&password=%s", usernameOrEmail, password);
-        login(getJSON(formattedURL));
+        String loginURL = String.format("accounts/login?usernameOrEmail=%s&password=%s", usernameOrEmail, password);
+        login(getJSON(loginURL));
     }
 
     public static void login(String token) {
@@ -28,8 +28,8 @@ public class Api {
             return;
         }
 
-        String formattedURL = String.format("accounts/login?token=%s", token);
-        login(getJSON(formattedURL));
+        String loginURL = String.format("accounts/login?token=%s", token);
+        login(getJSON(loginURL));
     }
 
     public static void login(JSONObject json) {

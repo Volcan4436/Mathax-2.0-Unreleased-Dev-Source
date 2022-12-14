@@ -98,7 +98,7 @@ public class DiscordRPC {
             } else if (mc.player.isSpectator()) {
                 text = "Spectator Mode";
             } else {
-                text = Math.round(PlayerUtils.getTotalHealth()) + " HP";
+                text = PlayerUtils.getTotalHealth(true) + " HP";
             }
         }
 

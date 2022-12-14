@@ -23,6 +23,21 @@ public class LiquidFiller extends Module {
 
     // General
 
+    private final Setting<List<Block>> whitelistSetting = generalSettings.add(new BlockListSetting.Builder()
+            .name("Block whitelist")
+            .description("The allowed blocks that it will use to fill up the liquid.")
+            .defaultValue(
+                    Blocks.DIRT,
+                    Blocks.COBBLESTONE,
+                    Blocks.STONE,
+                    Blocks.NETHERRACK,
+                    Blocks.DIORITE,
+                    Blocks.GRANITE,
+                    Blocks.ANDESITE
+            )
+            .build()
+    );
+
     private final Setting<PlaceIn> placeInLiquidsSetting = generalSettings.add(new EnumSetting.Builder<PlaceIn>()
             .name("Place in")
             .description("What type of liquids to place in.")
@@ -54,21 +69,6 @@ public class LiquidFiller extends Module {
             .defaultValue(1)
             .min(0)
             .sliderRange(0, 20)
-            .build()
-    );
-
-    private final Setting<List<Block>> whitelistSetting = generalSettings.add(new BlockListSetting.Builder()
-            .name("Block whitelist")
-            .description("The allowed blocks that it will use to fill up the liquid.")
-            .defaultValue(
-                    Blocks.DIRT,
-                    Blocks.COBBLESTONE,
-                    Blocks.STONE,
-                    Blocks.NETHERRACK,
-                    Blocks.DIORITE,
-                    Blocks.GRANITE,
-                    Blocks.ANDESITE
-            )
             .build()
     );
 

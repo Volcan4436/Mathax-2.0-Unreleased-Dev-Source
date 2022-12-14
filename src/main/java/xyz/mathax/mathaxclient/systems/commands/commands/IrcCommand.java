@@ -3,7 +3,6 @@ package xyz.mathax.mathaxclient.systems.commands.commands;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.command.CommandSource;
-import xyz.mathax.mathaxclient.MatHax;
 import xyz.mathax.mathaxclient.systems.commands.Command;
 import xyz.mathax.mathaxclient.utils.network.irc.Irc;
 

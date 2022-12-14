@@ -5,7 +5,6 @@ import xyz.mathax.mathaxclient.utils.misc.CryptUtils;
 import xyz.mathax.mathaxclient.utils.misc.ISerializable;
 
 import javax.crypto.SecretKey;
-import java.util.Base64;
 
 public class Message implements ISerializable<Message> {
     public MessageType type;

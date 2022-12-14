@@ -13,6 +13,7 @@ import xyz.mathax.mathaxclient.utils.Utils;
 import xyz.mathax.mathaxclient.utils.misc.Pool;
 import xyz.mathax.mathaxclient.utils.player.Rotations;
 import xyz.mathax.mathaxclient.utils.render.color.SettingColor;
+import xyz.mathax.mathaxclient.utils.settings.ListMode;
 import xyz.mathax.mathaxclient.utils.world.BlockUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -51,27 +52,10 @@ public class VeinMiner extends Module {
     private int tick = 0;
 
     private final SettingGroup generalSettings = settings.createGroup("General");
+    private final SettingGroup listSettings = settings.createGroup("List");
     private final SettingGroup renderSettings = settings.createGroup("Render");
 
     // General
-
-    private final Setting<List<Block>> selectedBlocksSetting = generalSettings.add(new BlockListSetting.Builder()
-            .name("Blocks")
-            .description("Which blocks to select.")
-            .defaultValue(
-                    Blocks.STONE,
-                    Blocks.DIRT,
-                    Blocks.GRASS
-            )
-            .build()
-    );
-
-    private final Setting<ListMode> modeSetting = generalSettings.add(new EnumSetting.Builder<ListMode>()
-            .name("Mode")
-            .description("Selection mode.")
-            .defaultValue(ListMode.Whitelist)
-            .build()
-    );
 
     private final Setting<Integer> depthSetting = generalSettings.add(new IntSetting.Builder()
             .name("Depth")
@@ -95,6 +79,35 @@ public class VeinMiner extends Module {
             .name("Rotate")
             .description("Send rotation packets to the server when mining.")
             .defaultValue(true)
+            .build()
+    );
+
+    // List
+
+    private final Setting<ListMode> listModeSetting = listSettings.add(new EnumSetting.Builder<ListMode>()
+            .name("List mode")
+            .description("Selection mode.")
+            .defaultValue(ListMode.Whitelist)
+            .build()
+    );
+
+    private final Setting<List<Block>> whitelistSetting = listSettings.add(new BlockListSetting.Builder()
+            .name("Whitelist")
+            .description("The blocks you want to use.")
+            .visible(() -> listModeSetting.get() == ListMode.Whitelist)
+            .defaultValue(
+                    Blocks.STONE,
+                    Blocks.DIRT,
+                    Blocks.GRASS
+            )
+            .build()
+    );
+
+    private final Setting<List<Block>> blacklistSetting = listSettings.add(new BlockListSetting.Builder()
+            .name("Blacklist")
+            .description("The blocks you don't want to use.")
+            .visible(() -> listModeSetting.get() == ListMode.Blacklist)
+            .defaultValue(new ArrayList<>())
             .build()
     );
 
@@ -167,11 +180,11 @@ public class VeinMiner extends Module {
             return;
         }
 
-        if (modeSetting.get() == ListMode.Whitelist && !selectedBlocksSetting.get().contains(state.getBlock())) {
+        if (listModeSetting.get() == ListMode.Whitelist && !whitelistSetting.get().contains(state.getBlock())) {
             return;
         }
 
-        if (modeSetting.get() == ListMode.Blacklist && selectedBlocksSetting.get().contains(state.getBlock())) {
+        if (listModeSetting.get() == ListMode.Blacklist && blacklistSetting.get().contains(state.getBlock())) {
             return;
         }
 
@@ -300,22 +313,6 @@ public class VeinMiner extends Module {
 
     @Override
     public String getInfoString() {
-        return modeSetting.get().toString() + " (" + selectedBlocksSetting.get().size() + ")";
-    }
-
-    public enum ListMode {
-        Whitelist("Whitelist"),
-        Blacklist("Blacklist");
-
-        private final String name;
-
-        ListMode(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
+        return listModeSetting.get().toString() + " (" + (listModeSetting.get() == ListMode.Whitelist ? whitelistSetting.get().size() : blacklistSetting.get().size()) + ")";
     }
 }

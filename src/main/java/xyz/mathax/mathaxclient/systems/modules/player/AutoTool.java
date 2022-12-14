@@ -9,6 +9,7 @@ import xyz.mathax.mathaxclient.systems.modules.Module;
 import xyz.mathax.mathaxclient.systems.modules.Modules;
 import xyz.mathax.mathaxclient.systems.modules.world.InfinityMiner;
 import xyz.mathax.mathaxclient.utils.player.InvUtils;
+import xyz.mathax.mathaxclient.utils.settings.ListMode;
 import xyz.mathax.mathaxclient.utils.world.BlockUtils;
 import net.minecraft.block.BambooBlock;
 import net.minecraft.block.BambooSaplingBlock;
@@ -234,22 +235,6 @@ public class AutoTool extends Module {
         private final String name;
 
         EnchantPreference(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
-    }
-
-    public enum ListMode {
-        Whitelist("Whitelist"),
-        Blacklist("Blacklist");
-
-        private final String name;
-
-        ListMode(String name) {
             this.name = name;
         }
 

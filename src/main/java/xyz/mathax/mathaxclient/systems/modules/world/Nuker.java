@@ -11,6 +11,7 @@ import xyz.mathax.mathaxclient.utils.Utils;
 import xyz.mathax.mathaxclient.utils.misc.Pool;
 import xyz.mathax.mathaxclient.utils.render.RenderUtils;
 import xyz.mathax.mathaxclient.utils.render.color.SettingColor;
+import xyz.mathax.mathaxclient.utils.settings.ListMode;
 import xyz.mathax.mathaxclient.utils.world.BlockIterator;
 import xyz.mathax.mathaxclient.utils.world.BlockUtils;
 import net.minecraft.block.Block;
@@ -160,16 +161,9 @@ public class Nuker extends Module {
     // List
 
     private final Setting<ListMode> listModeSetting = listSettings.add(new EnumSetting.Builder<ListMode>()
-            .name("list-mode")
+            .name("List mode")
             .description("Selection mode.")
             .defaultValue(ListMode.Whitelist)
-            .build()
-    );
-
-    private final Setting<List<Block>> blacklistSetting = listSettings.add(new BlockListSetting.Builder()
-            .name("Blacklist")
-            .description("The blocks you don't want to mine.")
-            .visible(() -> listModeSetting.get() == ListMode.Blacklist)
             .build()
     );
 
@@ -177,6 +171,13 @@ public class Nuker extends Module {
             .name("Whitelist")
             .description("The blocks you want to mine.")
             .visible(() -> listModeSetting.get() == ListMode.Whitelist)
+            .build()
+    );
+
+    private final Setting<List<Block>> blacklistSetting = listSettings.add(new BlockListSetting.Builder()
+            .name("Blacklist")
+            .description("The blocks you don't want to mine.")
+            .visible(() -> listModeSetting.get() == ListMode.Blacklist)
             .build()
     );
 
@@ -483,21 +484,5 @@ public class Nuker extends Module {
     public String getInfoString() {
         int size = listModeSetting.get() == ListMode.Whitelist ? whitelistSetting.get().size() : blacklistSetting.get().size();
         return modeSetting.get().toString() + " (" + size + ")";
-    }
-
-    public enum ListMode {
-        Whitelist("Whitelist"),
-        Blacklist("Blacklist");
-
-        private final String name;
-
-        ListMode(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
     }
 }

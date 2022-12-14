@@ -96,15 +96,10 @@ public class MatHax implements ClientModInitializer {
                 Formatting.YELLOW + "Hack on anarchyclef.eyezah.com",
                 Formatting.YELLOW + "Hack on 2b2t.org",
                 Formatting.YELLOW + "Better Than Wurst",
-                Formatting.YELLOW + "Better Than Hypixel",
-                Formatting.YELLOW + "Better Than Mineplex",
                 Formatting.YELLOW + "Better Than OptiFine",
                 Formatting.YELLOW + "Better Than Internet Explorer",
-                Formatting.YELLOW + "Better Than Dream",
                 Formatting.YELLOW + "Wish was better than Technoblade",
                 Formatting.YELLOW + "Chad Water",
-                Formatting.YELLOW + "Better than NoComm",
-                Formatting.YELLOW + "Better than Minecon",
                 Formatting.YELLOW + "L Bozo",
 
                 // PERSONALIZED
@@ -137,6 +132,7 @@ public class MatHax implements ClientModInitializer {
             Api.load();
 
             if (!VERSION_FOLDER.exists()) {
+                VERSION_FOLDER.getParentFile().mkdirs();
                 VERSION_FOLDER.mkdir();
 
                 Modules.get().get(Zoom.class).keybind.set(true, GLFW.GLFW_KEY_C);

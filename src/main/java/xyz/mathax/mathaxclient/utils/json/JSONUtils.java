@@ -34,15 +34,16 @@ public class JSONUtils {
             return null;
         }
 
-        try {
-            if (file.exists()) {
+
+        if (file.exists()) {
+            try {
                 String jsonString = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
                 if (jsonString != null && isValidJSON(jsonString)) {
                     return new JSONObject(jsonString);
                 }
+            } catch (IOException exception) {
+                exception.printStackTrace();
             }
-        } catch (IOException exception) {
-            exception.printStackTrace();
         }
 
         return null;

@@ -1,10 +1,6 @@
 package xyz.mathax.mathaxclient.renderer.text;
 
-import xyz.mathax.mathaxclient.utils.text.FontUtils;
-
-import java.io.File;
 import java.io.InputStream;
-import java.nio.file.Path;
 
 public abstract class FontFace {
     public final FontInfo info;

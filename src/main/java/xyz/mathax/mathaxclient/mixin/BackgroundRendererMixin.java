@@ -1,6 +1,8 @@
 package xyz.mathax.mathaxclient.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.entity.Entity;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.mathax.mathaxclient.systems.modules.Modules;
 import xyz.mathax.mathaxclient.systems.modules.render.NoRender;
 import xyz.mathax.mathaxclient.systems.modules.render.Xray;

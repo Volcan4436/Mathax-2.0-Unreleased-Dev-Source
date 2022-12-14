@@ -42,8 +42,17 @@ public class EntityUtils {
         return type != EntityType.AREA_EFFECT_CLOUD && type != EntityType.ARROW && type != EntityType.FALLING_BLOCK && type != EntityType.FIREWORK_ROCKET && type != EntityType.ITEM && type != EntityType.LLAMA_SPIT && type != EntityType.SPECTRAL_ARROW && type != EntityType.ENDER_PEARL && type != EntityType.EXPERIENCE_BOTTLE && type != EntityType.POTION && type != EntityType.TRIDENT && type != EntityType.LIGHTNING_BOLT && type != EntityType.FISHING_BOBBER && type != EntityType.EXPERIENCE_ORB && type != EntityType.EGG;
     }
 
-    public static float getTotalHealth(LivingEntity entity) {
-        return entity.getHealth() + entity.getAbsorptionAmount();
+    public static double getTotalHealth(LivingEntity entity, boolean round) {
+        double health = entity.getHealth() + entity.getAbsorptionAmount();
+        if (round) {
+            health = Math.round(health);
+        }
+
+        return health;
+    }
+
+    public static double getTotalHealth(LivingEntity entity) {
+        return getTotalHealth(entity);
     }
 
     public static int getPing(PlayerEntity player) {

@@ -1,7 +1,6 @@
 package xyz.mathax.mathaxclient.gui.tabs.builtin;
 
 import net.minecraft.client.gui.screen.Screen;
-import xyz.mathax.mathaxclient.MatHax;
 import xyz.mathax.mathaxclient.gui.tabs.Tab;
 import xyz.mathax.mathaxclient.gui.tabs.TabScreen;
 import xyz.mathax.mathaxclient.gui.tabs.Tabs;

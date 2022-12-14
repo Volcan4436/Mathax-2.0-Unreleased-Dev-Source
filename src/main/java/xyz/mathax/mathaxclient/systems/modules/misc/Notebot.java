@@ -49,8 +49,29 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-
 public class Notebot extends Module {
+    private CompletableFuture<Song> loadingSongFuture = null;
+
+    private final Map<Note, BlockPos> noteBlockPositions = new HashMap<>(); // Currently used noteblocks by the song
+    private final Map<BlockPos, Integer> tuneHits = new HashMap<>(); // noteblock -> target hits number
+
+    private final Multimap<Note, BlockPos> scannedNoteblocks = MultimapBuilder.linkedHashKeys().arrayListValues().build(); // Found noteblocks
+
+    private final List<BlockPos> clickedBlocks = new ArrayList<>();
+
+    private Song song; // Loaded song
+
+    private Stage stage = Stage.None;
+
+    private boolean anyNoteblockTuned = false;
+    private boolean isPlaying = false;
+
+    private int waitTicks = -1;
+    private int currentTick = 0;
+    private int ticks = 0;
+
+    private WLabel status;
+
     private final SettingGroup generalSettings = settings.createGroup("General");
     private final SettingGroup noteMapSettings = settings.createGroup("Note Map");
     private final SettingGroup renderSettings = settings.createGroup("Render");
@@ -110,13 +131,6 @@ public class Notebot extends Module {
             .build()
     );
 
-    public final Setting<Boolean> swingSetting = generalSettings.add(new BoolSetting.Builder()
-            .name("Swing")
-            .description("Swing hand client side.")
-            .defaultValue(true)
-            .build()
-    );
-
     public final Setting<Integer> checkNoteblocksAgainDelaySetting = generalSettings.add(new IntSetting.Builder()
             .name("Check noteblocks again delay")
             .description("How much delay should be between end of tuning and checking again.")
@@ -127,6 +141,13 @@ public class Notebot extends Module {
     );
 
     // Render
+
+    public final Setting<Boolean> swingSetting = renderSettings.add(new BoolSetting.Builder()
+            .name("Swing")
+            .description("Swing hand client side.")
+            .defaultValue(true)
+            .build()
+    );
 
     public final Setting<Boolean> renderTextSetting = renderSettings.add(new BoolSetting.Builder()
             .name("Render text")
@@ -219,28 +240,6 @@ public class Notebot extends Module {
             .defaultValue(false)
             .build()
     );
-
-    private CompletableFuture<Song> loadingSongFuture = null;
-
-    private final Map<Note, BlockPos> noteBlockPositions = new HashMap<>(); // Currently used noteblocks by the song
-    private final Map<BlockPos, Integer> tuneHits = new HashMap<>(); // noteblock -> target hits number
-
-    private final Multimap<Note, BlockPos> scannedNoteblocks = MultimapBuilder.linkedHashKeys().arrayListValues().build(); // Found noteblocks
-
-    private final List<BlockPos> clickedBlocks = new ArrayList<>();
-
-    private Song song; // Loaded song
-
-    private Stage stage = Stage.None;
-
-    private boolean anyNoteblockTuned = false;
-    private boolean isPlaying = false;
-
-    private int waitTicks = -1;
-    private int currentTick = 0;
-    private int ticks = 0;
-
-    private WLabel status;
 
     public Notebot(Category category) {
         super(category, "Notebot", "Plays songs using noteblocks.");

@@ -93,6 +93,7 @@ public class Modules extends System<Modules> {
         Category combat = Categories.Combat;
         add(new AutoArmor(combat));
         add(new AutoDisconnect(combat));
+        add(new AutoTotem(combat));
         add(new CrystalAura(combat));
         add(new KillAura(combat));
         add(new Surround(combat));
@@ -146,11 +147,19 @@ public class Modules extends System<Modules> {
         Category player = Categories.Player;
         add(new AntiCactus(player));
         add(new AntiHunger(player));
+        add(new AutoFish(player));
+        add(new AutoGap(player));
+        add(new AutoMend(player));
+        add(new AutoReplenish(player));
         add(new AutoTool(player));
         add(new ChestSwap(player));
         add(new EndermanLook(player));
-        add(new PacketMine(player));
+        add(new ExpThrower(player));
+        add(new FastUse(player));
+        add(new GhostHand(player));
         add(new InstaMine(player));
+        add(new LiquidInteract(player));
+        add(new PacketMine(player));
         add(new Reach(player));
 
         // World
@@ -192,6 +201,7 @@ public class Modules extends System<Modules> {
         add(new Notebot(misc));
         add(new PingSpoof(misc));
         add(new PortalChat(misc));
+        add(new ServerSpoof(misc));
         add(new VanillaSpoof(misc));
     }
 

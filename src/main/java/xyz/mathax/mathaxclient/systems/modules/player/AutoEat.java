@@ -95,9 +95,9 @@ public class AutoEat extends Module {
 
     @EventHandler(priority = EventPriority.LOW)
     private void onTick(TickEvent.Pre event) {
-        /*if (Modules.get().get(AutoGap.class).isEating()) {
+        if (Modules.get().get(AutoGap.class).isEating()) {
             return;
-        }*/
+        }
 
         if (eating) {
             if (shouldEat()) {

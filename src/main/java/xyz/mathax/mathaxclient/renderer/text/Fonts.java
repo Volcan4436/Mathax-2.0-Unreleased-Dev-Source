@@ -4,7 +4,6 @@ import xyz.mathax.mathaxclient.MatHax;
 import xyz.mathax.mathaxclient.gui.WidgetScreen;
 import xyz.mathax.mathaxclient.init.PreInit;
 import xyz.mathax.mathaxclient.renderer.Shaders;
-import xyz.mathax.mathaxclient.systems.config.Config;
 import xyz.mathax.mathaxclient.systems.themes.Themes;
 import xyz.mathax.mathaxclient.utils.Utils;
 import xyz.mathax.mathaxclient.utils.text.FontUtils;

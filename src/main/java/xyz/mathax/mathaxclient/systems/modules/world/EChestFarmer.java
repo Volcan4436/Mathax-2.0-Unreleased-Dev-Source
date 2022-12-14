@@ -100,12 +100,13 @@ public class EChestFarmer extends Module {
     );
 
     public EChestFarmer(Category category) {
-        super(category, "EChest Farmer", "Places and breaks EChests to farm obsidian.");
+        super(category, "E-Chest Farmer", "Places and breaks EChests to farm obsidian.");
     }
 
     @Override
     public void onEnable() {
         target = null;
+
         startCount = InvUtils.find(Items.OBSIDIAN).count();
     }
 

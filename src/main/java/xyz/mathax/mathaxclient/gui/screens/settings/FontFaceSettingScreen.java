@@ -12,7 +12,6 @@ import xyz.mathax.mathaxclient.gui.widgets.input.WDropdown;
 import xyz.mathax.mathaxclient.gui.widgets.input.WTextBox;
 import xyz.mathax.mathaxclient.gui.widgets.pressable.WButton;
 import xyz.mathax.mathaxclient.renderer.text.Fonts;
-import xyz.mathax.mathaxclient.renderer.text.FontFace;
 import xyz.mathax.mathaxclient.renderer.text.FontFamily;
 import xyz.mathax.mathaxclient.settings.FontFaceSetting;
 import org.apache.commons.lang3.StringUtils;

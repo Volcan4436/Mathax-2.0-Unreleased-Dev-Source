@@ -44,15 +44,7 @@ public class PlayerListHudMixin {
 
     @Inject(method = "renderLatencyIcon", at = @At("HEAD"), cancellable = true)
     private void onRenderLatencyIcon(MatrixStack matrixStack, int width, int x, int y, PlayerListEntry playerListEntry, CallbackInfo info) {
-        /*if (OnlinePlayers.isOnline() && OnlinePlayers.isPlayerOnline(playerListEntry.getProfile().getId()) && playerListEntry.getProfile().getName().equals("Matejko06")) {
-            GL.bindTexture(MATHAX_ICON);
-            Renderer2D.TEXTURE.begin();
-            int fontHeight = MinecraftClient.getInstance().textRenderer.fontHeight;
-            Renderer2D.TEXTURE.texturedQuad(x, y, fontHeight, fontHeight, Color.WHITE);
-            Renderer2D.TEXTURE.render(matrixStack);
-            //  TODO: NEFUNGUJE TO JAK MÁ KURVA
-        }*/
-        //TODO: Posunout ikonu hlavy a text u každého na listu online lidí, ukázat před tím vším ikonu
+        // MATHAX ICONS
 
         BetterTab betterTab = Modules.get().get(BetterTab.class);
         if (betterTab.isEnabled() && betterTab.accurateLatencySetting.get()) {

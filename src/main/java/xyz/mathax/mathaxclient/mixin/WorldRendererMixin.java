@@ -1,5 +1,7 @@
 package xyz.mathax.mathaxclient.mixin;
 
+import net.minecraft.block.BlockState;
+import net.minecraft.util.math.BlockPos;
 import xyz.mathax.mathaxclient.systems.modules.Modules;
 import xyz.mathax.mathaxclient.systems.modules.render.*;
 import xyz.mathax.mathaxclient.utils.render.color.Color;
@@ -29,12 +31,12 @@ public abstract class WorldRendererMixin {
         info.cancel();
     }
 
-    /*@Inject(method = "drawBlockOutline", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "drawBlockOutline", at = @At("HEAD"), cancellable = true)
     private void onDrawHighlightedBlockOutline(MatrixStack matrixStack, VertexConsumer vertexConsumer, Entity entity, double d, double e, double f, BlockPos blockPos, BlockState blockState, CallbackInfo info) {
         if (Modules.get().isEnabled(BlockSelection.class)) {
             info.cancel();
         }
-    }*/
+    }
 
     @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/WorldRenderer;setupTerrain(Lnet/minecraft/client/render/Camera;Lnet/minecraft/client/render/Frustum;ZZ)V"), index = 3)
     private boolean renderSetupTerrainModifyArg(boolean spectator) {
