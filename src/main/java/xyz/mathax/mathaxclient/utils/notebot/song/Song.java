@@ -9,16 +9,16 @@ import java.util.Set;
 public class Song {
     private final Multimap<Integer, Note> notesMap;
     private int lastTick;
-    private final String title;
+    private final String name;
     private final String author;
 
     private final Set<Note> requirements = new HashSet<>();
 
     private boolean finishedLoading = false;
 
-    public Song(Multimap<Integer, Note> notesMap, String title, String author) {
+    public Song(Multimap<Integer, Note> notesMap, String name, String author) {
         this.notesMap = notesMap;
-        this.title = title;
+        this.name = name;
         this.author = author;
     }
 
@@ -53,8 +53,8 @@ public class Song {
         return lastTick;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
     public String getAuthor() {

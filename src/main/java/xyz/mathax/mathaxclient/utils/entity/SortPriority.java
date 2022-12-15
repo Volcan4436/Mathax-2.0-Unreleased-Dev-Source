@@ -7,14 +7,14 @@ public enum SortPriority {
     Highest_Health("Highest health"),
     Closest_Angle("Closest angle");
 
-    private final String title;
+    private final String name;
 
-    SortPriority(String title) {
-        this.title = title;
+    SortPriority(String name) {
+        this.name = name;
     }
 
     @Override
     public String toString() {
-        return title;
+        return name;
     }
 }

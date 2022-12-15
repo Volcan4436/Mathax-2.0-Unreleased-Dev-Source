@@ -416,15 +416,15 @@ public class InventoryTweaks extends Module {
         Steal("Steal"),
         Dump("Dump");
 
-        private final String title;
+        private final String name;
 
-        AutoStealOrDumpMode(String title) {
-            this.title = title;
+        AutoStealOrDumpMode(String name) {
+            this.name = name;
         }
 
         @Override
         public String toString() {
-            return title;
+            return name;
         }
     }
 }

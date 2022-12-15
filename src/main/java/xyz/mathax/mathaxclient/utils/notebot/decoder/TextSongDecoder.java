@@ -24,12 +24,12 @@ public class TextSongDecoder extends SongDecoder {
         }
 
         Multimap<Integer, Note> notesMap = MultimapBuilder.linkedHashKeys().arrayListValues().build();
-        String title = FilenameUtils.getBaseName(file.getName());
+        String name = FilenameUtils.getBaseName(file.getName());
         String author = "Unknown";
         for (int lineNumber = 0; lineNumber < data.size(); lineNumber++) {
             String line = data.get(lineNumber);
             if (line.startsWith("// Name: ")) {
-                title = line.substring(9);
+                name = line.substring(9);
                 continue;
             }
 
@@ -66,6 +66,6 @@ public class TextSongDecoder extends SongDecoder {
             notesMap.put(key, note);
         }
 
-        return new Song(notesMap, title, author);
+        return new Song(notesMap, name, author);
     }
 }

@@ -146,15 +146,15 @@ public class ArmorHudElement extends HudElement {
         Percentage("Percentage"),
         None("None");
 
-        private final String title;
+        private final String name;
 
-        Durability(String title) {
-            this.title = title;
+        Durability(String name) {
+            this.name = name;
         }
 
         @Override
         public String toString() {
-            return title;
+            return name;
         }
     }
 
@@ -162,15 +162,15 @@ public class ArmorHudElement extends HudElement {
         Horizontal("Horizontal"),
         Vertical("Vertical");
 
-        private final String title;
+        private final String name;
 
-        Orientation(String title) {
-            this.title = title;
+        Orientation(String name) {
+            this.name = name;
         }
 
         @Override
         public String toString() {
-            return title;
+            return name;
         }
     }
 }

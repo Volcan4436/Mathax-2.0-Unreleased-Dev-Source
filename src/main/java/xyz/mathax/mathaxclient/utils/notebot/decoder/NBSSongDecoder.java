@@ -44,7 +44,7 @@ public class NBSSongDecoder extends SongDecoder {
             }
 
             readShort(dataInputStream); // Song Height
-            String title = readString(dataInputStream);
+            String name = readString(dataInputStream);
             String author = readString(dataInputStream);
             readString(dataInputStream); // original author
             readString(dataInputStream); // description
@@ -93,7 +93,7 @@ public class NBSSongDecoder extends SongDecoder {
                 }
             }
 
-            return new Song(notesMap, title, author);
+            return new Song(notesMap, name, author);
         } catch (EOFException exception) {
             String file = "";
             if (songFile != null) {

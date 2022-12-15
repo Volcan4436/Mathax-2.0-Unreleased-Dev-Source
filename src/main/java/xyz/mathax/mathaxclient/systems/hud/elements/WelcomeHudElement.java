@@ -126,15 +126,15 @@ public class WelcomeHudElement extends TripleTextHudElement {
         Retarded_Time("Retarded time"),
         Sussy("Sussy");
 
-        private final String title;
+        private final String name;
 
-        Message(String title) {
-            this.title = title;
+        Message(String name) {
+            this.name = name;
         }
 
         @Override
         public String toString() {
-            return title;
+            return name;
         }
     }
 }

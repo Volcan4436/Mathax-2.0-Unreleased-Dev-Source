@@ -159,8 +159,16 @@ public class Modules extends System<Modules> {
         add(new GhostHand(player));
         add(new InstaMine(player));
         add(new LiquidInteract(player));
+        add(new NoBreakDelay(player));
+        add(new NoInteract(player));
+        add(new NoMiningTrace(player));
+        add(new NoRotate(player));
         add(new PacketMine(player));
+        add(new PotionSaver(player));
+        add(new PotionSpoof(player));
         add(new Reach(player));
+        add(new Rotation(player));
+        add(new SpeedMine(player));
 
         // World
         Category world = Categories.World;
@@ -195,10 +203,12 @@ public class Modules extends System<Modules> {
         add(new BetterTab(misc));
         add(new GUIBackground(misc));
         add(new InventoryTweaks(misc));
+        add(new MiddleClickExtra(misc));
         add(new MiddleClickFriend(misc));
         add(new MountBypass(misc));
         add(new NameProtect(misc));
         add(new Notebot(misc));
+        add(new OffhandCrash(misc));
         add(new PingSpoof(misc));
         add(new PortalChat(misc));
         add(new ServerSpoof(misc));

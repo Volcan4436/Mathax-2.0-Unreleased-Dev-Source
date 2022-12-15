@@ -364,15 +364,15 @@ public class HandView extends Module {
         Mainhand("Mainhand"),
         None("None");
 
-        private final String title;
+        private final String name;
 
-        SwingMode(String title) {
-            this.title = title;
+        SwingMode(String name) {
+            this.name = name;
         }
 
         @Override
         public String toString() {
-            return title;
+            return name;
         }
     }
 }

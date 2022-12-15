@@ -740,15 +740,15 @@ public class Nametags extends Module {
         Above("Above"),
         On_Top("On Top");
 
-        private final String title;
+        private final String name;
 
-        Position(String title) {
-            this.title = title;
+        Position(String name) {
+            this.name = name;
         }
 
         @Override
         public String toString() {
-            return title;
+            return name;
         }
     }
 }

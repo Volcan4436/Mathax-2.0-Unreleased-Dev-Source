@@ -371,15 +371,15 @@ public class HoleESP extends Module {
             Obsidian("Obsidian"),
             Mixed("Mixed");
 
-            private final String title;
+            private final String name;
 
-            Type(String title) {
-                this.title = title;
+            Type(String name) {
+                this.name = name;
             }
 
             @Override
             public String toString() {
-                return title;
+                return name;
             }
         }
     }

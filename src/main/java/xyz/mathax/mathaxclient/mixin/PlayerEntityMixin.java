@@ -1,5 +1,6 @@
 package xyz.mathax.mathaxclient.mixin;
 
+import net.minecraft.block.BlockState;
 import xyz.mathax.mathaxclient.MatHax;
 import xyz.mathax.mathaxclient.events.entity.DropItemsEvent;
 import xyz.mathax.mathaxclient.events.entity.player.ClipAtLedgeEvent;
@@ -13,6 +14,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import xyz.mathax.mathaxclient.systems.modules.Modules;
+import xyz.mathax.mathaxclient.systems.modules.player.SpeedMine;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity {
@@ -23,7 +26,6 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     @Inject(method = "clipAtLedge", at = @At("HEAD"), cancellable = true)
     protected void clipAtLedge(CallbackInfoReturnable<Boolean> infoReturnable) {
         ClipAtLedgeEvent event = MatHax.EVENT_BUS.post(ClipAtLedgeEvent.get());
-
         if (event.isSet()) {
             infoReturnable.setReturnValue(event.isClip());
         }
@@ -32,21 +34,23 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     @Inject(method = "dropItem(Lnet/minecraft/item/ItemStack;ZZ)Lnet/minecraft/entity/ItemEntity;", at = @At("HEAD"), cancellable = true)
     private void onDropItem(ItemStack stack, boolean bl, boolean bl2, CallbackInfoReturnable<ItemEntity> info) {
         if (world.isClient && !stack.isEmpty()) {
-            if (MatHax.EVENT_BUS.post(DropItemsEvent.get(stack)).isCancelled()) info.cancel();
+            if (MatHax.EVENT_BUS.post(DropItemsEvent.get(stack)).isCancelled()) {
+                info.cancel();
+            }
         }
     }
 
-    /*@Inject(method = "getBlockBreakingSpeed", at = @At(value = "RETURN"), cancellable = true)
+    @Inject(method = "getBlockBreakingSpeed", at = @At(value = "RETURN"), cancellable = true)
     public void onGetBlockBreakingSpeed(BlockState block, CallbackInfoReturnable<Float> infoReturnable) {
         SpeedMine speedMine = Modules.get().get(SpeedMine.class);
         if (!speedMine.isEnabled() || speedMine.modeSetting.get() != SpeedMine.Mode.Normal) {
             return;
         }
 
-        infoReturnable.setReturnValue((float) (infoReturnable.getReturnValue() * speedMine.modifier.get()));
+        infoReturnable.setReturnValue((float) (infoReturnable.getReturnValue() * speedMine.modifierSetting.get()));
     }
 
-    @Inject(method = "jump", at = @At("HEAD"), cancellable = true)
+    /*@Inject(method = "jump", at = @At("HEAD"), cancellable = true)
     public void dontJump(CallbackInfo info) {
         Anchor anchor = Modules.get().get(Anchor.class);
         if (anchor.isEnabled() && anchor.cancelJump) {

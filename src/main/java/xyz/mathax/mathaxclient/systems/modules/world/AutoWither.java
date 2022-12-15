@@ -344,15 +344,15 @@ public class AutoWither extends Module {
         Furthest("Furthest"),
         Random("Random");
 
-        private final String title;
+        private final String name;
 
-        Priority(String title) {
-            this.title = title;
+        Priority(String name) {
+            this.name = name;
         }
 
         @Override
         public String toString() {
-            return title;
+            return name;
         }
     }
 }

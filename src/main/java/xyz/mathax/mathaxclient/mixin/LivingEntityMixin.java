@@ -1,9 +1,11 @@
 package xyz.mathax.mathaxclient.mixin;
 
+import net.minecraft.entity.EquipmentSlot;
 import xyz.mathax.mathaxclient.MatHax;
 import xyz.mathax.mathaxclient.events.entity.DamageEvent;
 import xyz.mathax.mathaxclient.events.entity.player.CanWalkOnFluidEvent;
 import xyz.mathax.mathaxclient.systems.modules.Modules;
+import xyz.mathax.mathaxclient.systems.modules.misc.OffhandCrash;
 import xyz.mathax.mathaxclient.systems.modules.render.HandView;
 import xyz.mathax.mathaxclient.systems.modules.render.NoRender;
 import xyz.mathax.mathaxclient.utils.Utils;
@@ -66,6 +68,13 @@ public abstract class LivingEntityMixin extends Entity {
     @Inject(method = "spawnItemParticles", at = @At("HEAD"), cancellable = true)
     private void spawnItemParticles(ItemStack stack, int count, CallbackInfo info) {
         if (Modules.get().get(NoRender.class).noEatParticles() && stack.isFood()) {
+            info.cancel();
+        }
+    }
+
+    @Inject(method = "onEquipStack", at = @At("HEAD"), cancellable = true)
+    private void onEquipStack(EquipmentSlot slot, ItemStack oldStack, ItemStack newStack, CallbackInfo info) {
+        if ((Object) this == mc.player && Modules.get().get(OffhandCrash.class).isAntiCrash()) {
             info.cancel();
         }
     }

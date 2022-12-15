@@ -118,15 +118,15 @@ public class WatermarkHudElement extends TripleTextHudElement {
         Icon("Icon"),
         Both("Both");
 
-        private final String title;
+        private final String name;
 
-        Mode(String title) {
-            this.title = title;
+        Mode(String name) {
+            this.name = name;
         }
 
         @Override
         public String toString() {
-            return title;
+            return name;
         }
     }
 }

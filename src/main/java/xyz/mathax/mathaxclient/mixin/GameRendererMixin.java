@@ -9,6 +9,7 @@ import xyz.mathax.mathaxclient.mixininterface.IVec3d;
 import xyz.mathax.mathaxclient.renderer.Renderer3D;
 import xyz.mathax.mathaxclient.systems.modules.Modules;
 import xyz.mathax.mathaxclient.systems.modules.player.LiquidInteract;
+import xyz.mathax.mathaxclient.systems.modules.player.NoMiningTrace;
 import xyz.mathax.mathaxclient.systems.modules.player.Reach;
 import xyz.mathax.mathaxclient.systems.modules.render.Freecam;
 import xyz.mathax.mathaxclient.systems.modules.render.NoRender;
@@ -86,13 +87,14 @@ public abstract class GameRendererMixin {
         MatHax.EVENT_BUS.post(RenderAfterWorldEvent.get());
     }
 
-    /*@Inject(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/projectile/ProjectileUtil;raycast(Lnet/minecraft/entity/Entity;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Box;Ljava/util/function/Predicate;D)Lnet/minecraft/util/hit/EntityHitResult;"), cancellable = true)
+    @Inject(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/projectile/ProjectileUtil;raycast(Lnet/minecraft/entity/Entity;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Box;Ljava/util/function/Predicate;D)Lnet/minecraft/util/hit/EntityHitResult;"), cancellable = true)
     private void onUpdateTargetedEntity(float tickDelta, CallbackInfo info) {
         if (Modules.get().get(NoMiningTrace.class).canWork() && client.crosshairTarget.getType() == HitResult.Type.BLOCK) {
             client.getProfiler().pop();
+
             info.cancel();
         }
-    }*/
+    }
 
     @Redirect(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;raycast(DFZ)Lnet/minecraft/util/hit/HitResult;"))
     private HitResult updateTargetedEntityEntityRayTraceProxy(Entity entity, double maxDistance, float tickDelta, boolean includeFluids) {

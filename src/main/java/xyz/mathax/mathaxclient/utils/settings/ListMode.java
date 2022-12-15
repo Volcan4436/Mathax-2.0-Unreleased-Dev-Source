@@ -4,14 +4,14 @@ public enum ListMode {
     Whitelist("Whitelist"),
     Blacklist("Blacklist");
 
-    private final String title;
+    private final String name;
 
-    ListMode(String title) {
-        this.title = title;
+    ListMode(String name) {
+        this.name = name;
     }
 
     @Override
     public String toString() {
-        return title;
+        return name;
     }
 }

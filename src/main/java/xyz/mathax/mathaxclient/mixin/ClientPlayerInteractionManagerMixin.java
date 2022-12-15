@@ -2,12 +2,16 @@ package xyz.mathax.mathaxclient.mixin;
 
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.screen.ScreenHandler;
+import org.objectweb.asm.Opcodes;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import xyz.mathax.mathaxclient.MatHax;
 import xyz.mathax.mathaxclient.events.entity.DropItemsEvent;
 import xyz.mathax.mathaxclient.mixininterface.IClientPlayerInteractionManager;
 import xyz.mathax.mathaxclient.systems.modules.Modules;
 import xyz.mathax.mathaxclient.systems.modules.misc.InventoryTweaks;
+import xyz.mathax.mathaxclient.systems.modules.player.NoBreakDelay;
 import xyz.mathax.mathaxclient.systems.modules.player.Reach;
+import xyz.mathax.mathaxclient.systems.modules.world.Nuker;
 import xyz.mathax.mathaxclient.utils.player.Rotations;
 import xyz.mathax.mathaxclient.utils.world.BlockUtils;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -118,7 +122,7 @@ public abstract class ClientPlayerInteractionManagerMixin implements IClientPlay
         infoReturnable.setReturnValue(Modules.get().get(Reach.class).getReach());
     }
 
-    /*@Redirect(method = "updateBlockBreakingProgress", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;blockBreakingCooldown:I", opcode = Opcodes.PUTFIELD))
+    @Redirect(method = "updateBlockBreakingProgress", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;blockBreakingCooldown:I", opcode = Opcodes.PUTFIELD))
     private void onMethod_2902SetField_3716Proxy(ClientPlayerInteractionManager interactionManager, int value) {
         if (Modules.get().isEnabled(NoBreakDelay.class) || Modules.get().isEnabled(Nuker.class)) {
             value = 0;
@@ -134,7 +138,7 @@ public abstract class ClientPlayerInteractionManagerMixin implements IClientPlay
         }
 
         blockBreakingCooldown = value;
-    }*/
+    }
 
     @Inject(method = "breakBlock", at = @At("HEAD"), cancellable = true)
     private void onBreakBlock(BlockPos blockPos, CallbackInfoReturnable<Boolean> infoReturnable) {
