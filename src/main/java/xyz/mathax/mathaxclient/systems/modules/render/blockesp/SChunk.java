@@ -1,4 +1,4 @@
-package xyz.mathax.mathaxclient.systems.modules.render.search;
+package xyz.mathax.mathaxclient.systems.modules.render.blockesp;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;

@@ -1,11 +1,11 @@
-package xyz.mathax.mathaxclient.systems.modules.render.search;
+package xyz.mathax.mathaxclient.systems.modules.render.blockesp;
 
 import net.minecraft.block.Block;
 import org.json.JSONObject;
 import xyz.mathax.mathaxclient.gui.WidgetScreen;
 import xyz.mathax.mathaxclient.renderer.ShapeMode;
 import xyz.mathax.mathaxclient.settings.BlockDataSetting;
-import xyz.mathax.mathaxclient.gui.screens.modules.search.SBlockDataScreen;
+import xyz.mathax.mathaxclient.gui.screens.modules.blockesp.SBlockDataScreen;
 import xyz.mathax.mathaxclient.systems.themes.Theme;
 import xyz.mathax.mathaxclient.utils.gui.IScreenFactory;
 import xyz.mathax.mathaxclient.utils.misc.IChangeable;

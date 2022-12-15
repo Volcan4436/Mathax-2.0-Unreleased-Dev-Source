@@ -1,4 +1,4 @@
-package xyz.mathax.mathaxclient.systems.modules.render.search;
+package xyz.mathax.mathaxclient.systems.modules.render.blockesp;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
@@ -15,7 +15,7 @@ import static xyz.mathax.mathaxclient.MatHax.mc;
 public class SBlock {
     private static final BlockPos.Mutable blockPos = new BlockPos.Mutable();
 
-    private static final Search search = Modules.get().get(Search.class);
+    private static final BlockESP BLOCK_ESP = Modules.get().get(BlockESP.class);
 
     public static final int FO = 1 << 1;
     public static final int FO_RI = 1 << 2;
@@ -55,12 +55,12 @@ public class SBlock {
 
     public SBlock getSideBlock(int side) {
         return switch (side) {
-            case FO -> search.getBlock(x, y, z + 1);
-            case BA -> search.getBlock(x, y, z - 1);
-            case LE -> search.getBlock(x - 1, y, z);
-            case RI -> search.getBlock(x + 1, y, z);
-            case TO -> search.getBlock(x, y + 1, z);
-            case BO -> search.getBlock(x, y - 1, z);
+            case FO -> BLOCK_ESP.getBlock(x, y, z + 1);
+            case BA -> BLOCK_ESP.getBlock(x, y, z - 1);
+            case LE -> BLOCK_ESP.getBlock(x - 1, y, z);
+            case RI -> BLOCK_ESP.getBlock(x + 1, y, z);
+            case TO -> BLOCK_ESP.getBlock(x, y + 1, z);
+            case BO -> BLOCK_ESP.getBlock(x, y - 1, z);
             default -> null;
         };
     }
@@ -87,7 +87,7 @@ public class SBlock {
         }
 
         if (firstGroup == null) {
-            firstGroup = search.newGroup(state.getBlock());
+            firstGroup = BLOCK_ESP.newGroup(state.getBlock());
         }
 
         firstGroup.add(this);
@@ -260,7 +260,7 @@ public class SBlock {
             z2 = z + shape.getMax(Direction.Axis.Z);
         }
 
-        SBlockData blockData = search.getBlockData(state.getBlock());
+        SBlockData blockData = BLOCK_ESP.getBlockData(state.getBlock());
         ShapeMode shapeMode = blockData.shapeMode;
         Color lineColor = blockData.lineColor;
         Color sideColor = blockData.sideColor;

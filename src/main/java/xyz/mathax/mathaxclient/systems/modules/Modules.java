@@ -21,7 +21,7 @@ import xyz.mathax.mathaxclient.systems.modules.chat.Spam;
 import xyz.mathax.mathaxclient.systems.modules.combat.*;
 import xyz.mathax.mathaxclient.systems.modules.movement.*;
 import xyz.mathax.mathaxclient.systems.modules.player.*;
-import xyz.mathax.mathaxclient.systems.modules.render.search.Search;
+import xyz.mathax.mathaxclient.systems.modules.render.blockesp.BlockESP;
 import xyz.mathax.mathaxclient.systems.modules.world.Timer;
 import xyz.mathax.mathaxclient.utils.Utils;
 import xyz.mathax.mathaxclient.utils.input.KeyBind;
@@ -102,6 +102,7 @@ public class Modules extends System<Modules> {
         Category render = Categories.Render;
         add(new Ambience(render));
         add(new BetterTooltips(render));
+        add(new BlockESP(render));
         add(new BlockSelection(render));
         add(new BossStack(render));
         add(new Breadcrumbs(render));
@@ -121,7 +122,6 @@ public class Modules extends System<Modules> {
         add(new Nametags(render));
         add(new NoRender(render));
         add(new PopChams(render));
-        add(new Search(render));
         add(new StorageESP(render));
         add(new Tracers(render));
         add(new Trail(render));

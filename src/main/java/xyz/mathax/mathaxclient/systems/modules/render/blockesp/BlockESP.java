@@ -1,4 +1,4 @@
-package xyz.mathax.mathaxclient.systems.modules.render.search;
+package xyz.mathax.mathaxclient.systems.modules.render.blockesp;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
@@ -27,7 +27,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class Search extends Module {
+public class BlockESP extends Module {
     private final BlockPos.Mutable blockPos = new BlockPos.Mutable();
 
     private final Long2ObjectMap<SChunk> chunks = new Long2ObjectOpenHashMap<>();
@@ -41,7 +41,7 @@ public class Search extends Module {
 
     private final Setting<List<Block>> blocksSetting = generalSettings.add(new BlockListSetting.Builder()
             .name("Blocks")
-            .description("Blocks to search for.")
+            .description("Blocks to highlight.")
             .onChanged(blocks1 -> {
                 if (isEnabled() && Utils.canUpdate()) {
                     onEnable();
@@ -71,8 +71,8 @@ public class Search extends Module {
             .build()
     );
 
-    public Search(Category category) {
-        super(category, "Search", "Searches for specified blocks.");
+    public BlockESP(Category category) {
+        super(category, "Block ESP", "Highlights for specified blocks.");
 
         RainbowColors.register(this::onTickRainbow);
     }

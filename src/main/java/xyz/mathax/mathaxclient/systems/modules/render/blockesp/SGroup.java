@@ -1,4 +1,4 @@
-package xyz.mathax.mathaxclient.systems.modules.render.search;
+package xyz.mathax.mathaxclient.systems.modules.render.blockesp;
 
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.block.Block;
@@ -12,7 +12,7 @@ import java.util.Queue;
 import java.util.Set;
 
 public class SGroup {
-    private static final Search search = Modules.get().get(Search.class);
+    private static final BlockESP BLOCK_ESP = Modules.get().get(BlockESP.class);
 
     private final Block block;
 
@@ -48,7 +48,7 @@ public class SGroup {
         sumZ -= block.z;
 
         if (blocks.isEmpty()) {
-            search.removeGroup(block.group);
+            BLOCK_ESP.removeGroup(block.group);
         } else if (splitGroup) {
             trySplit(block);
         }
@@ -103,7 +103,7 @@ public class SGroup {
         }
 
         if (neighbours.size() > 0) {
-            SGroup group = search.newGroup(this.block);
+            SGroup group = BLOCK_ESP.newGroup(this.block);
             group.blocks.ensureCapacity(remainingBlocks.size());
 
             blocks.removeIf(remainingBlocks::contains);
@@ -153,11 +153,11 @@ public class SGroup {
             add(block, false, false);
         }
 
-        search.removeGroup(group);
+        BLOCK_ESP.removeGroup(group);
     }
 
     public void render(Render3DEvent event) {
-        SBlockData blockData = search.getBlockData(block);
+        SBlockData blockData = BLOCK_ESP.getBlockData(block);
         if (blockData.tracer) {
             event.renderer.line(RenderUtils.center.x, RenderUtils.center.y, RenderUtils.center.z, sumX / blocks.size() + 0.5, sumY / blocks.size() + 0.5, sumZ / blocks.size() + 0.5, blockData.tracerColor);
         }

@@ -1,10 +1,10 @@
-package xyz.mathax.mathaxclient.gui.screens.modules.search;
+package xyz.mathax.mathaxclient.gui.screens.modules.blockesp;
 
 import net.minecraft.block.Block;
 import xyz.mathax.mathaxclient.gui.WindowScreen;
 import xyz.mathax.mathaxclient.renderer.ShapeMode;
 import xyz.mathax.mathaxclient.settings.*;
-import xyz.mathax.mathaxclient.systems.modules.render.search.SBlockData;
+import xyz.mathax.mathaxclient.systems.modules.render.blockesp.SBlockData;
 import xyz.mathax.mathaxclient.systems.themes.Theme;
 import xyz.mathax.mathaxclient.utils.render.color.SettingColor;
 
