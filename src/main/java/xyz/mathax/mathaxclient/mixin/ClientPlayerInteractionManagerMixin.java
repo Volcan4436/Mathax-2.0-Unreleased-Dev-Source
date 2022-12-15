@@ -9,9 +9,7 @@ import xyz.mathax.mathaxclient.events.entity.DropItemsEvent;
 import xyz.mathax.mathaxclient.mixininterface.IClientPlayerInteractionManager;
 import xyz.mathax.mathaxclient.systems.modules.Modules;
 import xyz.mathax.mathaxclient.systems.modules.misc.InventoryTweaks;
-import xyz.mathax.mathaxclient.systems.modules.player.NoBreakDelay;
 import xyz.mathax.mathaxclient.systems.modules.player.Reach;
-import xyz.mathax.mathaxclient.systems.modules.world.Nuker;
 import xyz.mathax.mathaxclient.utils.player.Rotations;
 import xyz.mathax.mathaxclient.utils.world.BlockUtils;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -122,22 +120,22 @@ public abstract class ClientPlayerInteractionManagerMixin implements IClientPlay
         infoReturnable.setReturnValue(Modules.get().get(Reach.class).getReach());
     }
 
-    @Redirect(method = "updateBlockBreakingProgress", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;blockBreakingCooldown:I", opcode = Opcodes.PUTFIELD))
-    private void onMethod_2902SetField_3716Proxy(ClientPlayerInteractionManager interactionManager, int value) {
-        if (Modules.get().isEnabled(NoBreakDelay.class) || Modules.get().isEnabled(Nuker.class)) {
-            value = 0;
-        }
+    @Redirect(method = "updateBlockBreakingProgress", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;blockBreakingCooldown:I", ordinal = 3))
+    private void updateBlockBreakingProgress3(ClientPlayerInteractionManager interactionManager, int value) {
+        BlockBreakingCooldownEvent event = MatHax.EVENT_BUS.post(BlockBreakingCooldownEvent.get(value));
+        blockBreakingCooldown = event.cooldown;
+    }
 
-        blockBreakingCooldown = value;
+    @Redirect(method = "updateBlockBreakingProgress", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;blockBreakingCooldown:I", ordinal = 4))
+    private void updateBlockBreakingProgress4(ClientPlayerInteractionManager interactionManager, int value) {
+        BlockBreakingCooldownEvent event = MatHax.EVENT_BUS.post(BlockBreakingCooldownEvent.get(value));
+        blockBreakingCooldown = event.cooldown;
     }
 
     @Redirect(method = "attackBlock", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;blockBreakingCooldown:I", opcode = Opcodes.PUTFIELD))
-    private void onAttackBlockSetField_3719Proxy(ClientPlayerInteractionManager interactionManager, int value) {
-        if (Modules.get().isEnabled(NoBreakDelay.class) || Modules.get().isEnabled(Nuker.class)) {
-            value = 0;
-        }
-
-        blockBreakingCooldown = value;
+    private void attackBlock(ClientPlayerInteractionManager interactionManager, int value) {
+        BlockBreakingCooldownEvent event = MatHax.EVENT_BUS.post(BlockBreakingCooldownEvent.get(value));
+        blockBreakingCooldown = event.cooldown;
     }
 
     @Inject(method = "breakBlock", at = @At("HEAD"), cancellable = true)

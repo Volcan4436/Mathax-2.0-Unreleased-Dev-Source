@@ -152,6 +152,7 @@ public class Modules extends System<Modules> {
         add(new AutoMend(player));
         add(new AutoReplenish(player));
         add(new AutoTool(player));
+        add(new BreakDelay(player));
         add(new ChestSwap(player));
         add(new EndermanLook(player));
         add(new ExpThrower(player));
@@ -159,7 +160,6 @@ public class Modules extends System<Modules> {
         add(new GhostHand(player));
         add(new InstaMine(player));
         add(new LiquidInteract(player));
-        add(new NoBreakDelay(player));
         add(new NoInteract(player));
         add(new NoMiningTrace(player));
         add(new NoRotate(player));

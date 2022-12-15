@@ -1,6 +1,8 @@
 package xyz.mathax.mathaxclient.systems.modules.world;
 
 import xyz.mathax.mathaxclient.eventbus.EventHandler;
+import xyz.mathax.mathaxclient.eventbus.EventPriority;
+import xyz.mathax.mathaxclient.events.entity.player.BlockBreakingCooldownEvent;
 import xyz.mathax.mathaxclient.events.render.Render3DEvent;
 import xyz.mathax.mathaxclient.events.world.TickEvent;
 import xyz.mathax.mathaxclient.renderer.ShapeMode;
@@ -258,6 +260,12 @@ public class Nuker extends Module {
         firstBlock = true;
         timer = 0;
         noBlockTimer = 0;
+    }
+
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void onBlockBreakingCooldown(BlockBreakingCooldownEvent event) {
+        event.cooldown = 0;
     }
 
     @EventHandler
