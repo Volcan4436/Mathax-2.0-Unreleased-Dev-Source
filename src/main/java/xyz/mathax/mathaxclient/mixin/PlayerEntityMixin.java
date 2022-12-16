@@ -4,6 +4,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import xyz.mathax.mathaxclient.MatHax;
 import xyz.mathax.mathaxclient.events.entity.DropItemsEvent;
 import xyz.mathax.mathaxclient.events.entity.player.ClipAtLedgeEvent;
@@ -18,6 +19,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.mathax.mathaxclient.systems.modules.Modules;
+import xyz.mathax.mathaxclient.systems.modules.movement.Anchor;
 import xyz.mathax.mathaxclient.systems.modules.player.SpeedMine;
 import xyz.mathax.mathaxclient.utils.world.BlockUtils;
 
@@ -65,11 +67,11 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         }
     }
 
-    /*@Inject(method = "jump", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "jump", at = @At("HEAD"), cancellable = true)
     public void dontJump(CallbackInfo info) {
         Anchor anchor = Modules.get().get(Anchor.class);
         if (anchor.isEnabled() && anchor.cancelJump) {
             info.cancel();
         }
-    }*/
+    }
 }

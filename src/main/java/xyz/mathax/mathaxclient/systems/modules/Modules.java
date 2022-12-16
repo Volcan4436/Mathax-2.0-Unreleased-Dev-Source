@@ -20,6 +20,7 @@ import xyz.mathax.mathaxclient.systems.Systems;
 import xyz.mathax.mathaxclient.systems.modules.chat.Spam;
 import xyz.mathax.mathaxclient.systems.modules.combat.*;
 import xyz.mathax.mathaxclient.systems.modules.movement.*;
+import xyz.mathax.mathaxclient.systems.modules.movement.speed.Speed;
 import xyz.mathax.mathaxclient.systems.modules.player.*;
 import xyz.mathax.mathaxclient.systems.modules.render.blockesp.BlockESP;
 import xyz.mathax.mathaxclient.systems.modules.world.IgnoreBorder;
@@ -139,8 +140,11 @@ public class Modules extends System<Modules> {
         // Movement
         Category movement = Categories.Movement;
         add(new AirJump(movement));
+        add(new Anchor(movement));
+        add(new EntityControl(movement));
         add(new GuiMove(movement));
         add(new IgnoreBorder(movement));
+        add(new Speed(movement));
         add(new Sprint(movement));
         add(new TridentBoost(movement));
         add(new Velocity(movement));
@@ -175,6 +179,7 @@ public class Modules extends System<Modules> {
         // World
         Category world = Categories.World;
         add(new AirPlace(world));
+        add(new AntiGhostBlock(world));
         add(new AutoBreed(world));
         add(new AutoMount(world));
         add(new AutoNametag(world));

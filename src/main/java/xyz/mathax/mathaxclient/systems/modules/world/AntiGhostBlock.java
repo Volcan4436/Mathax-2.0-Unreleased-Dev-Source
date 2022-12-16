@@ -1,4 +1,4 @@
-package xyz.mathax.mathaxclient.systems.modules.movement;
+package xyz.mathax.mathaxclient.systems.modules.world;
 
 import xyz.mathax.mathaxclient.eventbus.EventHandler;
 import xyz.mathax.mathaxclient.events.entity.player.BreakBlockEvent;
@@ -7,8 +7,6 @@ import xyz.mathax.mathaxclient.systems.modules.Module;
 import net.minecraft.block.BlockState;
 
 public class AntiGhostBlock extends Module {
-    private BlockState lastState;
-
     public AntiGhostBlock(Category category) {
         super(category, "Anti Ghost Block", "Attempts to prevent ghost blocks arising from breaking blocks quickly. Especially useful with multiconnect.");
     }
@@ -21,8 +19,7 @@ public class AntiGhostBlock extends Module {
 
         event.setCancelled(true);
 
-        // play the related sounds and particles for the user.
         BlockState blockState = mc.world.getBlockState(event.blockPos);
-        blockState.getBlock().onBreak(mc.world, event.blockPos, blockState, mc.player); // this doesn't alter the state of the block in the world
+        blockState.getBlock().onBreak(mc.world, event.blockPos, blockState, mc.player);
     }
 }
