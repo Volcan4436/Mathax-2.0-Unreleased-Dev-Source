@@ -7,6 +7,7 @@ import xyz.mathax.mathaxclient.events.entity.DropItemsEvent;
 import xyz.mathax.mathaxclient.events.entity.player.SendMovementPacketsEvent;
 import xyz.mathax.mathaxclient.systems.modules.Modules;
 import xyz.mathax.mathaxclient.systems.modules.misc.PortalChat;
+import xyz.mathax.mathaxclient.systems.modules.movement.EntityControl;
 import xyz.mathax.mathaxclient.systems.modules.movement.Velocity;
 import xyz.mathax.mathaxclient.utils.Utils;
 import net.minecraft.client.MinecraftClient;
@@ -104,10 +105,15 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
         MatHax.EVENT_BUS.post(SendMovementPacketsEvent.Post.get());
     }
 
-    // Sneak
-
     /*@Redirect(method = "sendMovementPackets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isSneaking()Z"))
     private boolean isSneaking(ClientPlayerEntity clientPlayerEntity) {
         return Modules.get().get(Sneak.class).doPacket() || Modules.get().get(NoSlow.class).airStrict() || clientPlayerEntity.isSneaking();
     }*/
+
+    @Inject(method = "getMountJumpStrength", at = @At("HEAD"), cancellable = true)
+    private void getMountJumpStrength(CallbackInfoReturnable<Float> infoReturnable) {
+        if (Modules.get().get(EntityControl.class).isEnabled() && Modules.get().get(EntityControl.class).maxJumpSetting.get()) {
+            infoReturnable.setReturnValue(1f);
+        }
+    }
 }

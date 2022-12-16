@@ -1,6 +1,9 @@
 package xyz.mathax.mathaxclient.mixin;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.BlockPos;
 import xyz.mathax.mathaxclient.MatHax;
 import xyz.mathax.mathaxclient.events.entity.DropItemsEvent;
 import xyz.mathax.mathaxclient.events.entity.player.ClipAtLedgeEvent;
@@ -16,6 +19,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.mathax.mathaxclient.systems.modules.Modules;
 import xyz.mathax.mathaxclient.systems.modules.player.SpeedMine;
+import xyz.mathax.mathaxclient.utils.world.BlockUtils;
+
+import static xyz.mathax.mathaxclient.MatHax.mc;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity {
@@ -47,7 +53,16 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             return;
         }
 
-        infoReturnable.setReturnValue((float) (infoReturnable.getReturnValue() * speedMine.modifierSetting.get()));
+        float breakSpeed = infoReturnable.getReturnValue();
+        float breakSpeedMod = (float) (breakSpeed * speedMine.modifierSetting.get());
+        HitResult result = mc.crosshairTarget;
+        if (result != null && result.getType() == HitResult.Type.BLOCK) {
+            BlockPos pos = ((BlockHitResult) result).getBlockPos();
+            if (speedMine.modifierSetting.get() < 1 || (BlockUtils.canInstaBreak(pos, breakSpeed) == BlockUtils.canInstaBreak(pos, breakSpeedMod)))
+                infoReturnable.setReturnValue(breakSpeedMod);
+            else
+                infoReturnable.setReturnValue(0.9f / BlockUtils.calcBlockBreakingDelta2(pos, 1));
+        }
     }
 
     /*@Inject(method = "jump", at = @At("HEAD"), cancellable = true)

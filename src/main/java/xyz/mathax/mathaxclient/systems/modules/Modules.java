@@ -22,6 +22,7 @@ import xyz.mathax.mathaxclient.systems.modules.combat.*;
 import xyz.mathax.mathaxclient.systems.modules.movement.*;
 import xyz.mathax.mathaxclient.systems.modules.player.*;
 import xyz.mathax.mathaxclient.systems.modules.render.blockesp.BlockESP;
+import xyz.mathax.mathaxclient.systems.modules.world.IgnoreBorder;
 import xyz.mathax.mathaxclient.systems.modules.world.Timer;
 import xyz.mathax.mathaxclient.utils.Utils;
 import xyz.mathax.mathaxclient.utils.input.KeyBind;
@@ -183,6 +184,7 @@ public class Modules extends System<Modules> {
         add(new EChestFarmer(world));
         add(new Flamethrower(world));
         add(new HighwayBuilder(world));
+        add(new IgnoreBorder(world));
         add(new InfinityMiner(world));
         add(new LiquidFiller(world));
         add(new Nuker(world));

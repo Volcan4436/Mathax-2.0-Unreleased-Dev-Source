@@ -15,14 +15,8 @@ public class MobSpawnUtils {
             return MobSpawn.Never;
         }
 
-        if (!BlockUtils.topSurface(mc.world.getBlockState(blockPos.down()))) {
-            if (mc.world.getBlockState(blockPos.down()).getCollisionShape(mc.world, blockPos.down()) != VoxelShapes.fullCube()) {
-                return MobSpawn.Never;
-            }
-
-            if (mc.world.getBlockState(blockPos.down()).isTranslucent(mc.world, blockPos.down())) {
-                return MobSpawn.Never;
-            }
+        if (!BlockUtils.topSurface(mc.world.getBlockState(blockPos.down())) && (mc.world.getBlockState(blockPos.down()).getCollisionShape(mc.world, blockPos.down()) != VoxelShapes.fullCube() || mc.world.getBlockState(blockPos.down()).isTranslucent(mc.world, blockPos.down()))) {
+            return MobSpawn.Never;
         }
 
         if (mc.world.getLightLevel(blockPos, 0) <= spawnLightLimit) {

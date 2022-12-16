@@ -5,7 +5,7 @@ package xyz.mathax.mathaxclient.mixin.canvas;
 public class CanvasWorldRendererMixin {
     /*@ModifyVariable(method = "renderWorld", at = @At("LOAD"), name = "blockOutlines")
     private boolean renderWorld_blockOutlines(boolean blockOutlines) {
-        if (Modules.get().isActive(BlockSelection.class)) return false;
+        if (Modules.get().isEnabled(BlockSelection.class)) return false;
         return blockOutlines;
     }
     @Inject(method = "renderWorld", at = @At("HEAD"))
