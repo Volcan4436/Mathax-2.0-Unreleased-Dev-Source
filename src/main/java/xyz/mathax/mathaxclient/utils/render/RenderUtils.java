@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import static xyz.mathax.mathaxclient.MatHax.mc;
+
 public class RenderUtils {
     private static final Pool<RenderBlock> renderBlockPool = new Pool<>(RenderBlock::new);
     private static final List<RenderBlock> renderBlocks = new ArrayList<>();
@@ -45,9 +47,9 @@ public class RenderUtils {
         matrixStack.push();
         matrixStack.scale((float) scale, (float) scale, 1);
 
-        MatHax.mc.getItemRenderer().renderGuiItemIcon(itemStack, (int) (x / scale), (int) (y / scale));
+        mc.getItemRenderer().renderGuiItemIcon(itemStack, (int) (x / scale), (int) (y / scale));
         if (overlay) {
-            MatHax.mc.getItemRenderer().renderGuiItemOverlay(MatHax.mc.textRenderer, itemStack, (int) (x / scale), (int) (y / scale), null);
+            mc.getItemRenderer().renderGuiItemOverlay(mc.textRenderer, itemStack, (int) (x / scale), (int) (y / scale), null);
         }
 
         matrixStack.pop();

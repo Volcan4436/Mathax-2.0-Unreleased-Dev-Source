@@ -13,6 +13,8 @@ import net.minecraft.item.ItemGroups;
 import net.minecraft.screen.*;
 import xyz.mathax.mathaxclient.MatHax;
 
+import static xyz.mathax.mathaxclient.MatHax.mc;
+
 public class SlotUtils {
     public static final int HOTBAR_START = 0;
     public static final int HOTBAR_END = 8;
@@ -26,11 +28,11 @@ public class SlotUtils {
     public static final int ARMOR_END = 39;
 
     public static int indexToId(int i) {
-        if (MatHax.mc.player == null) {
+        if (mc.player == null) {
             return -1;
         }
 
-        ScreenHandler handler = MatHax.mc.player.currentScreenHandler;
+        ScreenHandler handler = mc.player.currentScreenHandler;
         if (handler instanceof PlayerScreenHandler) {
             return survivalInventory(i);
         } else if (handler instanceof CreativeInventoryScreen.CreativeScreenHandler) {
@@ -91,7 +93,7 @@ public class SlotUtils {
     }
 
     private static int creativeInventory(int i) {
-        if (!(MatHax.mc.currentScreen instanceof CreativeInventoryScreen) || CreativeInventoryScreenAccessor.getSelectedTab() != ItemGroups.INVENTORY) {
+        if (!(mc.currentScreen instanceof CreativeInventoryScreen) || CreativeInventoryScreenAccessor.getSelectedTab() != ItemGroups.INVENTORY) {
             return -1;
         }
 

@@ -24,6 +24,8 @@ import org.joml.Quaternionf;
 import org.joml.Vector4f;
 import xyz.mathax.mathaxclient.MatHax;
 
+import static xyz.mathax.mathaxclient.MatHax.mc;
+
 public class WireframeEntityRenderer {
     private static final MatrixStack matrixStack = new MatrixStack();
 
@@ -49,7 +51,7 @@ public class WireframeEntityRenderer {
         matrixStack.push();
         matrixStack.scale((float) scale, (float) scale, (float) scale);
 
-        EntityRenderer<?> entityRenderer = MatHax.mc.getEntityRenderDispatcher().getRenderer(entity);
+        EntityRenderer<?> entityRenderer = mc.getEntityRenderDispatcher().getRenderer(entity);
 
         // LivingEntityRenderer
         if (entityRenderer instanceof LivingEntityRenderer renderer) {
@@ -398,23 +400,21 @@ public class WireframeEntityRenderer {
     }
 
     private static void render(Renderer3D renderer, ModelPart.Cuboid cuboid, double offsetX, double offsetY, double offsetZ) {
-        Matrix4f matrix = matrixStack.peek().getPositionMatrix();
+        Matrix4f matrix4f = matrixStack.peek().getPositionMatrix();
         for (ModelPart.Quad quad : cuboid.sides) {
-            // Transform positions
             pos1.set(quad.vertices[0].pos.x / 16, quad.vertices[0].pos.y / 16, quad.vertices[0].pos.z / 16, 1);
-            pos1.mul(matrix);
+            pos1.mul(matrix4f);
 
             pos2.set(quad.vertices[1].pos.x / 16, quad.vertices[1].pos.y / 16, quad.vertices[1].pos.z / 16, 1);
-            pos2.mul(matrix);
+            pos2.mul(matrix4f);
 
 
             pos3.set(quad.vertices[2].pos.x / 16, quad.vertices[2].pos.y / 16, quad.vertices[2].pos.z / 16, 1);
-            pos3.mul(matrix);
+            pos3.mul(matrix4f);
 
             pos4.set(quad.vertices[3].pos.x / 16, quad.vertices[3].pos.y / 16, quad.vertices[3].pos.z / 16, 1);
-            pos4.mul(matrix);
+            pos4.mul(matrix4f);
 
-            // Render
             if (shapeMode.sides()) {
                 int i1 = renderer.triangles.vec3(offsetX + pos1.x, offsetY + pos1.y, offsetZ + pos1.z).color(sideColor).next();
                 int i2 = renderer.triangles.vec3(offsetX + pos2.x, offsetY + pos2.y, offsetZ + pos2.z).color(sideColor).next();

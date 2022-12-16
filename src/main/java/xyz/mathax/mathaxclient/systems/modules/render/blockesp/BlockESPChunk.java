@@ -15,29 +15,29 @@ import java.util.List;
 
 import static xyz.mathax.mathaxclient.MatHax.mc;
 
-public class SChunk {
+public class BlockESPChunk {
     private static final BlockPos.Mutable blockPos = new BlockPos.Mutable();
 
     private final int x, z;
 
-    public Long2ObjectMap<SBlock> blocks;
+    public Long2ObjectMap<BlockESPBlock> blocks;
 
-    public SChunk(int x, int z) {
+    public BlockESPChunk(int x, int z) {
         this.x = x;
         this.z = z;
     }
 
-    public SBlock get(int x, int y, int z) {
-        return blocks == null ? null : blocks.get(SBlock.getKey(x, y, z));
+    public BlockESPBlock get(int x, int y, int z) {
+        return blocks == null ? null : blocks.get(BlockESPBlock.getKey(x, y, z));
     }
 
     public void add(BlockPos blockPos, boolean update) {
-        SBlock block = new SBlock(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+        BlockESPBlock block = new BlockESPBlock(blockPos.getX(), blockPos.getY(), blockPos.getZ());
         if (blocks == null) {
             blocks = new Long2ObjectOpenHashMap<>(64);
         }
 
-        blocks.put(SBlock.getKey(blockPos), block);
+        blocks.put(BlockESPBlock.getKey(blockPos), block);
 
         if (update) {
             block.update();
@@ -50,7 +50,7 @@ public class SChunk {
 
     public void remove(BlockPos blockPos) {
         if (blocks != null) {
-            SBlock block = blocks.remove(SBlock.getKey(blockPos));
+            BlockESPBlock block = blocks.remove(BlockESPBlock.getKey(blockPos));
             if (block != null) {
                 block.group.remove(block);
             }
@@ -59,7 +59,7 @@ public class SChunk {
 
     public void update() {
         if (blocks != null) {
-            for (SBlock block : blocks.values()) {
+            for (BlockESPBlock block : blocks.values()) {
                 block.update();
             }
         }
@@ -67,7 +67,7 @@ public class SChunk {
 
     public void update(int x, int y, int z) {
         if (blocks != null) {
-            SBlock block = blocks.get(SBlock.getKey(x, y, z));
+            BlockESPBlock block = blocks.get(BlockESPBlock.getKey(x, y, z));
             if (block != null) {
                 block.update();
             }
@@ -88,13 +88,13 @@ public class SChunk {
 
     public void render(Render3DEvent event) {
         if (blocks != null) {
-            for (SBlock block : blocks.values()) block.render(event);
+            for (BlockESPBlock block : blocks.values()) block.render(event);
         }
     }
 
 
-    public static SChunk searchChunk(Chunk chunk, List<Block> blocks) {
-        SChunk schunk = new SChunk(chunk.getPos().x, chunk.getPos().z);
+    public static BlockESPChunk searchChunk(Chunk chunk, List<Block> blocks) {
+        BlockESPChunk schunk = new BlockESPChunk(chunk.getPos().x, chunk.getPos().z);
         if (schunk.shouldBeDeleted()) {
             return schunk;
         }

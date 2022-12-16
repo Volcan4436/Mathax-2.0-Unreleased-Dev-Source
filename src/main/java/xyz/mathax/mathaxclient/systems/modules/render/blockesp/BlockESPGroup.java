@@ -11,20 +11,20 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 import java.util.Set;
 
-public class SGroup {
+public class BlockESPGroup {
     private static final BlockESP BLOCK_ESP = Modules.get().get(BlockESP.class);
 
     private final Block block;
 
-    public final UnorderedArrayList<SBlock> blocks = new UnorderedArrayList<>();
+    public final UnorderedArrayList<BlockESPBlock> blocks = new UnorderedArrayList<>();
 
     private double sumX, sumY, sumZ;
 
-    public SGroup(Block block) {
+    public BlockESPGroup(Block block) {
         this.block = block;
     }
 
-    public void add(SBlock block, boolean removeFromOld, boolean splitGroup) {
+    public void add(BlockESPBlock block, boolean removeFromOld, boolean splitGroup) {
         blocks.add(block);
         sumX += block.x;
         sumY += block.y;
@@ -37,11 +37,11 @@ public class SGroup {
         block.group = this;
     }
 
-    public void add(SBlock block) {
+    public void add(BlockESPBlock block) {
         add(block, true, true);
     }
 
-    public void remove(SBlock block, boolean splitGroup) {
+    public void remove(BlockESPBlock block, boolean splitGroup) {
         blocks.remove(block);
         sumX -= block.x;
         sumY -= block.y;
@@ -54,15 +54,15 @@ public class SGroup {
         }
     }
 
-    public void remove(SBlock block) {
+    public void remove(BlockESPBlock block) {
         remove(block, true);
     }
 
-    private void trySplit(SBlock block) {
-        Set<SBlock> neighbours = new ObjectOpenHashSet<>(6);
-        for (int side : SBlock.SIDES) {
+    private void trySplit(BlockESPBlock block) {
+        Set<BlockESPBlock> neighbours = new ObjectOpenHashSet<>(6);
+        for (int side : BlockESPBlock.SIDES) {
             if ((block.neighbours & side) == side) {
-                SBlock neighbour = block.getSideBlock(side);
+                BlockESPBlock neighbour = block.getSideBlock(side);
                 if (neighbour != null) {
                     neighbours.add(neighbour);
                 }
@@ -73,22 +73,22 @@ public class SGroup {
             return;
         }
 
-        Set<SBlock> remainingBlocks = new ObjectOpenHashSet<>(blocks);
-        Queue<SBlock> blocksToCheck = new ArrayDeque<>();
+        Set<BlockESPBlock> remainingBlocks = new ObjectOpenHashSet<>(blocks);
+        Queue<BlockESPBlock> blocksToCheck = new ArrayDeque<>();
         blocksToCheck.offer(blocks.get(0));
         remainingBlocks.remove(blocks.get(0));
         neighbours.remove(blocks.get(0));
 
         loop: {
             while (!blocksToCheck.isEmpty()) {
-                SBlock sBlock = blocksToCheck.poll();
+                BlockESPBlock blockESPBlock = blocksToCheck.poll();
 
-                for (int side : SBlock.SIDES) {
-                    if ((sBlock.neighbours & side) != side) {
+                for (int side : BlockESPBlock.SIDES) {
+                    if ((blockESPBlock.neighbours & side) != side) {
                         continue;
                     }
 
-                    SBlock neighbour = sBlock.getSideBlock(side);
+                    BlockESPBlock neighbour = blockESPBlock.getSideBlock(side);
                     if (neighbour != null && remainingBlocks.contains(neighbour)) {
                         blocksToCheck.offer(neighbour);
                         remainingBlocks.remove(neighbour);
@@ -103,41 +103,41 @@ public class SGroup {
         }
 
         if (neighbours.size() > 0) {
-            SGroup group = BLOCK_ESP.newGroup(this.block);
+            BlockESPGroup group = BLOCK_ESP.newGroup(this.block);
             group.blocks.ensureCapacity(remainingBlocks.size());
 
             blocks.removeIf(remainingBlocks::contains);
 
-            for (SBlock sBlock : remainingBlocks) {
-                group.add(sBlock, false, false);
+            for (BlockESPBlock blockESPBlock : remainingBlocks) {
+                group.add(block, false, false);
 
-                sumX -= sBlock.x;
-                sumY -= sBlock.y;
-                sumZ -= sBlock.z;
+                sumX -= blockESPBlock.x;
+                sumY -= blockESPBlock.y;
+                sumZ -= blockESPBlock.z;
             }
 
             if (neighbours.size() > 1) {
                 block.neighbours = 0;
-                for (SBlock b : neighbours) {
+                for (BlockESPBlock b : neighbours) {
                     int x = b.x - block.x;
                     if (x == 1) {
-                        block.neighbours |= SBlock.RI;
+                        block.neighbours |= BlockESPBlock.RI;
                     } else if (x == -1) {
-                        block.neighbours |= SBlock.LE;
+                        block.neighbours |= BlockESPBlock.LE;
                     }
 
                     int y = b.y - block.y;
                     if (y == 1) {
-                        block.neighbours |= SBlock.TO;
+                        block.neighbours |= BlockESPBlock.TO;
                     } else if (y == -1) {
-                        block.neighbours |= SBlock.BO;
+                        block.neighbours |= BlockESPBlock.BO;
                     }
 
                     int z = b.z - block.z;
                     if (z == 1) {
-                        block.neighbours |= SBlock.FO;
+                        block.neighbours |= BlockESPBlock.FO;
                     } else if (z == -1) {
-                        block.neighbours |= SBlock.BA;
+                        block.neighbours |= BlockESPBlock.BA;
                     }
                 }
 
@@ -146,10 +146,10 @@ public class SGroup {
         }
     }
 
-    public void merge(SGroup group) {
+    public void merge(BlockESPGroup group) {
         blocks.ensureCapacity(blocks.size() + group.blocks.size());
 
-        for (SBlock block : group.blocks) {
+        for (BlockESPBlock block : group.blocks) {
             add(block, false, false);
         }
 
@@ -157,7 +157,7 @@ public class SGroup {
     }
 
     public void render(Render3DEvent event) {
-        SBlockData blockData = BLOCK_ESP.getBlockData(block);
+        BlockESPBlockData blockData = BLOCK_ESP.getBlockData(block);
         if (blockData.tracer) {
             event.renderer.line(RenderUtils.center.x, RenderUtils.center.y, RenderUtils.center.z, sumX / blocks.size() + 0.5, sumY / blocks.size() + 0.5, sumZ / blocks.size() + 0.5, blockData.tracerColor);
         }

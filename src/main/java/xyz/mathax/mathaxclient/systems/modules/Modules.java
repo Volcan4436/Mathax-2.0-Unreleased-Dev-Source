@@ -92,6 +92,7 @@ public class Modules extends System<Modules> {
         // Combat
         Category combat = Categories.Combat;
         add(new AutoArmor(combat));
+        add(new AutoCity(combat));
         add(new AutoDisconnect(combat));
         add(new AutoTotem(combat));
         add(new CrystalAura(combat));

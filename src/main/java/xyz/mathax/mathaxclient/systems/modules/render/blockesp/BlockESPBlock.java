@@ -12,7 +12,7 @@ import xyz.mathax.mathaxclient.utils.render.color.Color;
 
 import static xyz.mathax.mathaxclient.MatHax.mc;
 
-public class SBlock {
+public class BlockESPBlock {
     private static final BlockPos.Mutable blockPos = new BlockPos.Mutable();
 
     private static final BlockESP BLOCK_ESP = Modules.get().get(BlockESP.class);
@@ -43,17 +43,17 @@ public class SBlock {
     private BlockState state;
     public int neighbours;
 
-    public SGroup group;
+    public BlockESPGroup group;
 
     public boolean loaded = true;
 
-    public SBlock(int x, int y, int z) {
+    public BlockESPBlock(int x, int y, int z) {
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public SBlock getSideBlock(int side) {
+    public BlockESPBlock getSideBlock(int side) {
         return switch (side) {
             case FO -> BLOCK_ESP.getBlock(x, y, z + 1);
             case BA -> BLOCK_ESP.getBlock(x, y, z - 1);
@@ -66,13 +66,13 @@ public class SBlock {
     }
 
     private void assignGroup() {
-        SGroup firstGroup = null;
+        BlockESPGroup firstGroup = null;
         for (int side : SIDES) {
             if ((neighbours & side) != side) {
                 continue;
             }
 
-            SBlock neighbour = getSideBlock(side);
+            BlockESPBlock neighbour = getSideBlock(side);
             if (neighbour == null || neighbour.group == null) {
                 continue;
             }
@@ -260,7 +260,7 @@ public class SBlock {
             z2 = z + shape.getMax(Direction.Axis.Z);
         }
 
-        SBlockData blockData = BLOCK_ESP.getBlockData(state.getBlock());
+        BlockESPBlockData blockData = BLOCK_ESP.getBlockData(state.getBlock());
         ShapeMode shapeMode = blockData.shapeMode;
         Color lineColor = blockData.lineColor;
         Color sideColor = blockData.sideColor;

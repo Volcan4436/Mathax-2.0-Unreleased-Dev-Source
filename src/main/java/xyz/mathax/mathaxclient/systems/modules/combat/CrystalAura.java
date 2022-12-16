@@ -741,8 +741,9 @@ public class CrystalAura extends Module {
         }
 
         double damage = getDamageToTargets(entity.getPos(), blockPos, true, false);
-        boolean facePlaced = (facePlaceSetting.get() && shouldFacePlace(entity.getBlockPos()) || forceFacePlaceSetting.get().isPressed());
-        if (!facePlaced && damage < minDamageSetting.get()) {
+        boolean shouldFacePlace = shouldFacePlace();
+        double minimumDamage = Math.min(minDamageSetting.get(), shouldFacePlace ? 1.5 : minDamageSetting.get());
+        if (damage < minimumDamage) {
             return 0;
         }
 
@@ -878,8 +879,9 @@ public class CrystalAura extends Module {
             }
 
             double damage = getDamageToTargets(vec3d, bp, false, !hasBlock && supportSetting.get() == SupportMode.Fast);
-            boolean facePlaced = (facePlaceSetting.get() && shouldFacePlace(blockPos)) || (forceFacePlaceSetting.get().isPressed());
-            if (damage < minDamageSetting.get() && !facePlaced) {
+            boolean shouldFacePlace = shouldFacePlace();
+            double minimumDamage = Math.min(minDamageSetting.get(), shouldFacePlace ? 1.5 : minDamageSetting.get());
+            if (damage < minimumDamage) {
                 return;
             }
 
@@ -1025,24 +1027,27 @@ public class CrystalAura extends Module {
         return phi > 180 ? 360 - phi : phi;
     }
 
-    private boolean shouldFacePlace(BlockPos crystal) {
-        for (LivingEntity target : targets) {
-            BlockPos pos = target.getBlockPos();
-            if (crystal.getY() == pos.getY() + 1 && Math.abs(pos.getX() - crystal.getX()) <= 1 && Math.abs(pos.getZ() - crystal.getZ()) <= 1) {
-                if (EntityUtils.getTotalHealth(target) <= facePlaceHealthSetting.get()) {
-                    return true;
-                }
+    private boolean shouldFacePlace() {
+        if (!facePlaceSetting.get()) {
+            return false;
+        }
 
-                for (ItemStack itemStack : target.getArmorItems()) {
-                    if (itemStack == null || itemStack.isEmpty()) {
-                        if (facePlaceArmorSetting.get()) {
-                            return true;
-                        }
-                    } else {
-                        if ((double) (itemStack.getMaxDamage() - itemStack.getDamage()) / itemStack.getMaxDamage() * 100 <= facePlaceDurabilitySetting.get()) {
-                            return true;
-                        }
+        if (forceFacePlaceSetting.get().isPressed()) {
+            return true;
+        }
+
+        for (LivingEntity target : targets) {
+            if (EntityUtils.getTotalHealth(target) <= facePlaceHealthSetting.get()) {
+                return true;
+            }
+
+            for (ItemStack itemStack : target.getArmorItems()) {
+                if (itemStack == null || itemStack.isEmpty()) {
+                    if (facePlaceArmorSetting.get()) {
+                        return true;
                     }
+                } else if ((double) (itemStack.getMaxDamage() - itemStack.getDamage()) / itemStack.getMaxDamage() * 100 <= facePlaceDurabilitySetting.get()) {
+                    return true;
                 }
             }
         }
@@ -1141,13 +1146,6 @@ public class CrystalAura extends Module {
                 targets.add(livingEntity);
             }
         }
-
-        // Fake players
-        FakePlayerManager.forEach(fp -> {
-            if (!fp.isDead() && fp.isAlive() && Friends.get().shouldAttack(fp) && fp.distanceTo(mc.player) <= targetRangeSetting.get()) {
-                targets.add(fp);
-            }
-        });
     }
 
     private boolean intersectsWithEntities(Box box) {

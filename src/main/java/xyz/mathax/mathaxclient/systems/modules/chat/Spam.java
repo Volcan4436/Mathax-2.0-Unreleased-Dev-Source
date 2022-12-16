@@ -144,7 +144,7 @@ public class Spam extends Module {
                 }
             }
 
-            ChatUtils.sendPlayerMessage(text);
+            ChatUtils.sendMessageAsPlayer(text);
 
             timer = delaySetting.get();
         } else {

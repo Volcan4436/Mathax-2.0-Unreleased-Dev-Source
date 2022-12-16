@@ -30,8 +30,8 @@ import java.util.Map;
 public class BlockESP extends Module {
     private final BlockPos.Mutable blockPos = new BlockPos.Mutable();
 
-    private final Long2ObjectMap<SChunk> chunks = new Long2ObjectOpenHashMap<>();
-    private final List<SGroup> groups = new UnorderedArrayList<>();
+    private final Long2ObjectMap<BlockESPChunk> chunks = new Long2ObjectOpenHashMap<>();
+    private final List<BlockESPGroup> groups = new UnorderedArrayList<>();
 
     private Dimension lastDimension;
 
@@ -50,14 +50,14 @@ public class BlockESP extends Module {
             .build()
     );
 
-    private final Setting<SBlockData> defaultBlockConfigSetting = generalSettings.add(new GenericSetting.Builder<SBlockData>()
+    private final Setting<BlockESPBlockData> defaultBlockConfigSetting = generalSettings.add(new GenericSetting.Builder<BlockESPBlockData>()
             .name("Default block config")
             .description("Default config for blocks.")
-            .defaultValue(new SBlockData(ShapeMode.Lines, new SettingColor(0, 255, 200), new SettingColor(0, 255, 200, 25), true, new SettingColor(0, 255, 200, 125)))
+            .defaultValue(new BlockESPBlockData(ShapeMode.Lines, new SettingColor(0, 255, 200), new SettingColor(0, 255, 200, 25), true, new SettingColor(0, 255, 200, 125)))
             .build()
     );
 
-    private final Setting<Map<Block, SBlockData>> blockConfigsSetting = generalSettings.add(new BlockDataSetting.Builder<SBlockData>()
+    private final Setting<Map<Block, BlockESPBlockData>> blockConfigsSetting = generalSettings.add(new BlockDataSetting.Builder<BlockESPBlockData>()
             .name("Block configs")
             .description("Config for each block.")
             .defaultData(defaultBlockConfigSetting)
@@ -106,44 +106,44 @@ public class BlockESP extends Module {
 
         defaultBlockConfigSetting.get().tickRainbow();
 
-        for (SBlockData blockData : blockConfigsSetting.get().values()) {
+        for (BlockESPBlockData blockData : blockConfigsSetting.get().values()) {
             blockData.tickRainbow();
         }
     }
 
-    SBlockData getBlockData(Block block) {
-        SBlockData blockData = blockConfigsSetting.get().get(block);
+    BlockESPBlockData getBlockData(Block block) {
+        BlockESPBlockData blockData = blockConfigsSetting.get().get(block);
         return blockData == null ? defaultBlockConfigSetting.get() : blockData;
     }
 
     private void updateChunk(int x, int z) {
-        SChunk chunk = chunks.get(ChunkPos.toLong(x, z));
+        BlockESPChunk chunk = chunks.get(ChunkPos.toLong(x, z));
         if (chunk != null) {
             chunk.update();
         }
     }
 
     private void updateBlock(int x, int y, int z) {
-        SChunk chunk = chunks.get(ChunkPos.toLong(x >> 4, z >> 4));
+        BlockESPChunk chunk = chunks.get(ChunkPos.toLong(x >> 4, z >> 4));
         if (chunk != null) {
             chunk.update(x, y, z);
         }
     }
 
-    public SBlock getBlock(int x, int y, int z) {
-        SChunk chunk = chunks.get(ChunkPos.toLong(x >> 4, z >> 4));
+    public BlockESPBlock getBlock(int x, int y, int z) {
+        BlockESPChunk chunk = chunks.get(ChunkPos.toLong(x >> 4, z >> 4));
         return chunk == null ? null : chunk.get(x, y, z);
     }
 
-    public SGroup newGroup(Block block) {
+    public BlockESPGroup newGroup(Block block) {
         synchronized (chunks) {
-            SGroup group = new SGroup(block);
+            BlockESPGroup group = new BlockESPGroup(block);
             groups.add(group);
             return group;
         }
     }
 
-    public void removeGroup(SGroup group) {
+    public void removeGroup(BlockESPGroup group) {
         synchronized (chunks) {
             groups.remove(group);
         }
@@ -160,7 +160,7 @@ public class BlockESP extends Module {
                 return;
             }
 
-            SChunk schunk = SChunk.searchChunk(chunk, blocksSetting.get());
+            BlockESPChunk schunk = BlockESPChunk.searchChunk(chunk, blocksSetting.get());
             if (schunk.size() > 0) {
                 synchronized (chunks) {
                     chunks.put(chunk.getPos().toLong(), schunk);
@@ -193,9 +193,9 @@ public class BlockESP extends Module {
         if (added || removed) {
             Executor.execute(() -> {
                 synchronized (chunks) {
-                    SChunk chunk = chunks.get(key);
+                    BlockESPChunk chunk = chunks.get(key);
                     if (chunk == null) {
-                        chunk = new SChunk(chunkX, chunkZ);
+                        chunk = new BlockESPChunk(chunkX, chunkZ);
                         if (chunk.shouldBeDeleted()) {
                             return;
                         }
@@ -240,11 +240,11 @@ public class BlockESP extends Module {
     @EventHandler
     private void onRender(Render3DEvent event) {
         synchronized (chunks) {
-            for (Iterator<SChunk> it = chunks.values().iterator(); it.hasNext();) {
-                SChunk chunk = it.next();
+            for (Iterator<BlockESPChunk> it = chunks.values().iterator(); it.hasNext();) {
+                BlockESPChunk chunk = it.next();
                 if (chunk.shouldBeDeleted()) {
                     Executor.execute(() -> {
-                        for (SBlock block : chunk.blocks.values()) {
+                        for (BlockESPBlock block : chunk.blocks.values()) {
                             block.group.remove(block, false);
                             block.loaded = false;
                         }
@@ -257,8 +257,8 @@ public class BlockESP extends Module {
             }
 
             if (tracerSetting.get()) {
-                for (Iterator<SGroup> it = groups.iterator(); it.hasNext();) {
-                    SGroup group = it.next();
+                for (Iterator<BlockESPGroup> it = groups.iterator(); it.hasNext();) {
+                    BlockESPGroup group = it.next();
                     if (group.blocks.isEmpty()) {
                         it.remove();
                     } else {

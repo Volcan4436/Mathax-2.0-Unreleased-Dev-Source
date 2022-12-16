@@ -76,13 +76,13 @@ public class MiddleClickFriend extends Module {
             Friends.get().add(new Friend(player));
             info("Added (highlight)%s(default) to friends.", player.getEntityName());
             if (addMessagesSetting.get()) {
-                ChatUtils.sendPlayerMessage(messagePrefixSetting.get() + " " + player.getEntityName() + " " + addMessageSetting.get());
+                ChatUtils.sendMessageAsPlayer(messagePrefixSetting.get() + " " + player.getEntityName() + " " + addMessageSetting.get());
             }
         } else {
             Friends.get().remove(Friends.get().get(player));
             info("Removed (highlight)%s(default) from friends.", player.getEntityName());
             if (removeMessagesSetting.get()) {
-                ChatUtils.sendPlayerMessage(messagePrefixSetting.get() + " " + player.getEntityName() + " " + removeMessageSetting.get());
+                ChatUtils.sendMessageAsPlayer(messagePrefixSetting.get() + " " + player.getEntityName() + " " + removeMessageSetting.get());
             }
         }
     }

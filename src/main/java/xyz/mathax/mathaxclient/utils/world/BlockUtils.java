@@ -1,5 +1,11 @@
 package xyz.mathax.mathaxclient.utils.world;
 
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.effect.StatusEffectUtil;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.item.ItemStack;
+import net.minecraft.registry.tag.FluidTags;
 import xyz.mathax.mathaxclient.MatHax;
 import xyz.mathax.mathaxclient.eventbus.EventHandler;
 import xyz.mathax.mathaxclient.eventbus.EventPriority;
@@ -21,6 +27,8 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.World;
+
+import static xyz.mathax.mathaxclient.MatHax.mc;
 
 public class BlockUtils {
     private static final Vec3d hitPos = new Vec3d(0, 0, 0);
@@ -57,7 +65,7 @@ public class BlockUtils {
 
     public static boolean place(BlockPos blockPos, FindItemResult findItemResult, boolean rotate, int rotationPriority, boolean swingHand, boolean checkEntities, boolean swapBack) {
         if (findItemResult.isOffhand()) {
-            return place(blockPos, Hand.OFF_HAND, MatHax.mc.player.getInventory().selectedSlot, rotate, rotationPriority, swingHand, checkEntities, swapBack);
+            return place(blockPos, Hand.OFF_HAND, mc.player.getInventory().selectedSlot, rotate, rotationPriority, swingHand, checkEntities, swapBack);
         } else if (findItemResult.isHotbar()) {
             return place(blockPos, Hand.MAIN_HAND, findItemResult.slot(), rotate, rotationPriority, swingHand, checkEntities, swapBack);
         }
@@ -114,20 +122,20 @@ public class BlockUtils {
     }
 
     private static void place(BlockHitResult blockHitResult, Hand hand, boolean swing) {
-        boolean wasSneaking = MatHax.mc.player.input.sneaking;
-        MatHax.mc.player.input.sneaking = false;
+        boolean wasSneaking = mc.player.input.sneaking;
+        mc.player.input.sneaking = false;
 
-        ActionResult result = MatHax.mc.interactionManager.interactBlock(MatHax.mc.player, hand, blockHitResult);
+        ActionResult result = mc.interactionManager.interactBlock(mc.player, hand, blockHitResult);
 
         if (result.shouldSwingHand()) {
             if (swing) {
-                MatHax.mc.player.swingHand(hand);
+                mc.player.swingHand(hand);
             } else {
-                MatHax.mc.getNetworkHandler().sendPacket(new HandSwingC2SPacket(hand));
+                mc.getNetworkHandler().sendPacket(new HandSwingC2SPacket(hand));
             }
         }
 
-        MatHax.mc.player.input.sneaking = wasSneaking;
+        mc.player.input.sneaking = wasSneaking;
     }
 
     public static boolean canPlace(BlockPos blockPos, boolean checkEntities) {
@@ -141,12 +149,12 @@ public class BlockUtils {
         }
 
         // Check if current block is replaceable
-        if (!MatHax.mc.world.getBlockState(blockPos).getMaterial().isReplaceable()) {
+        if (!mc.world.getBlockState(blockPos).getMaterial().isReplaceable()) {
             return false;
         }
 
         // Check if intersects entities
-        return !checkEntities || MatHax.mc.world.canPlace(MatHax.mc.world.getBlockState(blockPos), blockPos, ShapeContext.absent());
+        return !checkEntities || mc.world.canPlace(Blocks.OBSIDIAN.getDefaultState(), blockPos, ShapeContext.absent());
     }
 
     public static boolean canPlace(BlockPos blockPos) {
@@ -158,7 +166,7 @@ public class BlockUtils {
             BlockPos neighbor = blockPos.offset(side);
             Direction side2 = side.getOpposite();
 
-            BlockState state = MatHax.mc.world.getBlockState(neighbor);
+            BlockState state = mc.world.getBlockState(neighbor);
 
             // Check if neighbour isn't empty
             if (state.isAir() || isClickable(state.getBlock())) {
@@ -188,31 +196,31 @@ public class BlockUtils {
         if (!breakingThisTick && breaking) {
             breaking = false;
 
-            if (MatHax.mc.interactionManager != null) {
-                MatHax.mc.interactionManager.cancelBlockBreaking();
+            if (mc.interactionManager != null) {
+                mc.interactionManager.cancelBlockBreaking();
             }
         }
     }
 
     /** Needs to be used in {@link TickEvent.Pre} */
     public static boolean breakBlock(BlockPos blockPos, boolean swing) {
-        if (!canBreak(blockPos, MatHax.mc.world.getBlockState(blockPos))) {
+        if (!canBreak(blockPos, mc.world.getBlockState(blockPos))) {
             return false;
         }
 
         // Creating new instance of block pos because minecraft assigns the parameter to a field and we don't want it to change when it has been stored in a field somewhere
         BlockPos pos = blockPos instanceof BlockPos.Mutable ? new BlockPos(blockPos) : blockPos;
 
-        if (MatHax.mc.interactionManager.isBreakingBlock()) {
-            MatHax.mc.interactionManager.updateBlockBreakingProgress(pos, Direction.UP);
+        if (mc.interactionManager.isBreakingBlock()) {
+            mc.interactionManager.updateBlockBreakingProgress(pos, Direction.UP);
         } else {
-            MatHax.mc.interactionManager.attackBlock(pos, Direction.UP);
+            mc.interactionManager.attackBlock(pos, Direction.UP);
         }
 
         if (swing) {
-            MatHax.mc.player.swingHand(Hand.MAIN_HAND);
+            mc.player.swingHand(Hand.MAIN_HAND);
         } else {
-            MatHax.mc.getNetworkHandler().sendPacket(new HandSwingC2SPacket(Hand.MAIN_HAND));
+            mc.getNetworkHandler().sendPacket(new HandSwingC2SPacket(Hand.MAIN_HAND));
         }
 
         breaking = true;
@@ -222,23 +230,23 @@ public class BlockUtils {
     }
 
     public static boolean canBreak(BlockPos blockPos, BlockState state) {
-        if (!MatHax.mc.player.isCreative() && state.getHardness(MatHax.mc.world, blockPos) < 0) {
+        if (!mc.player.isCreative() && state.getHardness(mc.world, blockPos) < 0) {
             return false;
         }
 
-        return state.getOutlineShape(MatHax.mc.world, blockPos) != VoxelShapes.empty();
+        return state.getOutlineShape(mc.world, blockPos) != VoxelShapes.empty();
     }
 
     public static boolean canBreak(BlockPos blockPos) {
-        return canBreak(blockPos, MatHax.mc.world.getBlockState(blockPos));
+        return canBreak(blockPos, mc.world.getBlockState(blockPos));
     }
 
     public static boolean canInstaBreak(BlockPos blockPos, BlockState state) {
-        return MatHax.mc.player.isCreative() || state.calcBlockBreakingDelta(MatHax.mc.player, MatHax.mc.world, blockPos) >= 1;
+        return mc.player.isCreative() || state.calcBlockBreakingDelta(mc.player, mc.world, blockPos) >= 1;
     }
 
     public static boolean canInstaBreak(BlockPos blockPos) {
-        return canInstaBreak(blockPos, MatHax.mc.world.getBlockState(blockPos));
+        return canInstaBreak(blockPos, mc.world.getBlockState(blockPos));
     }
 
     // Other
@@ -259,7 +267,7 @@ public class BlockUtils {
 
     public static boolean isExposed(BlockPos blockPos) {
         for (Direction direction : Direction.values()) {
-            if (!MatHax.mc.world.getBlockState(EXPOSED_POS.get().set(blockPos, direction)).isOpaque()) {
+            if (!mc.world.getBlockState(EXPOSED_POS.get().set(blockPos, direction)).isOpaque()) {
                 return true;
             }
         }
@@ -269,5 +277,50 @@ public class BlockUtils {
 
     public static BlockPos roundBlockPos(Vec3d vec) {
         return new BlockPos(vec.x, Math.round(vec.y), vec.z);
+    }
+
+    public static double getBreakDelta(int slot, BlockState state) {
+        float hardness = state.getHardness(null, null);
+        if (hardness == -1) {
+            return 0;
+        } else {
+            return getBlockBreakingSpeed(slot, state) / hardness / (!state.isToolRequired() || mc.player.getInventory().main.get(slot).isSuitableFor(state) ? 30 : 100);
+        }
+    }
+
+    private static double getBlockBreakingSpeed(int slot, BlockState block) {
+        double speed = mc.player.getInventory().main.get(slot).getMiningSpeedMultiplier(block);
+        if (speed > 1) {
+            ItemStack tool = mc.player.getInventory().getStack(slot);
+            int efficiency = EnchantmentHelper.getLevel(Enchantments.EFFICIENCY, tool);
+            if (efficiency > 0 && !tool.isEmpty()) {
+                speed += efficiency * efficiency + 1;
+            }
+        }
+
+        if (StatusEffectUtil.hasHaste(mc.player)) {
+            speed *= 1 + (StatusEffectUtil.getHasteAmplifier(mc.player) + 1) * 0.2F;
+        }
+
+        if (mc.player.hasStatusEffect(StatusEffects.MINING_FATIGUE)) {
+            float effectAmplifier = switch (mc.player.getStatusEffect(StatusEffects.MINING_FATIGUE).getAmplifier()) {
+                case 0 -> 0.3F;
+                case 1 -> 0.09F;
+                case 2 -> 0.0027F;
+                default -> 8.1E-4F;
+            };
+
+            speed *= effectAmplifier;
+        }
+
+        if (mc.player.isSubmergedIn(FluidTags.WATER) && !EnchantmentHelper.hasAquaAffinity(mc.player)) {
+            speed /= 5.0F;
+        }
+
+        if (!mc.player.isOnGround()) {
+            speed /= 5.0F;
+        }
+
+        return speed;
     }
 }

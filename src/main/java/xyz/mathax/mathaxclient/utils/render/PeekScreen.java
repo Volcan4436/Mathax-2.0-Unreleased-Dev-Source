@@ -15,6 +15,8 @@ import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 import xyz.mathax.mathaxclient.MatHax;
 
+import static xyz.mathax.mathaxclient.MatHax.mc;
+
 public class PeekScreen extends ShulkerBoxScreen {
     private final Identifier TEXTURE = new Identifier("textures/gui/container/shulker_box.png");
 
@@ -22,7 +24,7 @@ public class PeekScreen extends ShulkerBoxScreen {
     private final ItemStack storageBlock;
 
     public PeekScreen(ItemStack storageBlock, ItemStack[] contents) {
-        super(new ShulkerBoxScreenHandler(0, MatHax.mc.player.getInventory(), new SimpleInventory(contents)), MatHax.mc.player.getInventory(), storageBlock.getName());
+        super(new ShulkerBoxScreenHandler(0, mc.player.getInventory(), new SimpleInventory(contents)), mc.player.getInventory(), storageBlock.getName());
         this.contents = contents;
         this.storageBlock = storageBlock;
     }
@@ -31,7 +33,7 @@ public class PeekScreen extends ShulkerBoxScreen {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         BetterTooltips toolips = Modules.get().get(BetterTooltips.class);
 
-        if (button == GLFW.GLFW_MOUSE_BUTTON_MIDDLE && focusedSlot != null && !focusedSlot.getStack().isEmpty() && MatHax.mc.player.currentScreenHandler.getCursorStack().isEmpty() && toolips.middleClickOpen()) {
+        if (button == GLFW.GLFW_MOUSE_BUTTON_MIDDLE && focusedSlot != null && !focusedSlot.getStack().isEmpty() && mc.player.currentScreenHandler.getCursorStack().isEmpty() && toolips.middleClickOpen()) {
             return Utils.openContainer(focusedSlot.getStack(), contents, false);
         }
 

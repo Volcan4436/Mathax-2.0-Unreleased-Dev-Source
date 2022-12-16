@@ -5,7 +5,7 @@ import org.json.JSONObject;
 import xyz.mathax.mathaxclient.gui.WidgetScreen;
 import xyz.mathax.mathaxclient.renderer.ShapeMode;
 import xyz.mathax.mathaxclient.settings.BlockDataSetting;
-import xyz.mathax.mathaxclient.gui.screens.modules.blockesp.SBlockDataScreen;
+import xyz.mathax.mathaxclient.gui.screens.modules.blockesp.BlockESPBlockDataScreen;
 import xyz.mathax.mathaxclient.systems.themes.Theme;
 import xyz.mathax.mathaxclient.utils.gui.IScreenFactory;
 import xyz.mathax.mathaxclient.utils.misc.IChangeable;
@@ -14,7 +14,7 @@ import xyz.mathax.mathaxclient.utils.misc.ISerializable;
 import xyz.mathax.mathaxclient.utils.render.color.SettingColor;
 import xyz.mathax.mathaxclient.utils.settings.IBlockData;
 
-public class SBlockData implements ICopyable<SBlockData>, ISerializable<SBlockData>, IChangeable, IBlockData<SBlockData>, IScreenFactory {
+public class BlockESPBlockData implements ICopyable<BlockESPBlockData>, ISerializable<BlockESPBlockData>, IChangeable, IBlockData<BlockESPBlockData>, IScreenFactory {
     public ShapeMode shapeMode;
     public SettingColor lineColor;
     public SettingColor sideColor;
@@ -24,7 +24,7 @@ public class SBlockData implements ICopyable<SBlockData>, ISerializable<SBlockDa
 
     private boolean changed;
 
-    public SBlockData(ShapeMode shapeMode, SettingColor lineColor, SettingColor sideColor, boolean tracer, SettingColor tracerColor) {
+    public BlockESPBlockData(ShapeMode shapeMode, SettingColor lineColor, SettingColor sideColor, boolean tracer, SettingColor tracerColor) {
         this.shapeMode = shapeMode;
         this.lineColor = lineColor;
         this.sideColor = sideColor;
@@ -34,13 +34,13 @@ public class SBlockData implements ICopyable<SBlockData>, ISerializable<SBlockDa
     }
 
     @Override
-    public WidgetScreen createScreen(Theme theme, Block block, BlockDataSetting<SBlockData> setting) {
-        return new SBlockDataScreen(theme, this, block, setting);
+    public WidgetScreen createScreen(Theme theme, Block block, BlockDataSetting<BlockESPBlockData> setting) {
+        return new BlockESPBlockDataScreen(theme, this, block, setting);
     }
 
     @Override
     public WidgetScreen createScreen(Theme theme) {
-        return new SBlockDataScreen(theme, this, null, null);
+        return new BlockESPBlockDataScreen(theme, this, null, null);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class SBlockData implements ICopyable<SBlockData>, ISerializable<SBlockDa
     }
 
     @Override
-    public SBlockData set(SBlockData value) {
+    public BlockESPBlockData set(BlockESPBlockData value) {
         shapeMode = value.shapeMode;
         lineColor.set(value.lineColor);
         sideColor.set(value.sideColor);
@@ -73,8 +73,8 @@ public class SBlockData implements ICopyable<SBlockData>, ISerializable<SBlockDa
     }
 
     @Override
-    public SBlockData copy() {
-        return new SBlockData(shapeMode, new SettingColor(lineColor), new SettingColor(sideColor), tracer, new SettingColor(tracerColor));
+    public BlockESPBlockData copy() {
+        return new BlockESPBlockData(shapeMode, new SettingColor(lineColor), new SettingColor(sideColor), tracer, new SettingColor(tracerColor));
     }
 
     @Override
@@ -90,7 +90,7 @@ public class SBlockData implements ICopyable<SBlockData>, ISerializable<SBlockDa
     }
 
     @Override
-    public SBlockData fromJson(JSONObject json) {
+    public BlockESPBlockData fromJson(JSONObject json) {
         shapeMode = ShapeMode.valueOf(json.getString("shape-mode"));
         lineColor.fromJson(json.getJSONObject("line-color"));
         sideColor.fromJson(json.getJSONObject("side-color"));

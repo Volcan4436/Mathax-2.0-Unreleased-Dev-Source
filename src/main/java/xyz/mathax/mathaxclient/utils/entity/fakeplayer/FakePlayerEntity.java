@@ -5,17 +5,21 @@ import net.minecraft.client.network.OtherClientPlayerEntity;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.entity.player.PlayerEntity;
 import org.jetbrains.annotations.Nullable;
-import xyz.mathax.mathaxclient.MatHax;
 import xyz.mathax.mathaxclient.utils.render.PlayerHeadTexture;
 import xyz.mathax.mathaxclient.utils.render.PlayerHeadUtils;
+
+import java.util.UUID;
+
+import static xyz.mathax.mathaxclient.MatHax.mc;
 
 public class FakePlayerEntity extends OtherClientPlayerEntity {
     public boolean doNotPush, hideWhenInsideCamera;
 
-    private @Nullable PlayerHeadTexture headTexture;
+    @Nullable
+    private PlayerHeadTexture headTexture;
 
     public FakePlayerEntity(PlayerEntity player, String name, float health, boolean copyInv) {
-        super(MatHax.mc.world, new GameProfile(player.getUuid(), name));
+        super(mc.world, new GameProfile(UUID.randomUUID(), name));
 
         copyPositionAndRotation(player);
 
@@ -56,11 +60,11 @@ public class FakePlayerEntity extends OtherClientPlayerEntity {
 
     public void spawn() {
         unsetRemoved();
-        MatHax.mc.world.addEntity(getId(), this);
+        mc.world.addEntity(getId(), this);
     }
 
     public void despawn() {
-        MatHax.mc.world.removeEntity(getId(), RemovalReason.DISCARDED);
+        mc.world.removeEntity(getId(), RemovalReason.DISCARDED);
         setRemoved(RemovalReason.DISCARDED);
     }
 
@@ -68,7 +72,7 @@ public class FakePlayerEntity extends OtherClientPlayerEntity {
     @Override
     protected PlayerListEntry getPlayerListEntry() {
         if (playerListEntry == null) {
-            playerListEntry = MatHax.mc.getNetworkHandler().getPlayerListEntry(MatHax.mc.player.getUuid());
+            playerListEntry = mc.getNetworkHandler().getPlayerListEntry(mc.player.getUuid());
         }
 
         return playerListEntry;

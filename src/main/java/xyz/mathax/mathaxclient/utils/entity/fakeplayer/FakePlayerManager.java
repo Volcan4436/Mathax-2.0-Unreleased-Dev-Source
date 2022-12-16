@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+import static xyz.mathax.mathaxclient.MatHax.mc;
+
 public class FakePlayerManager {
     private static final List<FakePlayerEntity> ENTITIES = new ArrayList<>();
 
@@ -34,7 +36,7 @@ public class FakePlayerManager {
             remove(existingFakePlayer);
         }
 
-        FakePlayerEntity fakePlayer = new FakePlayerEntity(MatHax.mc.player, name, health, copyInv);
+        FakePlayerEntity fakePlayer = new FakePlayerEntity(mc.player, name, health, copyInv);
         fakePlayer.spawn();
 
         ENTITIES.add(fakePlayer);

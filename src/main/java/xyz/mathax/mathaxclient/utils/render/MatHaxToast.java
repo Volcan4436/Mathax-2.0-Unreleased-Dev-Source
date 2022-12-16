@@ -18,6 +18,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.mathax.mathaxclient.MatHax;
 
+import static xyz.mathax.mathaxclient.MatHax.mc;
+
 public class MatHaxToast implements Toast {
     public static final int TITLE_COLOR = Color.fromRGBA(145, 61, 226, 255);
     public static final int TEXT_COLOR = Color.fromRGBA(220, 220, 220, 255);
@@ -57,18 +59,18 @@ public class MatHaxToast implements Toast {
         int titleY = 12;
 
         if (text != null) {
-            MatHax.mc.textRenderer.draw(matrixStack, text, x, 18, TEXT_COLOR);
+            mc.textRenderer.draw(matrixStack, text, x, 18, TEXT_COLOR);
             titleY = 7;
         }
 
-        MatHax.mc.textRenderer.draw(matrixStack, title, x, titleY, TITLE_COLOR);
+        mc.textRenderer.draw(matrixStack, title, x, titleY, TITLE_COLOR);
 
         if (icon != null) {
-            MatHax.mc.getItemRenderer().renderInGui(icon, 8, 8);
+            mc.getItemRenderer().renderInGui(icon, 8, 8);
         }
 
         if (!playedSound) {
-            MatHax.mc.getSoundManager().play(getSound());
+            mc.getSoundManager().play(getSound());
             playedSound = true;
         }
 

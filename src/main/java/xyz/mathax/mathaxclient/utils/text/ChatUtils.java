@@ -10,18 +10,19 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 
+import static xyz.mathax.mathaxclient.MatHax.mc;
+
 public class ChatUtils {
 
     // Player
 
-    /** Sends the message as if the user typed it into chat. */
-    public static void sendPlayerMessage(String message) {
-        MatHax.mc.inGameHud.getChatHud().addToMessageHistory(message);
+    public static void sendMessageAsPlayer(String message) {
+        mc.inGameHud.getChatHud().addToMessageHistory(message);
 
         if (message.startsWith("/")) {
-            MatHax.mc.player.networkHandler.sendCommand(message.substring(1));
+            mc.player.networkHandler.sendCommand(message.substring(1));
         } else {
-            MatHax.mc.player.networkHandler.sendChatMessage(message);
+            mc.player.networkHandler.sendChatMessage(message);
         }
     }
 
@@ -84,7 +85,7 @@ public class ChatUtils {
     }
 
     public static void sendMessage(int id, @Nullable String prefixTitle, @Nullable Formatting prefixColor, Text msg) {
-        if (MatHax.mc.world == null) {
+        if (mc.world == null) {
             return;
         }
 
@@ -100,7 +101,7 @@ public class ChatUtils {
             id = 0;
         }
 
-        ((IChatHud) MatHax.mc.inGameHud.getChatHud()).add(message, id);
+        ((IChatHud) mc.inGameHud.getChatHud()).add(message, id);
     }
 
     // Prefix

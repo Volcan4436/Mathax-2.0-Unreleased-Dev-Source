@@ -8,6 +8,8 @@ import org.joml.Vector3d;
 import org.joml.Vector4f;
 import xyz.mathax.mathaxclient.MatHax;
 
+import static xyz.mathax.mathaxclient.MatHax.mc;
+
 public class NametagUtils {
     private static final Vector4f vec4 = new Vector4f();
     private static final Vector4f mmMat4 = new Vector4f();
@@ -28,11 +30,11 @@ public class NametagUtils {
 
         NametagUtils.projection = projection;
 
-        Utils.set(camera, MatHax.mc.gameRenderer.getCamera().getPos());
+        Utils.set(camera, mc.gameRenderer.getCamera().getPos());
         cameraNegated.set(camera);
         cameraNegated.negate();
 
-        windowScale = MatHax.mc.getWindow().calculateScaleFactor(1, false);
+        windowScale = mc.getWindow().calculateScaleFactor(1, false);
     }
 
     public static boolean to2D(Vector3d pos, double scale) {
@@ -54,13 +56,13 @@ public class NametagUtils {
         }
 
         toScreen(pmMat4);
-        double x = pmMat4.x * MatHax.mc.getWindow().getFramebufferWidth();
-        double y = pmMat4.y * MatHax.mc.getWindow().getFramebufferHeight();
+        double x = pmMat4.x * mc.getWindow().getFramebufferWidth();
+        double y = pmMat4.y * mc.getWindow().getFramebufferHeight();
         if (Double.isInfinite(x) || Double.isInfinite(y)) {
             return false;
         }
 
-        pos.set(x / windowScale, MatHax.mc.getWindow().getFramebufferHeight() - y / windowScale, pmMat4.z);
+        pos.set(x / windowScale, mc.getWindow().getFramebufferHeight() - y / windowScale, pmMat4.z);
 
         return true;
     }

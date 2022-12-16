@@ -15,6 +15,8 @@ import net.minecraft.util.math.RotationAxis;
 import org.joml.Quaternionf;
 import xyz.mathax.mathaxclient.MatHax;
 
+import static xyz.mathax.mathaxclient.MatHax.mc;
+
 public class EntityTooltipComponent implements MatHaxTooltipData, TooltipComponent {
     protected final Entity entity;
 
@@ -47,7 +49,7 @@ public class EntityTooltipComponent implements MatHaxTooltipData, TooltipCompone
     }
 
     protected void renderEntity(MatrixStack matrixStack, int x, int y) {
-        if (MatHax.mc.player == null) {
+        if (mc.player == null) {
             return;
         }
 
@@ -74,12 +76,12 @@ public class EntityTooltipComponent implements MatHaxTooltipData, TooltipCompone
         hamiltonProduct(quaternion, quaternion2);
         matrixStack.multiply(quaternion);
         setupAngles();
-        EntityRenderDispatcher entityRenderDispatcher = MatHax.mc.getEntityRenderDispatcher();
+        EntityRenderDispatcher entityRenderDispatcher = mc.getEntityRenderDispatcher();
         quaternion2.conjugate();
         entityRenderDispatcher.setRotation(quaternion2);
         entityRenderDispatcher.setRenderShadows(false);
-        VertexConsumerProvider.Immediate immediate = MatHax.mc.getBufferBuilders().getEntityVertexConsumers();
-        entity.age = MatHax.mc.player.age;
+        VertexConsumerProvider.Immediate immediate = mc.getBufferBuilders().getEntityVertexConsumers();
+        entity.age = mc.player.age;
         entity.setCustomNameVisible(false);
         entityRenderDispatcher.render(entity, 0, 0, 0, 0.f, 1.f, matrixStack, immediate, 15728880);
         immediate.draw();

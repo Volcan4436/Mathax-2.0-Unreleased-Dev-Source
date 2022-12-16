@@ -13,6 +13,8 @@ import net.minecraft.network.ClientConnection;
 import net.minecraft.network.NetworkSide;
 import net.minecraft.world.Difficulty;
 
+import static xyz.mathax.mathaxclient.MatHax.mc;
+
 public class FakeClientPlayer {
     private static ClientWorld world;
     private static PlayerEntity player;
@@ -30,14 +32,13 @@ public class FakeClientPlayer {
     private static void onGameJoined(GameJoinedEvent event) {}
 
     public static PlayerEntity getPlayer() {
-        String id = MatHax.mc.getSession().getUuid();
-
+        String id = mc.getSession().getUuid();
         if (player == null || (!id.equals(lastId))) {
             if (world == null) {
-                world = new ClientWorld(new ClientPlayNetworkHandler(MatHax.mc, null, new ClientConnection(NetworkSide.CLIENTBOUND), MatHax.mc.getCurrentServerEntry(), MatHax.mc.getSession().getProfile(), null), new ClientWorld.Properties(Difficulty.NORMAL, false, false), world.getRegistryKey(), world.getDimensionEntry(), 1, 1, MatHax.mc::getProfiler, null, false, 0);
+                world = new ClientWorld(new ClientPlayNetworkHandler(mc, null, new ClientConnection(NetworkSide.CLIENTBOUND), mc.getCurrentServerEntry(), mc.getSession().getProfile(), null), new ClientWorld.Properties(Difficulty.NORMAL, false, false), world.getRegistryKey(), world.getDimensionEntry(), 1, 1, mc::getProfiler, null, false, 0);
             }
 
-            player = new OtherClientPlayerEntity(world, MatHax.mc.getSession().getProfile());
+            player = new OtherClientPlayerEntity(world, mc.getSession().getProfile());
 
             lastId = id;
             needsNewEntry = true;
@@ -48,7 +49,7 @@ public class FakeClientPlayer {
 
     public static PlayerListEntry getPlayerListEntry() {
         if (playerListEntry == null || needsNewEntry) {
-            playerListEntry = new PlayerListEntry(MatHax.mc.getSession().getProfile(), false);
+            playerListEntry = new PlayerListEntry(mc.getSession().getProfile(), false);
             needsNewEntry = false;
         }
 

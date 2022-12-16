@@ -13,6 +13,8 @@ import net.minecraft.item.map.MapState;
 import net.minecraft.util.Identifier;
 import xyz.mathax.mathaxclient.MatHax;
 
+import static xyz.mathax.mathaxclient.MatHax.mc;
+
 public class MapTooltipComponent implements TooltipComponent, MatHaxTooltipData {
     private static final Identifier TEXTURE_MAP_BACKGROUND = new Identifier("textures/map/map_background.png");
 
@@ -57,14 +59,14 @@ public class MapTooltipComponent implements TooltipComponent, MatHaxTooltipData 
         matrixStack.pop();
 
         // Contents
-        VertexConsumerProvider.Immediate consumer = MatHax.mc.getBufferBuilders().getEntityVertexConsumers();
-        MapState mapState = FilledMapItem.getMapState(this.mapId, MatHax.mc.world);
+        VertexConsumerProvider.Immediate consumer = mc.getBufferBuilders().getEntityVertexConsumers();
+        MapState mapState = FilledMapItem.getMapState(this.mapId, mc.world);
         if (mapState == null) return;
         matrixStack.push();
         matrixStack.translate(x, y, z);
         matrixStack.scale((float) scale, (float) scale, 0);
         matrixStack.translate(8, 8, 0);
-        MatHax.mc.gameRenderer.getMapRenderer().draw(matrixStack, consumer, this.mapId, mapState, false, 0xF000F0);
+        mc.gameRenderer.getMapRenderer().draw(matrixStack, consumer, this.mapId, mapState, false, 0xF000F0);
         consumer.draw();
         matrixStack.pop();
     }

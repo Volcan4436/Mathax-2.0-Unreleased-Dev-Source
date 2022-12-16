@@ -3,6 +3,8 @@ package xyz.mathax.mathaxclient.utils.entity;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.LongBidirectionalIterator;
 import it.unimi.dsi.fastutil.longs.LongSortedSet;
+import net.minecraft.block.AirBlock;
+import net.minecraft.block.Block;
 import xyz.mathax.mathaxclient.mixin.EntityTrackingSectionAccessor;
 import xyz.mathax.mathaxclient.mixin.SectionedEntityCacheAccessor;
 import xyz.mathax.mathaxclient.mixin.SimpleEntityLookupAccessor;
@@ -29,6 +31,7 @@ import net.minecraft.world.entity.EntityTrackingSection;
 import net.minecraft.world.entity.SectionedEntityCache;
 import net.minecraft.world.entity.SimpleEntityLookup;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -137,25 +140,48 @@ public class EntityUtils {
             return null;
         }
 
+        BlockPos.Mutable testPos = new BlockPos.Mutable();
         List<BlockPos> positions = new ArrayList<>();
-        for (Direction direction : Direction.values()) {
-            if (direction == Direction.UP || direction == Direction.DOWN) {
-                continue;
-            }
+        for (Direction direction : Direction.HORIZONTAL) {
+            testPos.set(player.getBlockPos()).offset(direction);
 
-            BlockPos pos = player.getBlockPos().offset(direction);
-            if (mc.world.getBlockState(pos).getBlock() == Blocks.OBSIDIAN) {
-                positions.add(pos);
+            if (mc.world.getBlockState(testPos).getBlock() == Blocks.OBSIDIAN) {
+                positions.add(testPos);
             }
         }
 
         return positions;
     }
 
+    @Nullable
     public static BlockPos getCityBlock(PlayerEntity player) {
-        List<BlockPos> posList = getSurroundBlocks(player);
-        posList.sort(Comparator.comparingDouble(PlayerUtils::distanceTo));
-        return posList.isEmpty() ? null : posList.get(0);
+        BlockPos bestPos = null;
+        int bestScore = 0;
+        BlockPos.Mutable testPos = new BlockPos.Mutable();
+        for (BlockPos pos : getSurroundBlocks(player)) {
+            int score = 1;
+            for (Direction direction : Direction.values()) {
+                testPos.set(pos).offset(direction);
+                Block block = mc.world.getBlockState(testPos).getBlock();
+                if (direction == Direction.DOWN && block == Blocks.OBSIDIAN || block == Blocks.BEDROCK) {
+                    score+= 2;
+                    continue;
+                }
+
+                if (direction != Direction.DOWN && block instanceof AirBlock) {
+                    score++;
+                }
+            }
+
+            score -= PlayerUtils.distanceTo(pos);
+
+            if (score >= bestScore) {
+                bestPos = pos;
+                bestScore = score;
+            }
+        }
+
+        return bestPos;
     }
 
     public static String getName(Entity entity) {

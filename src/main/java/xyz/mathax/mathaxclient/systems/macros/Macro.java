@@ -46,7 +46,7 @@ public class Macro implements ISerializable<Macro> {
                     continue;
                 }
 
-                ChatUtils.sendPlayerMessage(message);
+                ChatUtils.sendMessageAsPlayer(message);
             }
 
             return true;

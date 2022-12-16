@@ -52,7 +52,7 @@ public class MiddleClickExtra extends Module {
 
     @EventHandler
     private void onMouseButton(MouseButtonEvent event) {
-        if (event.action != KeyAction.Press || event.button != GLFW.GLFW_MOUSE_BUTTON_MIDDLE) {
+        if (event.action != KeyAction.Press || event.button != GLFW.GLFW_MOUSE_BUTTON_MIDDLE || mc.currentScreen != null) {
             return;
         }
 

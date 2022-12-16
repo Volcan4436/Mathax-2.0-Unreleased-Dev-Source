@@ -16,7 +16,8 @@ import net.minecraft.util.math.*;
 import net.minecraft.world.RaycastContext;
 import org.joml.Quaterniond;
 import org.joml.Vector3d;
-import xyz.mathax.mathaxclient.MatHax;
+
+import static xyz.mathax.mathaxclient.MatHax.mc;
 
 public class ProjectileEntitySimulator {
     private static final BlockPos.Mutable blockPos = new BlockPos.Mutable();
@@ -33,7 +34,7 @@ public class ProjectileEntitySimulator {
     public boolean set(Entity user, ItemStack itemStack, double simulated, boolean accurate, double tickDelta) {
         Item item = itemStack.getItem();
         if (item instanceof BowItem) {
-            double charge = BowItem.getPullProgress(MatHax.mc.player.getItemUseTime());
+            double charge = BowItem.getPullProgress(mc.player.getItemUseTime());
             if (charge <= 0) {
                 return false;
             }
@@ -167,13 +168,13 @@ public class ProjectileEntitySimulator {
         velocity.mul(isTouchingWater() ? waterDrag : airDrag);
         velocity.sub(0, gravity, 0);
 
-        if (pos.y < MatHax.mc.world.getBottomY()) {
+        if (pos.y < mc.world.getBottomY()) {
             return MissHitResult.INSTANCE;
         }
 
         int chunkX = (int) (pos.x / 16);
         int chunkZ = (int) (pos.z / 16);
-        if (!MatHax.mc.world.getChunkManager().isChunkLoaded(chunkX, chunkZ)) {
+        if (!mc.world.getChunkManager().isChunkLoaded(chunkX, chunkZ)) {
             return MissHitResult.INSTANCE;
         }
 
@@ -186,7 +187,7 @@ public class ProjectileEntitySimulator {
     private boolean isTouchingWater() {
         blockPos.set(pos.x, pos.y, pos.z);
 
-        FluidState fluidState = MatHax.mc.world.getFluidState(blockPos);
+        FluidState fluidState = mc.world.getFluidState(blockPos);
         if (fluidState.getFluid() != Fluids.WATER && fluidState.getFluid() != Fluids.FLOWING_WATER) {
             return false;
         }
@@ -196,12 +197,12 @@ public class ProjectileEntitySimulator {
 
     private HitResult getCollision() {
         Vec3d vec3d3 = prevPos3d;
-        HitResult hitResult = MatHax.mc.world.raycast(new RaycastContext(vec3d3, pos3d, RaycastContext.ShapeType.COLLIDER, waterDrag == 0 ? RaycastContext.FluidHandling.ANY : RaycastContext.FluidHandling.NONE, MatHax.mc.player));
+        HitResult hitResult = mc.world.raycast(new RaycastContext(vec3d3, pos3d, RaycastContext.ShapeType.COLLIDER, waterDrag == 0 ? RaycastContext.FluidHandling.ANY : RaycastContext.FluidHandling.NONE, mc.player));
         if (hitResult.getType() != HitResult.Type.MISS) {
             vec3d3 = hitResult.getPos();
         }
 
-        HitResult hitResult2 = ProjectileUtil.getEntityCollision(MatHax.mc.world, MatHax.mc.player, vec3d3, pos3d, new Box(pos.x, pos.y, pos.z, pos.x, pos.y, pos.z).stretch(MatHax.mc.player.getVelocity()).expand(1.0D), entity -> !entity.isSpectator() && entity.isAlive() && entity.canHit());
+        HitResult hitResult2 = ProjectileUtil.getEntityCollision(mc.world, mc.player, vec3d3, pos3d, new Box(pos.x, pos.y, pos.z, pos.x, pos.y, pos.z).stretch(mc.player.getVelocity()).expand(1.0D), entity -> !entity.isSpectator() && entity.isAlive() && entity.canHit());
         if (hitResult2 != null) {
             hitResult = hitResult2;
         }
