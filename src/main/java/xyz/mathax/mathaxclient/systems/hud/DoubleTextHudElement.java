@@ -1,6 +1,7 @@
 package xyz.mathax.mathaxclient.systems.hud;
 
 import xyz.mathax.mathaxclient.gui.renderer.OverlayRenderer;
+import xyz.mathax.mathaxclient.renderer.text.Section;
 import xyz.mathax.mathaxclient.utils.render.color.Color;
 
 public abstract class DoubleTextHudElement extends HudElement {
@@ -42,11 +43,10 @@ public abstract class DoubleTextHudElement extends HudElement {
             return;
         }
 
-        double x = box.getX();
-        double y = box.getY();
-
-        renderer.text(left, x, y, leftColor);
-        renderer.text(right, x + leftWidth, y, rightColor);
+        renderer.text(new Section[] {
+                new Section(left, leftColor),
+                new Section(right, rightColor)
+        }, box.getX(), box.getY());
     }
 
     protected void setLeft(String left) {

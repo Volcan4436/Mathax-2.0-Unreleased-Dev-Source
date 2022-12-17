@@ -4,6 +4,8 @@ import baritone.api.BaritoneAPI;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import xyz.mathax.mathaxclient.MatHax;
 import xyz.mathax.mathaxclient.events.game.SendMessageEvent;
+import xyz.mathax.mathaxclient.gui.renderer.GuiDebugRenderer;
+import xyz.mathax.mathaxclient.renderer.*;
 import xyz.mathax.mathaxclient.systems.commands.Commands;
 import xyz.mathax.mathaxclient.systems.config.Config;
 import xyz.mathax.mathaxclient.utils.render.color.Color;
@@ -75,17 +77,14 @@ public abstract class ChatScreenMixin extends Screen {
 
     @Inject(method = "render", at = @At(value = "HEAD"))
     public void onRender(MatrixStack matrixStack, int mouseX, int mouseY, float delta, CallbackInfo info) {
-        if (chatField.getText().startsWith(Config.get().prefixSetting.get())) {
-            renderBoxOutline(matrixStack, Color.MATHAX);
+        Renderer2D.COLOR.begin();
+        /*if (chatField.getText().startsWith(Config.get().prefixSetting.get())) {
+            Renderer2D.COLOR.boxLines(chatField.x, height - 14, width - 2, height - 2, Color.MATHAX);
         } else if (chatField.getText().startsWith(BaritoneAPI.getSettings().prefix.value)) {
-            renderBoxOutline(matrixStack, Color.MAGENTA);
-        }
-    }
+            Renderer2D.COLOR.quad(2, height - 14, width - 2, height - 2, Color.MAGENTA);
+        }*/
 
-    private void renderBoxOutline(MatrixStack matrixStack, Color color) {
-        //TODO: Renders in the middle of the screen for some fucking reason.
-        /*Renderer2D.COLOR.begin();
-        Renderer2D.COLOR.boxLines(chatField.x - 1, chatField.y - 1, chatField.getWidth() + 1, chatField.getHeight() + 1, color);
-        Renderer2D.COLOR.render(matrixStack);*/
+        Renderer2D.COLOR.quad(chatField.getX(), chatField.getY(), chatField.getWidth(), chatField.getHeight(), Color.MATHAX);
+        Renderer2D.COLOR.render(null);
     }
 }

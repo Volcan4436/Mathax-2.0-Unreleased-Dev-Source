@@ -151,7 +151,6 @@ public class Modules extends System<Modules> {
 
         // Player
         Category player = Categories.Player;
-        add(new AntiCactus(player));
         add(new AntiHunger(player));
         add(new AutoFish(player));
         add(new AutoGap(player));
@@ -186,6 +185,7 @@ public class Modules extends System<Modules> {
         add(new AutoShearer(world));
         add(new AutoSign(world));
         add(new BuildHeight(world));
+        add(new Collisions(world));
         add(new EChestFarmer(world));
         add(new Flamethrower(world));
         add(new HighwayBuilder(world));

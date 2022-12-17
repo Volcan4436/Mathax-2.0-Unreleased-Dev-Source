@@ -45,6 +45,8 @@ import java.io.File;
 import java.lang.invoke.MethodHandles;
 import java.util.*;
 
+// TODO: Make all modules use sections for text rendering
+
 public class MatHax implements ClientModInitializer {
     public static MinecraftClient mc;
     public static MatHax INSTANCE;
@@ -179,7 +181,11 @@ public class MatHax implements ClientModInitializer {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             DiscordRPC.disableRPC();
             //TODO: Leave API and IRC
-            Irc.leave();
+
+            if (Irc.client != null) {
+                Irc.leave();
+            }
+
             Api.save();
             Systems.save();
         }));

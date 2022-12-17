@@ -38,23 +38,13 @@ public class WelcomeHudElement extends TripleTextHudElement {
 
     @Override
     protected String getLeft() {
-        switch (messageSetting.get()) {
-            case Using -> {
-                return "You are using MatHax, ";
-            }
-            case Time -> {
-                return getTime() + ", ";
-            }
-            case Retarded_Time -> {
-                return getRetardedTime() + ", ";
-            }
-            case Sussy -> {
-                return "You are a sussy baka, ";
-            }
-            default -> {
-                return "Welcome to MatHax, ";
-            }
-        }
+        return switch (messageSetting.get()) {
+            case Using -> "You are using MatHax, ";
+            case Time -> getTime() + ", ";
+            case Retarded_Time -> getRetardedTime() + ", ";
+            case Sussy -> "You are a sussy baka, ";
+            default -> "Welcome to MatHax, ";
+        };
     }
 
     @Override
@@ -69,7 +59,6 @@ public class WelcomeHudElement extends TripleTextHudElement {
 
     private String getTime() {
         int hour = Integer.parseInt(new SimpleDateFormat("k").format(new Date()));
-
         if (hour < 6) {
             return "Good Night";
         }
@@ -91,7 +80,6 @@ public class WelcomeHudElement extends TripleTextHudElement {
 
     private String getRetardedTime() {
         int hour = Integer.parseInt(new SimpleDateFormat("k").format(new Date()));
-
         if (hour < 3) {
             return "Why are you killing newfags at this hour retard";
         }

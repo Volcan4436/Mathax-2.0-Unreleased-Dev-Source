@@ -23,19 +23,4 @@ public class AbstractBlockMixin {
             infoReturnable.setReturnValue(event.lightLevel);
         }
     }
-
-    @Inject(method = "getCollisionShape", at = @At("HEAD"), cancellable = true)
-    private void onGetCollisionShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> infoReturnable) {
-        if (!(state.getFluidState().isEmpty())) {
-            CollisionShapeEvent event = MatHax.EVENT_BUS.post(CollisionShapeEvent.get(state.getFluidState().getBlockState(), pos, CollisionShapeEvent.CollisionType.FLUID));
-            if (event.shape != null) {
-                infoReturnable.setReturnValue(event.shape);
-            }
-        } else {
-            CollisionShapeEvent event = MatHax.EVENT_BUS.post(CollisionShapeEvent.get(state, pos, CollisionShapeEvent.CollisionType.BLOCK));
-            if (event.shape != null) {
-                infoReturnable.setReturnValue(event.shape);
-            }
-        }
-    }
 }

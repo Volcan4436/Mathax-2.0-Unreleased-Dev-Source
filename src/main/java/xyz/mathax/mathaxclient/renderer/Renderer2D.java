@@ -48,7 +48,6 @@ public class Renderer2D {
     public void line(double x1, double y1, double x2, double y2, Color color) {
         int i1 = lines.vec2(x1, y1).color(color).next();
         int i2 = lines.vec2(x2, y2).color(color).next();
-
         lines.line(i1, i2);
     }
 
@@ -57,7 +56,6 @@ public class Renderer2D {
         int i2 = lines.vec2(x, y + height).color(color).next();
         int i3 = lines.vec2(x + width, y + height).color(color).next();
         int i4 = lines.vec2(x + width, y).color(color).next();
-
         lines.line(i1, i2);
         lines.line(i2, i3);
         lines.line(i3, i4);
@@ -71,7 +69,6 @@ public class Renderer2D {
         int i2 = triangles.vec2(x, y + height).color(cBottomLeft).next();
         int i3 = triangles.vec2(x + width, y + height).color(cBottomRight).next();
         int i4 = triangles.vec2(x + width, y).color(cTopRight).next();
-
         triangles.quad(i1, i2, i3, i4);
     }
 
@@ -86,7 +83,6 @@ public class Renderer2D {
         int i2 = triangles.vec2(x, y + height).vec2(0, 1).color(color).next();
         int i3 = triangles.vec2(x + width, y + height).vec2(1, 1).color(color).next();
         int i4 = triangles.vec2(x + width, y).vec2(1, 0).color(color).next();
-
         triangles.quad(i1, i2, i3, i4);
     }
 
@@ -95,7 +91,6 @@ public class Renderer2D {
         int i2 = triangles.vec2(x, y + height).vec2(texture.x1, texture.y2).color(color).next();
         int i3 = triangles.vec2(x + width, y + height).vec2(texture.x2, texture.y2).color(color).next();
         int i4 = triangles.vec2(x + width, y).vec2(texture.x2, texture.y1).color(color).next();
-
         triangles.quad(i1, i2, i3, i4);
     }
 

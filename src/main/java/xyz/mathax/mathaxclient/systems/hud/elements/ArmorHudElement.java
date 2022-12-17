@@ -2,6 +2,8 @@ package xyz.mathax.mathaxclient.systems.hud.elements;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import xyz.mathax.mathaxclient.gui.renderer.OverlayRenderer;
+import xyz.mathax.mathaxclient.renderer.text.Section;
+import xyz.mathax.mathaxclient.renderer.text.SectionShadow;
 import xyz.mathax.mathaxclient.settings.*;
 import xyz.mathax.mathaxclient.systems.hud.Hud;
 import xyz.mathax.mathaxclient.systems.hud.HudElement;

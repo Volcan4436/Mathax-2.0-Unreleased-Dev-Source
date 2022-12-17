@@ -146,7 +146,6 @@ public class BoundingBox implements ISerializable<BoundingBox> {
     public boolean isOver(double x, double y) {
         double sx = getX();
         double sy = getY();
-
         return x >= sx && x <= sx + width && y >= sy && y <= sy + height;
     }
 

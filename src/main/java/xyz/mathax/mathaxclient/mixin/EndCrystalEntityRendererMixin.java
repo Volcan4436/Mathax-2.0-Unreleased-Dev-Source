@@ -45,7 +45,6 @@ public abstract class EndCrystalEntityRendererMixin {
     @Inject(method = "render(Lnet/minecraft/entity/decoration/EndCrystalEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At("HEAD"))
     private void render(EndCrystalEntity endCrystalEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo info) {
         Chams chams = Modules.get().get(Chams.class);
-
         END_CRYSTAL = RenderLayer.getEntityTranslucent((chams.isEnabled() && chams.crystalsSetting.get() && !chams.crystalsTextureSetting.get()) ? Chams.BLANK : TEXTURE);
     }
 

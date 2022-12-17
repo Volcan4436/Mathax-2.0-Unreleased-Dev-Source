@@ -89,7 +89,6 @@ public class MeshVertexConsumerProvider implements IVertexConsumerProvider {
                 int i2 = mesh.vec3(xs[1], ys[1], zs[1]).color(color).next();
                 int i3 = mesh.vec3(xs[2], ys[2], zs[2]).color(color).next();
                 int i4 = mesh.vec3(xs[3], ys[3], zs[3]).color(color).next();
-
                 mesh.quad(i1, i2, i3, i4);
 
                 i = 0;

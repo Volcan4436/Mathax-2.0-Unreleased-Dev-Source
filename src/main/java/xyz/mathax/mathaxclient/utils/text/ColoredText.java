@@ -6,6 +6,7 @@ import java.util.Objects;
 
 public class ColoredText {
     private final String text;
+
     private final Color color;
 
     public ColoredText(String text, Color color) {
@@ -22,10 +23,16 @@ public class ColoredText {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ColoredText that = (ColoredText) o;
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+
+        if (object == null || getClass() != object.getClass()) {
+            return false;
+        }
+
+        ColoredText that = (ColoredText) object;
         return text.equals(that.text) && color.equals(that.color);
     }
 

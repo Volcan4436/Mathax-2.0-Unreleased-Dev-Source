@@ -11,13 +11,15 @@ import xyz.mathax.mathaxclient.utils.render.color.Color;
 import net.minecraft.client.util.math.MatrixStack;
 
 public class GuiDebugRenderer {
+    private final Mesh mesh = new ShaderMesh(Shaders.POS_COLOR, DrawMode.Lines, Mesh.Attrib.Vec2, Mesh.Attrib.Color);
+
     private static final Color CELL_COLOR = new Color(25, 225, 25);
     private static final Color WIDGET_COLOR = new Color(25, 25, 225);
 
-    private final Mesh mesh = new ShaderMesh(Shaders.POS_COLOR, DrawMode.Lines, Mesh.Attrib.Vec2, Mesh.Attrib.Color);
-
     public void render(WWidget widget, MatrixStack matrixStack) {
-        if (widget == null) return;
+        if (widget == null) {
+            return;
+        }
 
         mesh.begin();
 
@@ -38,7 +40,7 @@ public class GuiDebugRenderer {
         }
     }
 
-    private void lineBox(double x, double y, double width, double height, Color color) {
+    public void lineBox(double x, double y, double width, double height, Color color) {
         line(x, y, x + width, y, color);
         line(x + width, y, x + width, y + height, color);
         line(x, y, x, y + height, color);
@@ -46,9 +48,8 @@ public class GuiDebugRenderer {
     }
 
     private void line(double x1, double y1, double x2, double y2, Color color) {
-        mesh.line(
-            mesh.vec2(x1, y1).color(color).next(),
-            mesh.vec2(x2, y2).color(color).next()
-        );
+        int i1 = mesh.vec2(x1, y1).color(color).next();
+        int i2 = mesh.vec2(x2, y2).color(color).next();
+        mesh.line(i1, i2);
     }
 }

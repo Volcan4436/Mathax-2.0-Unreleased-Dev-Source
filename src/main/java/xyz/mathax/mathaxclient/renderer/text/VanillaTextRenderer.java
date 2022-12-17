@@ -16,7 +16,7 @@ public class VanillaTextRenderer implements TextRenderer {
     private final VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(buffer);
 
     private final MatrixStack matrixStack = new MatrixStack();
-    private final Matrix4f emptyMatrix = new Matrix4f();
+    private final Matrix4f emptyMatrix4f = new Matrix4f();
 
     public double scale = 2;
     public boolean scaleIndividually;
@@ -90,11 +90,6 @@ public class VanillaTextRenderer implements TextRenderer {
     }
 
     @Override
-    public double render(String text, double x, double y, Color color) {
-        return render(text, x, y, color, shadow);
-    }
-
-    @Override
     public double render(String text, double x, double y, Color color, boolean shadow) {
         boolean wasBuilding = building;
         if (!wasBuilding) {
@@ -107,20 +102,73 @@ public class VanillaTextRenderer implements TextRenderer {
         int preA = color.a;
         color.a = (int) ((color.a / 255 * alpha) * 255);
 
-        Matrix4f matrix = emptyMatrix;
+        Matrix4f matrix4f = emptyMatrix4f;
         if (scaleIndividually) {
             matrixStack.push();
             matrixStack.scale((float) scale, (float) scale, 1);
-            matrix = matrixStack.peek().getPositionMatrix();
+            matrix4f = matrixStack.peek().getPositionMatrix();
         }
 
-        double x2 = MatHax.mc.textRenderer.draw(text, (float) (x / scale), (float) (y / scale), color.getPacked(), shadow, matrix, immediate, false, 0, LightmapTextureManager.MAX_LIGHT_COORDINATE);
+        double x2 = MatHax.mc.textRenderer.draw(text, (float) (x / scale), (float) (y / scale), color.getPacked(), shadow, matrix4f, immediate, false, 0, LightmapTextureManager.MAX_LIGHT_COORDINATE);
 
         if (scaleIndividually) {
             matrixStack.pop();
         }
 
         color.a = preA;
+
+        if (!wasBuilding) {
+            end();
+        }
+
+        return (x2 - 1) * scale;
+    }
+
+    @Override
+    public double render(String text, double x, double y, Color color) {
+        return render(text, x, y, color, shadow);
+    }
+
+    @Override
+    public double render(Section[] sections, double x, double y) {
+        boolean wasBuilding = building;
+        if (!wasBuilding) {
+            begin();
+        }
+
+        double x2 = 0;
+        boolean notFirst = false;
+        for (Section section : sections) {
+            boolean shadow;
+            if (section.shadow == SectionShadow.Undefined) {
+                shadow = this.shadow;
+            } else {
+                shadow = section.shadow == SectionShadow.Render;
+            }
+
+            x += 0.5 * scale;
+            y += 0.5 * scale;
+
+            int preA = section.color.a;
+            section.color.a = (int) ((section.color.a / 255 * alpha) * 255);
+
+            Matrix4f matrix4f = emptyMatrix4f;
+            if (scaleIndividually) {
+                matrixStack.push();
+                matrixStack.scale((float) scale, (float) scale, 1);
+                matrix4f = matrixStack.peek().getPositionMatrix();
+            }
+
+            x2 = MatHax.mc.textRenderer.draw(section.text, (notFirst ? 0.0F : (float) (x / scale)) + (float) x2 - (notFirst ? 2.0F : 0.0F), (float) (y / scale), section.color.getPacked(), shadow, matrix4f, immediate, false, 0, LightmapTextureManager.MAX_LIGHT_COORDINATE);
+
+            if (scaleIndividually) {
+                matrixStack.pop();
+            }
+
+            section.color.a = preA;
+
+            notFirst = true;
+        }
 
         if (!wasBuilding) {
             end();

@@ -17,7 +17,6 @@ public class PostProcessRenderer {
         int i2 = mesh.vec2(-1, 1).next();
         int i3 = mesh.vec2(1, 1).next();
         int i4 = mesh.vec2(1, -1).next();
-
         mesh.quad(i1, i2, i3, i4);
 
         mesh.end();

@@ -143,15 +143,15 @@ public class Mesh {
         return this;
     }
 
-    public Mesh color(Color c) {
-        long p = verticesPointer;
-
-        memPutByte(p, (byte) c.r);
-        memPutByte(p + 1, (byte) c.g);
-        memPutByte(p + 2, (byte) c.b);
-        memPutByte(p + 3, (byte) (c.a * (float) alpha));
+    public Mesh color(Color color) {
+        long pointer = verticesPointer;
+        memPutByte(pointer, (byte) color.r);
+        memPutByte(pointer + 1, (byte) color.g);
+        memPutByte(pointer + 2, (byte) color.b);
+        memPutByte(pointer + 3, (byte) (color.a * (float) alpha));
 
         verticesPointer += 4;
+
         return this;
     }
 
@@ -160,25 +160,25 @@ public class Mesh {
     }
 
     public void line(int i1, int i2) {
-        long p = indicesPointer + indicesCount * 4L;
+        long pointer = indicesPointer + indicesCount * 4L;
 
-        memPutInt(p, i1);
-        memPutInt(p + 4, i2);
+        memPutInt(pointer, i1);
+        memPutInt(pointer + 4, i2);
 
         indicesCount += 2;
         growIfNeeded();
     }
 
     public void quad(int i1, int i2, int i3, int i4) {
-        long p = indicesPointer + indicesCount * 4L;
+        long pointer = indicesPointer + indicesCount * 4L;
 
-        memPutInt(p, i1);
-        memPutInt(p + 4, i2);
-        memPutInt(p + 8, i3);
+        memPutInt(pointer, i1);
+        memPutInt(pointer + 4, i2);
+        memPutInt(pointer + 8, i3);
 
-        memPutInt(p + 12, i3);
-        memPutInt(p + 16, i4);
-        memPutInt(p + 20, i1);
+        memPutInt(pointer + 12, i3);
+        memPutInt(pointer + 16, i4);
+        memPutInt(pointer + 20, i1);
 
         indicesCount += 6;
         growIfNeeded();

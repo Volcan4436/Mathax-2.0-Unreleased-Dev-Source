@@ -76,6 +76,8 @@ public interface TextRenderer {
 
     double render(String text, double x, double y, Color color, boolean shadow);
 
+    double render(Section[] sections, double x, double y);
+
     boolean isBuilding();
 
     boolean isBuilt();

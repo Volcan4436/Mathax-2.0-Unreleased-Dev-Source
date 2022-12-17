@@ -38,7 +38,6 @@ public abstract class SingleTextHudElement extends HudElement {
 
         double x = box.getX();
         double y = box.getY();
-
         renderer.text(text, x, y, textColor);
     }
 

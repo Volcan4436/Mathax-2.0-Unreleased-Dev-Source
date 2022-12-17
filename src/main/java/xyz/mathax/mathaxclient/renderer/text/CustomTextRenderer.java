@@ -153,6 +153,45 @@ public class CustomTextRenderer implements TextRenderer {
     }
 
     @Override
+    public double render(Section[] sections, double x, double y) {
+        boolean wasBuilding = building;
+        if (!wasBuilding) {
+            begin();
+        }
+
+        double width = 0;
+        boolean notFirst = false;
+        for (Section section : sections) {
+            boolean shadow;
+            if (section.shadow == SectionShadow.Undefined) {
+                shadow = this.shadow;
+            } else {
+                shadow = section.shadow == SectionShadow.Render;
+            }
+
+            if (shadow) {
+                int preShadowA = SHADOW_COLOR.a;
+                SHADOW_COLOR.a = (int) (section.color.a / 255.0 * preShadowA);
+
+                font.render(mesh, section.text, x + 1, y + 1, SHADOW_COLOR, scale);
+                width = font.render(mesh, section.text, (notFirst ? width : x + width) - (notFirst ? 2 * scale : 0), y, section.color, scale);
+
+                SHADOW_COLOR.a = preShadowA;
+            } else {
+                width = font.render(mesh, section.text, (notFirst ? width : x + width) - (notFirst ? 2 * scale : 0), y, section.color, scale);
+            }
+
+            notFirst = true;
+        }
+
+        if (!wasBuilding) {
+            end();
+        }
+
+        return width;
+    }
+
+    @Override
     public double render(String text, double x, double y, Color color) {
         return render(text, x, y, color, shadow);
     }

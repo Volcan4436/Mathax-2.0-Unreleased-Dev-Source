@@ -63,7 +63,7 @@ public class Hud extends System<Hud> implements Iterable<HudElement> {
     public final Setting<SettingColor> secondaryColorSetting = generalSettings.add(new ColorSetting.Builder()
             .name("Secondary color")
             .description("Secondary color of HUD text.")
-            .defaultValue(new SettingColor(Color.GRAY))
+            .defaultValue(new SettingColor(Color.LIGHT_GRAY))
             .build()
     );
 
@@ -111,7 +111,7 @@ public class Hud extends System<Hud> implements Iterable<HudElement> {
         layer1.add(new ServerBrandHudElement(this));
         layer1.add(new DurabilityHudElement(this));
         layer1.add(new BiomeHudElement(this));
-        layer1.add(new PlayerModelHudElement(this));
+        //layer1.add(new PlayerModelHudElement(this));
 
         layer2 = new HudElementLayer(RENDERER, elements, Alignment.X.Left, Alignment.Y.Top, 100, 200);
         layer2.add(new ModuleInfoHudElement(this));
@@ -137,7 +137,7 @@ public class Hud extends System<Hud> implements Iterable<HudElement> {
         layer7.add(new PotionTimersHudElement(this));
 
         layer8 = new HudElementLayer(RENDERER, elements, Alignment.X.Left, Alignment.Y.Center, 2, 100);
-        layer8.add(new CombatInfoHudElement(this));
+        //layer8.add(new CombatInfoHudElement(this));
         layer8.add(new TextRadarHudElement(this));
 
         layer9 = new HudElementLayer(RENDERER, elements, Alignment.X.Center, Alignment.Y.Center, -150, -50);
@@ -219,9 +219,9 @@ public class Hud extends System<Hud> implements Iterable<HudElement> {
     public void save(File folder) {
         if (folder == null) {
             folder = HUD_FOLDER;
+        } else {
+            folder = new File(folder, "HUD");
         }
-
-        folder = new File(folder, "HUD");
 
         JSONObject json = toJson();
         if (json == null) {
@@ -246,11 +246,12 @@ public class Hud extends System<Hud> implements Iterable<HudElement> {
 
     @Override
     public void load(File folder) {
-        if (folder != null) {
+        if (folder == null) {
             folder = HUD_FOLDER;
+        } else {
+            folder = new File(folder, "HUD");
         }
 
-        folder = new File(folder, "HUD");
         File file = new File(folder, "HUD.json");
         JSONObject json = JSONUtils.loadJSON(file);
         if (json == null) {
@@ -276,6 +277,6 @@ public class Hud extends System<Hud> implements Iterable<HudElement> {
             settings.fromJson(json.getJSONObject("settings"));
         }
 
-        return super.fromJson(json);
+        return this;
     }
 }

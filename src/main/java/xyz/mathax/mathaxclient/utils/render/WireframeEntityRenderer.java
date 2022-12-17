@@ -420,7 +420,6 @@ public class WireframeEntityRenderer {
                 int i2 = renderer.triangles.vec3(offsetX + pos2.x, offsetY + pos2.y, offsetZ + pos2.z).color(sideColor).next();
                 int i3 = renderer.triangles.vec3(offsetX + pos3.x, offsetY + pos3.y, offsetZ + pos3.z).color(sideColor).next();
                 int i4 = renderer.triangles.vec3(offsetX + pos4.x, offsetY + pos4.y, offsetZ + pos4.z).color(sideColor).next();
-
                 renderer.triangles.quad(i1, i2, i3, i4);
             }
 

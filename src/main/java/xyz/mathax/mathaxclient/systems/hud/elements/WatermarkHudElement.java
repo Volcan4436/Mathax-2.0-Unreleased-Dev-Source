@@ -6,6 +6,7 @@ import xyz.mathax.mathaxclient.events.game.GameJoinedEvent;
 import xyz.mathax.mathaxclient.gui.renderer.OverlayRenderer;
 import xyz.mathax.mathaxclient.renderer.GL;
 import xyz.mathax.mathaxclient.renderer.Renderer2D;
+import xyz.mathax.mathaxclient.renderer.text.Section;
 import xyz.mathax.mathaxclient.settings.*;
 import xyz.mathax.mathaxclient.systems.hud.Hud;
 import xyz.mathax.mathaxclient.systems.hud.TripleTextHudElement;
@@ -82,28 +83,25 @@ public class WatermarkHudElement extends TripleTextHudElement {
     @Override
     public void render(OverlayRenderer renderer) {
         double textWidth = renderer.textWidth(getLeft()) + renderer.textWidth(getCenter()) + renderer.textWidth(getRight());
-
         switch (modeSetting.get()) {
             case Text -> {
                 box.setSize(textWidth, renderer.textHeight());
 
-                double x = box.getX();
-                double y = box.getY();
-
-                renderer.text(getLeft(), x, y, hud.primaryColorSetting.get());
-                renderer.text(getCenter(), x + renderer.textWidth(getLeft()), y, hud.secondaryColorSetting.get());
-                renderer.text(getRight(), x + textWidth - renderer.textWidth(getRight()), y, hud.primaryColorSetting.get());
+                renderer.text(new Section[] {
+                        new Section(getLeft(), hud.primaryColorSetting.get()),
+                        new Section(getCenter(), hud.secondaryColorSetting.get()),
+                        new Section(getRight(), hud.primaryColorSetting.get())
+                }, box.getX(), box.getY());
             }
             case Icon -> box.setSize(renderer.textHeight() * scaleSetting.get(),  renderer.textHeight() * scaleSetting.get());
             default -> {
                 box.setSize(renderer.textHeight() + 2 + textWidth, renderer.textHeight());
 
-                double x = box.getX();
-                double y = box.getY();
-
-                renderer.text(getLeft(), x + 2 + renderer.textHeight(), y + 2, hud.primaryColorSetting.get());
-                renderer.text(getCenter(), x + 2 + renderer.textHeight() + renderer.textWidth(getLeft()), y + 2, hud.secondaryColorSetting.get());
-                renderer.text(getRight(), x + 2 + renderer.textHeight() + textWidth - renderer.textWidth(getRight()), y + 2, hud.primaryColorSetting.get());
+                renderer.text(new Section[] {
+                        new Section(getLeft(), hud.primaryColorSetting.get()),
+                        new Section(getCenter(), hud.secondaryColorSetting.get()),
+                        new Section(getRight(), hud.primaryColorSetting.get())
+                }, box.getX() + 2 + renderer.textHeight(), box.getY() + 2);
             }
         }
 

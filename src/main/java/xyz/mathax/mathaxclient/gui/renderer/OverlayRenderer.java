@@ -1,6 +1,7 @@
 package xyz.mathax.mathaxclient.gui.renderer;
 
 import net.minecraft.client.util.math.MatrixStack;
+import xyz.mathax.mathaxclient.renderer.text.Section;
 import xyz.mathax.mathaxclient.renderer.text.TextRenderer;
 import xyz.mathax.mathaxclient.systems.Systems;
 import xyz.mathax.mathaxclient.systems.themes.Themes;
@@ -52,6 +53,10 @@ public class OverlayRenderer {
 
     public void text(String text, double x, double y, Color color) {
         text(text, x, y, color, shadow);
+    }
+
+    public void text(Section[] sections, double x, double y) {
+        textRenderer.render(sections, x, y);
     }
 
     public double textWidth(String text, boolean shadow) {

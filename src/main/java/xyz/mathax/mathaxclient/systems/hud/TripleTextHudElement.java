@@ -50,7 +50,6 @@ public abstract class TripleTextHudElement extends HudElement {
 
         double x = box.getX();
         double y = box.getY();
-
         renderer.text(left, x, y, leftColor);
         renderer.text(center, x + leftWidth, y, centerColor);
         renderer.text(right, x + leftWidth + centerWidth, y, rightColor);

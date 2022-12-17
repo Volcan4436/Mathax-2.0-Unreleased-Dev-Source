@@ -134,7 +134,7 @@ public class AutoCity extends Module {
     );
 
     public AutoCity(Category category) {
-        super(category, "auto-city", "Automatically mine blocks next to someone's feet.");
+        super(category, "Auto City", "Automatically mine blocks next to someone's feet.");
     }
 
     @Override

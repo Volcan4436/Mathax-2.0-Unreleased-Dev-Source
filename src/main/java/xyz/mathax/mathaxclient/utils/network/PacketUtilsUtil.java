@@ -151,10 +151,16 @@ public class PacketUtilsUtil {
     }
 """;
 
-    //@PostInit
+    public static void main(String[] args) {
+        try {
+            init();
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        }
+    }
+
     public static void init() throws IOException {
-        // Generate PacketUtils.java
-        File file = new File(System.getProperty("user.dir") + "/PacketUtils.java");
+        File file = new File("src/main/java/" + PacketUtilsUtil.class.getPackageName().replace('.', '/') + "/PacketUtils.java");
         if (!file.exists()) {
             file.getParentFile().mkdirs();
             file.createNewFile();

@@ -110,6 +110,12 @@ shadowJar {
     configurations = [
         project.configurations.shadow
     ]
+
+    dependencies {
+        exclude {
+            it.moduleGroup == "org.slf4j"
+        }
+    }
 }
 
 processResources {

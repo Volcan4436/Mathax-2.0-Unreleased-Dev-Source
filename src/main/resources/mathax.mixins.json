@@ -32,7 +32,6 @@
     "BrewingStandScreenMixin",
     "BufferBuilderAccessor",
     "BufferRendererAccessor",
-    "CactusBlockMixin",
     "CameraMixin",
     "CapabilityTrackerMixin",
     "ChatHudAccessor",
@@ -79,7 +78,6 @@
     "FireworkRocketEntityMixin",
     "FireworksSparkParticleMixin",
     "FireworksSparkParticleSubMixin",
-    "FluidBlockMixin",
     "FluidRendererMixin",
     "FoliageColorsMixin",
     "GameOptionsMixin",
@@ -163,6 +161,7 @@
     "defaultRequire": 1
   },
   "mixins": [
-    "AbstractHorseEntityMixin"
+    "AbstractHorseEntityMixin",
+    "BlockCollisionSpliteratorMixin"
   ]
 }
