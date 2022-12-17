@@ -40,7 +40,7 @@ public class BetterTab extends Module {
     private final Setting<SettingColor> selfColorSetting = generalSettings.add(new ColorSetting.Builder()
             .name("Self color")
             .description("The color to highlight your name with.")
-            .defaultValue(new SettingColor(250, 130, 30))
+            .defaultValue(new SettingColor(0, 165, 255))
             .visible(selfSetting::get)
             .build()
     );
