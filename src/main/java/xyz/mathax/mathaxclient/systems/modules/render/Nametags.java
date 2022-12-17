@@ -6,14 +6,15 @@ import xyz.mathax.mathaxclient.events.render.Render2DEvent;
 import xyz.mathax.mathaxclient.events.world.TickEvent;
 import xyz.mathax.mathaxclient.renderer.GL;
 import xyz.mathax.mathaxclient.renderer.Renderer2D;
+import xyz.mathax.mathaxclient.renderer.text.Section;
 import xyz.mathax.mathaxclient.renderer.text.TextRenderer;
 import xyz.mathax.mathaxclient.settings.*;
-import xyz.mathax.mathaxclient.systems.Systems;
 import xyz.mathax.mathaxclient.systems.enemies.Enemies;
 import xyz.mathax.mathaxclient.systems.friends.Friends;
 import xyz.mathax.mathaxclient.systems.modules.Category;
 import xyz.mathax.mathaxclient.systems.modules.Module;
-import xyz.mathax.mathaxclient.systems.themes.Themes;
+import xyz.mathax.mathaxclient.systems.modules.Modules;
+import xyz.mathax.mathaxclient.systems.modules.misc.NameProtect;
 import xyz.mathax.mathaxclient.utils.Utils;
 import xyz.mathax.mathaxclient.utils.entity.EntityUtils;
 import xyz.mathax.mathaxclient.utils.misc.MatHaxIdentifier;
@@ -310,26 +311,23 @@ public class Nametags extends Module {
     @EventHandler
     private void onRender2D(Render2DEvent event) {
         int count = getRenderCount();
-        boolean shadow = Systems.get(Themes.class).getTheme().fontShadow();
         for (int i = count - 1; i > -1; i--) {
             Entity entity = entityList.get(i);
-
             Utils.set(pos, entity, event.tickDelta);
             pos.add(0, getHeight(entity), 0);
 
             EntityType<?> type = entity.getType();
-
             if (NametagUtils.to2D(pos, scaleSetting.get())) {
                 if (type == EntityType.PLAYER) {
-                    renderNametagPlayer((PlayerEntity) entity, shadow);
+                    renderNametagPlayer((PlayerEntity) entity);
                 } else if (type == EntityType.ITEM) {
-                    renderNametagItem(((ItemEntity) entity).getStack(), shadow);
+                    renderNametagItem(((ItemEntity) entity).getStack());
                 } else if (type == EntityType.ITEM_FRAME) {
-                    renderNametagItem(((ItemFrameEntity) entity).getHeldItemStack(), shadow);
+                    renderNametagItem(((ItemFrameEntity) entity).getHeldItemStack());
                 } else if (type == EntityType.TNT) {
-                    renderTntNametag((TntEntity) entity, shadow);
+                    renderTntNametag((TntEntity) entity);
                 } else if (entity instanceof LivingEntity) {
-                    renderGenericNametag((LivingEntity) entity, shadow);
+                    renderGenericNametag((LivingEntity) entity);
                 }
             }
         }
@@ -338,7 +336,6 @@ public class Nametags extends Module {
     private int getRenderCount() {
         int count = cullingSetting.get() ? maxCullingCountSetting.get() : entityList.size();
         count = MathHelper.clamp(count, 0, entityList.size());
-
         return count;
     }
 
@@ -358,7 +355,7 @@ public class Nametags extends Module {
         return height;
     }
 
-    private void renderNametagPlayer(PlayerEntity player, boolean shadow) {
+    private void renderNametagPlayer(PlayerEntity player) {
         if (!selfSetting.get() && player == mc.player) {
             return;
         } else if (ignoreFriendsSetting.get() && Friends.get().contains(player)) {
@@ -368,6 +365,7 @@ public class Nametags extends Module {
         }
 
         TextRenderer text = TextRenderer.get();
+
         NametagUtils.begin(pos);
 
         // TODO: Show MatHax icon when the player is online on the API.
@@ -394,7 +392,7 @@ public class Nametags extends Module {
                 nameColor = selfColorSetting.get();
             }
 
-            name = /*Modules.get().get(NameProtect.class).getName(*/player.getEntityName()/*)*/;
+            name = Modules.get().get(NameProtect.class).getName(player.getEntityName());
         } else {
             name = player.getEntityName();
         }
@@ -432,12 +430,12 @@ public class Nametags extends Module {
         String popText = " [" + TotemPopUtils.getPops(player.getGameProfile().getId()) + "]";
 
         // Calc widths
-        double gmWidth = text.getWidth(gmText, shadow);
-        double nameWidth = text.getWidth(name, shadow);
-        double healthWidth = text.getWidth(healthText, shadow);
-        double pingWidth = text.getWidth(pingText, shadow);
-        double distanceWidth = text.getWidth(distanceText, shadow);
-        double popWidth = text.getWidth(popText, shadow);
+        double gmWidth = text.getWidth(gmText);
+        double nameWidth = text.getWidth(name);
+        double healthWidth = text.getWidth(healthText);
+        double pingWidth = text.getWidth(pingText);
+        double distanceWidth = text.getWidth(distanceText);
+        double popWidth = text.getWidth(popText);
         double width = nameWidth + healthWidth;
 
         if (showMatHax) {
@@ -461,9 +459,9 @@ public class Nametags extends Module {
         }
 
         double widthHalf = width / 2;
-        double heightDown = text.getHeight(shadow);
+        double heightDown = text.getHeight();
 
-        drawBg(-widthHalf, -heightDown, width, heightDown);
+        drawBackground(-widthHalf, -heightDown, width, heightDown);
 
         // Render texts
         text.beginBig();
@@ -474,24 +472,28 @@ public class Nametags extends Module {
             hX += text.getHeight();
         }
 
+        List<Section> sections = new ArrayList<>();
         if (displayGameModeSetting.get()) {
-            hX = text.render(gmText, hX, hY, Color.YELLOW, shadow);
+            sections.add(new Section(gmText, Color.YELLOW));
         }
 
-        hX = text.render(name, hX, hY, nameColor, shadow);
+        sections.add(new Section(name, nameColor));
 
-        hX = text.render(healthText, hX, hY, healthColor, shadow);
+        sections.add(new Section(healthText, healthColor));
+
         if (displayPingSetting.get()) {
-            hX = text.render(pingText, hX, hY, Color.BLUE, shadow);
+            sections.add(new Section(pingText, Color.BLUE));
         }
 
         if (displayDistanceSetting.get()) {
-            hX = text.render(distanceText, hX, hY, Color.GRAY, shadow);
+            sections.add(new Section(distanceText, Color.LIGHT_GRAY));
         }
 
         if (displayTotemPopsSetting.get()) {
-            text.render(popText, hX, hY, Color.ORANGE, shadow);
+            sections.add(new Section(popText, Color.ORANGE));
         }
+
+        text.render(sections, hX, hY);
 
         text.end();
 
@@ -521,7 +523,7 @@ public class Nametags extends Module {
 
                     for (Enchantment enchantment : enchantmentsToShowScale.keySet()) {
                         String enchantName = Utils.getEnchantSimpleName(enchantment, enchantLengthSetting.get()) + " " + enchantmentsToShowScale.get(enchantment);
-                        itemWidths[i] = Math.max(itemWidths[i], (text.getWidth(enchantName, shadow) / 2));
+                        itemWidths[i] = Math.max(itemWidths[i], (text.getWidth(enchantName) / 2));
                     }
 
                     maxEnchantCount = Math.max(maxEnchantCount, enchantmentsToShowScale.size());
@@ -530,18 +532,15 @@ public class Nametags extends Module {
 
             double itemsHeight = (hasItems ? 32 : 0);
             double itemWidthTotal = 0;
-            for (double w : itemWidths) {
-                itemWidthTotal += w;
+            for (double itemWidth : itemWidths) {
+                itemWidthTotal += itemWidth;
             }
 
             double itemWidthHalf = itemWidthTotal / 2;
-
             double y = -heightDown - 7 - itemsHeight;
             double x = -itemWidthHalf;
-
             for (int i = 0; i < 6; i++) {
                 ItemStack stack = getItem(player, i);
-
                 RenderUtils.drawItem(stack, (int) x, (int) y, 2, true);
 
                 if (maxEnchantCount > 0 && displayItemEnchantsSetting.get()) {
@@ -559,8 +558,8 @@ public class Nametags extends Module {
                     double enchantY = 0;
 
                     double addY = switch (enchantPositionSetting.get()) {
-                        case Above -> -((enchantmentsToShow.size() + 1) * text.getHeight(shadow));
-                        case On_Top -> (itemsHeight - enchantmentsToShow.size() * text.getHeight(shadow)) / 2;
+                        case Above -> -((enchantmentsToShow.size() + 1) * text.getHeight());
+                        case On_Top -> (itemsHeight - enchantmentsToShow.size() * text.getHeight()) / 2;
                     };
 
                     double enchantX;
@@ -573,13 +572,13 @@ public class Nametags extends Module {
                         }
 
                         enchantX = switch (enchantPositionSetting.get()) {
-                            case Above -> x + (aW / 2) - (text.getWidth(enchantName, shadow) / 2);
-                            case On_Top -> x + (aW - text.getWidth(enchantName, shadow)) / 2;
+                            case Above -> x + (aW / 2) - (text.getWidth(enchantName) / 2);
+                            case On_Top -> x + (aW - text.getWidth(enchantName)) / 2;
                         };
 
-                        text.render(enchantName, enchantX, y + addY + enchantY, enchantColor, shadow);
+                        text.render(enchantName, enchantX, y + addY + enchantY, enchantColor);
 
-                        enchantY += text.getHeight(shadow);
+                        enchantY += text.getHeight();
                     }
 
                     text.end();
@@ -599,50 +598,47 @@ public class Nametags extends Module {
             }
 
             Renderer2D.TEXTURE.begin();
-            double textHeight = text.getHeight() / 2;
-            Renderer2D.TEXTURE.texturedQuad(-width / 2 + 2, -textHeight * 2, 16, 16, Color.WHITE);
+            Renderer2D.TEXTURE.texturedQuad(-width / 2 + 2, -text.getHeight(), 16, 16, Color.WHITE);
             Renderer2D.TEXTURE.render(null);
         }
 
         NametagUtils.end();
     }
 
-    private void renderNametagItem(ItemStack stack, boolean shadow) {
+    private void renderNametagItem(ItemStack stack) {
         TextRenderer text = TextRenderer.get();
+
         NametagUtils.begin(pos);
 
         String name = stack.getName().getString();
         String count = " x" + stack.getCount();
-
-        double nameWidth = text.getWidth(name, shadow);
-        double countWidth = text.getWidth(count, shadow);
-        double heightDown = text.getHeight(shadow);
-
+        double nameWidth = text.getWidth(name);
+        double countWidth = text.getWidth(count);
+        double heightDown = text.getHeight();
         double width = nameWidth;
         if (itemCountSetting.get()) {
             width += countWidth;
         }
 
         double widthHalf = width / 2;
-
-        drawBg(-widthHalf, -heightDown, width, heightDown);
+        drawBackground(-widthHalf, -heightDown, width, heightDown);
 
         text.beginBig();
 
-        double hX = -widthHalf;
-        double hY = -heightDown;
-
-        hX = text.render(name, hX, hY, nameColorSetting.get(), shadow);
+        List<Section> sections = new ArrayList<>();
+        sections.add(new Section(name, nameColorSetting.get()));
         if (itemCountSetting.get()) {
-            text.render(count, hX, hY, Color.YELLOW, shadow);
+            sections.add(new Section(count, Color.YELLOW));
         }
+
+        text.render(sections, -widthHalf, -heightDown);
 
         text.end();
 
         NametagUtils.end();
     }
 
-    private void renderGenericNametag(LivingEntity entity, boolean shadow) {
+    private void renderGenericNametag(LivingEntity entity) {
         TextRenderer text = TextRenderer.get();
         NametagUtils.begin(pos);
 
@@ -664,47 +660,42 @@ public class Nametags extends Module {
         }
 
         String healthText = String.valueOf(health);
-
-        double nameWidth = text.getWidth(nameText, shadow);
-        double healthWidth = text.getWidth(healthText, shadow);
-        double heightDown = text.getHeight(shadow);
-
+        double nameWidth = text.getWidth(nameText);
+        double healthWidth = text.getWidth(healthText);
+        double heightDown = text.getHeight();
         double width = nameWidth + healthWidth;
         double widthHalf = width / 2;
-
-        drawBg(-widthHalf, -heightDown, width, heightDown);
+        drawBackground(-widthHalf, -heightDown, width, heightDown);
 
         text.beginBig();
 
-        double hX = -widthHalf;
-        double hY = -heightDown;
+        List<Section> sections = new ArrayList<>();
+        sections.add(new Section(nameText, nameColorSetting.get()));
+        sections.add(new Section(healthText, healthColor));
+        text.render(sections, -widthHalf, -heightDown);
 
-        hX = text.render(nameText, hX, hY, nameColorSetting.get(), shadow);
-        text.render(healthText, hX, hY, healthColor, shadow);
         text.end();
 
         NametagUtils.end();
     }
 
-    private void renderTntNametag(TntEntity entity, boolean shadow) {
+    private void renderTntNametag(TntEntity entity) {
         TextRenderer text = TextRenderer.get();
+
         NametagUtils.begin(pos);
 
         String fuseText = ticksToTime(entity.getFuse());
-
-        double width = text.getWidth(fuseText, shadow);
-        double heightDown = text.getHeight(shadow);
-
+        double width = text.getWidth(fuseText);
+        double heightDown = text.getHeight();
         double widthHalf = width / 2;
-
-        drawBg(-widthHalf, -heightDown, width, heightDown);
+        drawBackground(-widthHalf, -heightDown, width, heightDown);
 
         text.beginBig();
 
         double hX = -widthHalf;
         double hY = -heightDown;
+        text.render(fuseText, hX, hY, nameColorSetting.get());
 
-        text.render(fuseText, hX, hY, nameColorSetting.get(), shadow);
         text.end();
 
         NametagUtils.end();
@@ -722,7 +713,7 @@ public class Nametags extends Module {
         };
     }
 
-    private void drawBg(double x, double y, double width, double height) {
+    private void drawBackground(double x, double y, double width, double height) {
         Renderer2D.COLOR.begin();
         Renderer2D.COLOR.quad(x - 1, y - 1, width + 2, height + 2, backgroundSetting.get());
         Renderer2D.COLOR.render(null);

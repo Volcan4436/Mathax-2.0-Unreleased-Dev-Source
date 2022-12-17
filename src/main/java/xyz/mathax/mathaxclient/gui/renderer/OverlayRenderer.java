@@ -55,7 +55,7 @@ public class OverlayRenderer {
         text(text, x, y, color, shadow);
     }
 
-    public void text(Section[] sections, double x, double y) {
+    public void text(List<Section> sections, double x, double y) {
         textRenderer.render(sections, x, y);
     }
 

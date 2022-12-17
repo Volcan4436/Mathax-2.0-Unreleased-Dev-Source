@@ -68,14 +68,16 @@ public class MatHax implements ClientModInitializer {
 
     public static final Logger LOG = LoggerFactory.getLogger(NAME);
 
+    private boolean wasWidgetScreen, wasHudHiddenRoot;
+
     public static List<String> getSplashes() {
         String username = MinecraftClient.getInstance().getSession().getUsername();
         return Arrays.asList(
                 // SPLASHES
-                Formatting.RED + "MatHax on top!",
+                Formatting.RED + NAME + " on top!",
                 Formatting.RED + "Matejko06" + Formatting.GRAY + " based god",
-                Formatting.RED + "MatHaxClient.xyz",
-                Formatting.RED + "MatHaxClient.xyz/Discord",
+                Formatting.RED + NAME + "Client.xyz",
+                Formatting.RED + NAME + "Client.xyz/Discord",
                 Formatting.RED + Versions.getStylized(),
                 Formatting.RED + Versions.getMinecraft(),
 
@@ -223,8 +225,6 @@ public class MatHax implements ClientModInitializer {
     }
 
     // Hide HUD
-
-    private boolean wasWidgetScreen, wasHudHiddenRoot;
 
     @EventHandler(priority = EventPriority.LOWEST)
     private void onOpenScreen(OpenScreenEvent event) {

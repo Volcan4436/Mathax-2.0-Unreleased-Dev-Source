@@ -18,14 +18,15 @@ public class FontFaceSetting extends Setting<FontFace> {
     @Override
     protected FontFace parseImpl(String str) {
         String[] split = str.replace(" ", "").split("-");
-        if (split.length != 2) return null;
+        if (split.length != 2) {
+            return null;
+        }
 
         for (FontFamily family : Fonts.FONT_FAMILIES) {
             if (family.getName().replace(" ", "").equals(split[0])) {
                 try {
                     return family.get(FontInfo.Type.valueOf(split[1]));
-                }
-                catch (IllegalArgumentException ignored) {
+                } catch (IllegalArgumentException ignored) {
                     return null;
                 }
             }
@@ -36,18 +37,21 @@ public class FontFaceSetting extends Setting<FontFace> {
 
     @Override
     public List<String> getSuggestions() {
-        return List.of("JetBrainsMono-Regular", "Arial-Bold");
+        return List.of("Comfortaa-Regular", "Arial-Bold");
     }
 
     @Override
     protected boolean isValueValid(FontFace value) {
-        if (value == null) return false;
+        if (value == null) {
+            return false;
+        }
 
         for (FontFamily fontFamily : Fonts.FONT_FAMILIES) {
             if (fontFamily.hasType(value.info.type())) {
                 return true;
             }
         }
+
         return false;
     }
 

@@ -136,7 +136,7 @@ public class Breadcrumbs extends Module {
 
     private void populateSectionManagers() {
         sectionManagers.clear();
-        
+
         for (Entity entity : getWorldEntitiesFiltered()) {
             sectionManagers.put(entity, new SectionManager(entity));
         }
@@ -181,9 +181,10 @@ public class Breadcrumbs extends Module {
         }
     }
 
-    private class SectionManager{
+    private class SectionManager {
         private final Pool<Section> sectionPool;
         private final Queue<Section> sections = new ArrayDeque<>();
+        
         private Section section;
 
         public SectionManager(Entity entity){

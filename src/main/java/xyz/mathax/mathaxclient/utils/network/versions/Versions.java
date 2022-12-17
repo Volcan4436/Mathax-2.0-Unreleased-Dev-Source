@@ -55,14 +55,15 @@ public class Versions {
     }
 
     public static void checkForUpdate() {
+        latestVersion = null;
+        updateAvailable = false;
+
         JSONObject json = Api.getVersions();
         if (json == null) {
             return;
         }
 
-        if (!json.has("versions") || !JSONUtils.isValidJSONArray(json, "versions")) {
-            latestVersion = null;
-        } else {
+        if (json.has("versions") && JSONUtils.isValidJSONArray(json, "versions"))  {
             for (Object object : json.getJSONArray("versions")) {
                 if (!(object instanceof JSONObject versionJson)) {
                     continue;
@@ -76,8 +77,6 @@ public class Versions {
 
         if (latestVersion != null) {
             updateAvailable = latestVersion.isHigherThan(version);
-        } else {
-            updateAvailable = false;
         }
     }
 

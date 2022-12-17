@@ -8,6 +8,7 @@ import org.lwjgl.BufferUtils;
 
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
+import java.util.List;
 
 public class CustomTextRenderer implements TextRenderer {
     public static final Color SHADOW_COLOR = new Color(60, 60, 60, 180);
@@ -153,7 +154,7 @@ public class CustomTextRenderer implements TextRenderer {
     }
 
     @Override
-    public double render(Section[] sections, double x, double y) {
+    public double render(List<Section> sections, double x, double y) {
         boolean wasBuilding = building;
         if (!wasBuilding) {
             begin();

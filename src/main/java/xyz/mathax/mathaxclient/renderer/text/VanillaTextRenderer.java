@@ -9,6 +9,8 @@ import net.minecraft.client.util.math.MatrixStack;
 import org.joml.Matrix4f;
 import xyz.mathax.mathaxclient.MatHax;
 
+import java.util.List;
+
 public class VanillaTextRenderer implements TextRenderer {
     public static final VanillaTextRenderer INSTANCE = new VanillaTextRenderer();
 
@@ -130,7 +132,7 @@ public class VanillaTextRenderer implements TextRenderer {
     }
 
     @Override
-    public double render(Section[] sections, double x, double y) {
+    public double render(List<Section> sections, double x, double y) {
         boolean wasBuilding = building;
         if (!wasBuilding) {
             begin();

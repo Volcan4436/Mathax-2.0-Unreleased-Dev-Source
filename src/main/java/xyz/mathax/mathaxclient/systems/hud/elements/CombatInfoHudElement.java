@@ -3,6 +3,7 @@ package xyz.mathax.mathaxclient.systems.hud.elements;
 import com.mojang.blaze3d.systems.RenderSystem;
 import xyz.mathax.mathaxclient.gui.renderer.OverlayRenderer;
 import xyz.mathax.mathaxclient.renderer.Renderer2D;
+import xyz.mathax.mathaxclient.renderer.text.Section;
 import xyz.mathax.mathaxclient.renderer.text.TextRenderer;
 import xyz.mathax.mathaxclient.systems.enemies.Enemies;
 import xyz.mathax.mathaxclient.systems.friends.Friends;
@@ -259,10 +260,8 @@ public class CombatInfoHudElement extends HudElement {
                 statusColor = Enemies.get().colorSetting.get();
             } else {
                 boolean naked = true;
-
                 for (int position = 3; position >= 0; position--) {
                     ItemStack itemStack = getItem(position);
-
                     if (!itemStack.isEmpty()) {
                         naked = false;
                     }
@@ -273,10 +272,8 @@ public class CombatInfoHudElement extends HudElement {
                     statusColor = Color.GREEN;
                 } else {
                     boolean threat = false;
-
                     for (int position = 5; position >= 0; position--) {
                         ItemStack itemStack = getItem(position);
-
                         if (itemStack.getItem() instanceof SwordItem || itemStack.getItem() == Items.END_CRYSTAL || itemStack.getItem() == Items.RESPAWN_ANCHOR || itemStack.getItem() instanceof BedItem) {
                             threat = true;
                         }
@@ -325,7 +322,6 @@ public class CombatInfoHudElement extends HudElement {
 
             // Drawing armor
             MatrixStack matrixStack = RenderSystem.getModelViewStack();
-
             matrixStack.push();
             matrixStack.scale(scaleSetting.get().floatValue(), scaleSetting.get().floatValue(), 1);
 

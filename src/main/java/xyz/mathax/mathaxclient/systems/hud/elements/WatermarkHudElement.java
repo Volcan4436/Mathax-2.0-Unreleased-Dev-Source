@@ -15,6 +15,9 @@ import xyz.mathax.mathaxclient.utils.network.versions.Versions;
 import xyz.mathax.mathaxclient.utils.render.color.Color;
 import net.minecraft.util.Identifier;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class WatermarkHudElement extends TripleTextHudElement {
     private static final Identifier MATHAX_LOGO = new MatHaxIdentifier("icons/1080.png");
 
@@ -87,21 +90,13 @@ public class WatermarkHudElement extends TripleTextHudElement {
             case Text -> {
                 box.setSize(textWidth, renderer.textHeight());
 
-                renderer.text(new Section[] {
-                        new Section(getLeft(), hud.primaryColorSetting.get()),
-                        new Section(getCenter(), hud.secondaryColorSetting.get()),
-                        new Section(getRight(), hud.primaryColorSetting.get())
-                }, box.getX(), box.getY());
+                renderer.text(getText(), box.getX(), box.getY());
             }
             case Icon -> box.setSize(renderer.textHeight() * scaleSetting.get(),  renderer.textHeight() * scaleSetting.get());
             default -> {
                 box.setSize(renderer.textHeight() + 2 + textWidth, renderer.textHeight());
 
-                renderer.text(new Section[] {
-                        new Section(getLeft(), hud.primaryColorSetting.get()),
-                        new Section(getCenter(), hud.secondaryColorSetting.get()),
-                        new Section(getRight(), hud.primaryColorSetting.get())
-                }, box.getX() + 2 + renderer.textHeight(), box.getY() + 2);
+                renderer.text(getText(), box.getX() + 2 + renderer.textHeight(), box.getY() + 2);
             }
         }
 
@@ -109,6 +104,14 @@ public class WatermarkHudElement extends TripleTextHudElement {
         Renderer2D.TEXTURE.begin();
         Renderer2D.TEXTURE.texturedQuad(box.getX(), box.getY(), box.width - (modeSetting.get() != Mode.Text ? textWidth : 0), box.height, Color.WHITE);
         Renderer2D.TEXTURE.render(null);
+    }
+
+    public List<Section> getText() {
+        List<Section> sections = new ArrayList<>();
+        sections.add(new Section(getLeft(), hud.primaryColorSetting.get()));
+        sections.add(new Section(getCenter(), hud.secondaryColorSetting.get()));
+        sections.add(new Section(getRight(), hud.primaryColorSetting.get()));
+        return sections;
     }
 
     public enum Mode {

@@ -5,6 +5,8 @@ import xyz.mathax.mathaxclient.systems.themes.Themes;
 import xyz.mathax.mathaxclient.utils.render.color.Color;
 import net.minecraft.client.util.math.MatrixStack;
 
+import java.util.List;
+
 public interface TextRenderer {
     static TextRenderer get(TextRendererType rendererType) {
         switch (rendererType) {
@@ -76,7 +78,7 @@ public interface TextRenderer {
 
     double render(String text, double x, double y, Color color, boolean shadow);
 
-    double render(Section[] sections, double x, double y);
+    double render(List<Section> sections, double x, double y);
 
     boolean isBuilding();
 

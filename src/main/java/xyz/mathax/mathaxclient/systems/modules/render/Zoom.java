@@ -69,6 +69,7 @@ public class Zoom extends Module {
 
     public Zoom(Category category) {
         super(category, "Zoom", "Zooms your view.");
+
         autoSubscribe = false;
     }
 
@@ -125,6 +126,7 @@ public class Zoom extends Module {
     private void onRender3D(Render3DEvent event) {
         if (!smoothSetting.get()) {
             time = isEnabled() ? 1 : 0;
+
             return;
         }
 
@@ -149,8 +151,7 @@ public class Zoom extends Module {
     }
 
     private double value() {
-        double delta = time < 0.5 ? 4 * time * time * time : 1 - Math.pow(-2 * time + 2, 3) / 2; // Ease in out cubic
-        return MathHelper.lerp(delta, 1, value);
+        return MathHelper.lerp(time < 0.5 ? 4 * time * time * time : 1 - Math.pow(-2 * time + 2, 3) / 2, 1, value);
     }
 
     public boolean renderHands() {

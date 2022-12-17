@@ -4,6 +4,9 @@ import xyz.mathax.mathaxclient.gui.renderer.OverlayRenderer;
 import xyz.mathax.mathaxclient.renderer.text.Section;
 import xyz.mathax.mathaxclient.utils.render.color.Color;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class DoubleTextHudElement extends HudElement {
     protected Color leftColor;
     protected Color rightColor;
@@ -43,10 +46,10 @@ public abstract class DoubleTextHudElement extends HudElement {
             return;
         }
 
-        renderer.text(new Section[] {
-                new Section(left, leftColor),
-                new Section(right, rightColor)
-        }, box.getX(), box.getY());
+        List<Section> sections = new ArrayList<>();
+        sections.add(new Section(left, leftColor));
+        sections.add(new Section(right, rightColor));
+        renderer.text(sections, box.getX(), box.getY());
     }
 
     protected void setLeft(String left) {
