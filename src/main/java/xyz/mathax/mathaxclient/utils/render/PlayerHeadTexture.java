@@ -74,7 +74,6 @@ public class PlayerHeadTexture extends Texture {
                 IntBuffer width = stack.mallocInt(1);
                 IntBuffer height = stack.mallocInt(1);
                 IntBuffer comp = stack.mallocInt(1);
-
                 ByteBuffer image = STBImage.stbi_load_from_memory(data, width, height, comp, 3);
                 upload(image);
                 STBImage.stbi_image_free(image);

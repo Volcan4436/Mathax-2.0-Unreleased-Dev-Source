@@ -64,7 +64,7 @@ public class Account {
 
                     if (capeJson.has("selected") && capeJson.getBoolean("selected")) {
                         selectedCape = cape;
-                        
+
                         minecraftAccounts.forEach(uuid -> Capes.selectPlayerCape(uuid, selectedCape));
                     }
                 }

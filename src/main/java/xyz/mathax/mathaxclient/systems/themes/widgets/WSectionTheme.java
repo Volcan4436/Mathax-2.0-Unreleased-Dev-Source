@@ -44,7 +44,7 @@ public class WSectionTheme extends WSection {
     protected static class WHeaderTriangle extends WTriangle implements WidgetTheme {
         @Override
         protected void onRender(GuiRenderer renderer, double mouseX, double mouseY, double delta) {
-            renderer.rotatedQuad(x, y, width, height, rotation, GuiRenderer.TRIANGLE, theme().textColorSetting.get());
+            renderer.rotatedQuad(GuiRenderer.TRIANGLE, theme().textColorSetting.get(), x, y, width, height, rotation);
         }
     }
 }

@@ -14,7 +14,6 @@ public abstract class WFavorite extends WPressable {
     protected void onCalculateSize() {
         double pad = pad();
         double textHeight = theme.textHeight();
-
         width = pad + textHeight + pad;
         height = pad + textHeight + pad;
     }
@@ -29,7 +28,7 @@ public abstract class WFavorite extends WPressable {
         double pad = pad();
         double textHeight = theme.textHeight();
 
-        renderer.quad(x + pad, y + pad, textHeight, textHeight, checked ? GuiRenderer.FAVORITE_YES : GuiRenderer.FAVORITE_NO, getColor());
+        renderer.quad(checked ? GuiRenderer.FAVORITE_YES : GuiRenderer.FAVORITE_NO, getColor(), x + pad, y + pad, textHeight, textHeight);
     }
 
     protected abstract Color getColor();

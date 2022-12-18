@@ -24,7 +24,6 @@ public class BlockListSettingScreen extends LeftRightListSettingScreen<Block> {
     @Override
     protected boolean includeValue(Block value) {
         Predicate<Block> filter = ((BlockListSetting) setting).filter;
-
         if (filter == null) {
             return value != Blocks.AIR;
         }

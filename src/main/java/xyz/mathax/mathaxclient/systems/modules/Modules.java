@@ -13,6 +13,7 @@ import xyz.mathax.mathaxclient.events.mathax.EnabledModulesChangedEvent;
 import xyz.mathax.mathaxclient.events.mathax.KeyEvent;
 import xyz.mathax.mathaxclient.events.mathax.ModuleBindChangedEvent;
 import xyz.mathax.mathaxclient.events.mathax.MouseButtonEvent;
+import xyz.mathax.mathaxclient.init.PostInit;
 import xyz.mathax.mathaxclient.settings.Setting;
 import xyz.mathax.mathaxclient.settings.SettingGroup;
 import xyz.mathax.mathaxclient.systems.System;
@@ -57,13 +58,13 @@ public class Modules extends System<Modules> {
 
     private static final List<Category> CATEGORIES = new ArrayList<>();
 
-    private final Map<Class<? extends Module>, Module> moduleInstances = new HashMap<>();
-    private final Map<Category, List<Module>> groups = new HashMap<>();
+    private static final Map<Class<? extends Module>, Module> moduleInstances = new HashMap<>();
+    private static final Map<Category, List<Module>> groups = new HashMap<>();
 
-    private final List<Module> modules = new ArrayList<>();
-    private final List<Module> enabled = new ArrayList<>();
+    private static final List<Module> modules = new ArrayList<>();
+    private static final List<Module> enabled = new ArrayList<>();
 
-    private Module moduleToBind;
+    private static Module moduleToBind;
 
     public Modules() {
         super("Modules", null);
@@ -249,7 +250,7 @@ public class Modules extends System<Modules> {
         module.settings.registerColorSettings(module);
     }
 
-    public void sortModules() {
+    public static void sortModules() {
         for (List<Module> modules : groups.values()) {
             modules.sort(Comparator.comparing(module -> module.name));
         }

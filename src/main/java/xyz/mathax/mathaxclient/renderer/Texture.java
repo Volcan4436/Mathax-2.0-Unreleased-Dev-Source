@@ -10,8 +10,10 @@ import static org.lwjgl.opengl.GL11C.*;
 import static org.lwjgl.opengl.GL12C.GL_CLAMP_TO_EDGE;
 
 public class Texture {
-    public int width, height;
     private int id;
+
+    public int width, height;
+
     private boolean valid;
 
     public Texture(int width, int height, byte[] data, Format format, Filter filterMin, Filter filterMag) {

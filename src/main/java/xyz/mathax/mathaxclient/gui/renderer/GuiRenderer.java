@@ -1,5 +1,6 @@
 package xyz.mathax.mathaxclient.gui.renderer;
 
+import net.minecraft.util.Pair;
 import xyz.mathax.mathaxclient.gui.renderer.operations.GuiRenderOperation;
 import xyz.mathax.mathaxclient.init.PostInit;
 import xyz.mathax.mathaxclient.systems.themes.Theme;
@@ -18,9 +19,7 @@ import xyz.mathax.mathaxclient.utils.render.color.Color;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 import static xyz.mathax.mathaxclient.utils.Utils.getWindowHeight;
 import static xyz.mathax.mathaxclient.utils.Utils.getWindowWidth;
@@ -36,6 +35,9 @@ public class GuiRenderer {
     public static GuiTexture EDIT;
     public static GuiTexture RESET;
     public static GuiTexture FAVORITE_NO, FAVORITE_YES;
+    public static GuiTexture SEARCH, FAVORITES;
+
+    public static List<Pair<String, GuiTexture>> CATEGORIES = new ArrayList<>();
 
     public Theme theme;
 
@@ -56,8 +58,18 @@ public class GuiRenderer {
 
     private MatrixStack matrixStack;
 
-    public static GuiTexture addTexture(Identifier id) {
-        return TEXTURE_PACKER.add(id);
+    public static GuiTexture addTexture(Identifier identifier, String categoryName) {
+        GuiTexture guiTexture = TEXTURE_PACKER.add(identifier);
+        if (categoryName != null && !categoryName.isBlank()) {
+            CATEGORIES.add(new Pair<>(categoryName, guiTexture));
+            TEXTURE = TEXTURE_PACKER.pack();
+        }
+
+        return guiTexture;
+    }
+
+    public static GuiTexture addTexture(Identifier identifier) {
+        return addTexture(identifier, "");
     }
 
     @PostInit
@@ -68,6 +80,8 @@ public class GuiRenderer {
         RESET = addTexture(new MatHaxIdentifier("textures/icons/gui/reset.png"));
         FAVORITE_NO = addTexture(new MatHaxIdentifier("textures/icons/gui/favorite/no.png"));
         FAVORITE_YES = addTexture(new MatHaxIdentifier("textures/icons/gui/favorite/yes.png"));
+        SEARCH = addTexture(new MatHaxIdentifier("textures/icons/gui/category/search.png"));
+        FAVORITES = addTexture(new MatHaxIdentifier("textures/icons/gui/category/favorites.png"));
 
         TEXTURE = TEXTURE_PACKER.pack();
     }
@@ -150,14 +164,16 @@ public class GuiRenderer {
         }
 
         scissorStack.push(scissorPool.get().set(x, y, width, height));
+
         beginRender();
     }
 
     public void scissorEnd() {
         Scissor scissor = scissorStack.pop();
-
         scissor.apply();
+
         endRender();
+
         for (Runnable task : scissor.postTasks) {
             task.run();
         }
@@ -174,7 +190,6 @@ public class GuiRenderer {
         tooltipAnimProgress = Utils.clamp(tooltipAnimProgress, 0, 1);
 
         boolean toReturn = false;
-
         if (tooltipAnimProgress > 0) {
             if (tooltip != null && !tooltip.equals(lastTooltip)) {
                 tooltipWidget = theme.tooltip(tooltip);
@@ -196,6 +211,7 @@ public class GuiRenderer {
         }
 
         tooltip = null;
+
         return toReturn;
     }
 
@@ -226,11 +242,11 @@ public class GuiRenderer {
         quad(widget.x, widget.y, widget.width, widget.height, color);
     }
 
-    public void quad(double x, double y, double width, double height, GuiTexture texture, Color color) {
+    public void quad(GuiTexture texture, Color color, double x, double y, double width, double height) {
         textureRenderer.texturedQuad(x, y, width, height, texture.get(width, height), color);
     }
 
-    public void rotatedQuad(double x, double y, double width, double height, double rotation, GuiTexture texture, Color color) {
+    public void rotatedQuad(GuiTexture texture, Color color, double x, double y, double width, double height, double rotation) {
         textureRenderer.texturedQuad(x, y, width, height, rotation, texture.get(width, height), color);
     }
 
@@ -238,7 +254,7 @@ public class GuiRenderer {
         texts.add(getOp(textPool, x, y, color).set(text, theme.textRenderer(), title));
     }
 
-    public void texture(double x, double y, double width, double height, double rotation, Texture texture) {
+    public void texture(Texture texture, double x, double y, double width, double height, double rotation) {
         post(() -> {
             textureRenderer.begin();
             textureRenderer.texturedQuad(x, y, width, height, rotation, 0, 0, 1, 1, WHITE);

@@ -1,5 +1,6 @@
 package xyz.mathax.mathaxclient.gui.screens.modules;
 
+import xyz.mathax.mathaxclient.gui.renderer.GuiRenderer;
 import xyz.mathax.mathaxclient.gui.tabs.builtin.ModulesTab;
 import xyz.mathax.mathaxclient.systems.config.Config;
 import xyz.mathax.mathaxclient.systems.themes.Theme;
@@ -16,6 +17,7 @@ import xyz.mathax.mathaxclient.systems.modules.Module;
 import xyz.mathax.mathaxclient.systems.modules.Modules;
 import net.minecraft.item.Items;
 import xyz.mathax.mathaxclient.utils.Utils;
+import xyz.mathax.mathaxclient.utils.render.CategoryIcons;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,8 +54,9 @@ public class ModulesScreen extends TabScreen {
         window.padding = 0;
         window.spacing = 0;
 
-        if (theme.categoryIcons()) {
-            window.beforeHeaderInit = wContainer -> wContainer.add(theme.item(category.getIconAsItemStack())).pad(2);
+        switch (theme.categoryIcons()) {
+            case Custom -> window.beforeHeaderInit = wContainer -> wContainer.add(theme.guiTexture(32, 32, 0, category.getIcons().getLeft())).pad(2);
+            case Minecraft -> window.beforeHeaderInit = wContainer -> wContainer.add(theme.item(category.getIcons().getRight().getDefaultStack())).pad(2);
         }
 
         container.add(window);
@@ -115,8 +118,9 @@ public class ModulesScreen extends TabScreen {
         WWindow window = theme.window(name);
         window.id = name;
 
-        if (theme.categoryIcons()) {
-            window.beforeHeaderInit = wContainer -> wContainer.add(theme.item(Items.COMPASS.getDefaultStack())).pad(2);
+        switch (theme.categoryIcons()) {
+            case Custom -> window.beforeHeaderInit = wContainer -> wContainer.add(theme.guiTexture(32, 32, 0, GuiRenderer.SEARCH)).pad(2);
+            case Minecraft -> window.beforeHeaderInit = wContainer -> wContainer.add(theme.item(Items.COMPASS.getDefaultStack())).pad(2);
         }
 
         container.add(window);
@@ -153,8 +157,9 @@ public class ModulesScreen extends TabScreen {
         window.padding = 0;
         window.spacing = 0;
 
-        if (theme.categoryIcons()) {
-            window.beforeHeaderInit = wContainer -> wContainer.add(theme.item(Items.NETHER_STAR.getDefaultStack())).pad(2);
+        switch (theme.categoryIcons()) {
+            case Custom -> window.beforeHeaderInit = wContainer -> wContainer.add(theme.guiTexture(32, 32, 0, GuiRenderer.FAVORITES)).pad(2);
+            case Minecraft -> window.beforeHeaderInit = wContainer -> wContainer.add(theme.item(Items.NETHER_STAR.getDefaultStack())).pad(2);
         }
 
         Cell<WWindow> cell = container.add(window);

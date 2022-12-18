@@ -48,7 +48,7 @@ public class Fonts {
 
         long start = Utils.getCurrentTimeMillis();
 
-        DEFAULT_FONT_FAMILY = FontUtils.getBuiltinFontInfo(BUILTIN_FONTS[1]).family();
+        DEFAULT_FONT_FAMILY = FontUtils.getBuiltinFontInfo(BUILTIN_FONTS[0]).family();
         DEFAULT_FONT = getFamily(DEFAULT_FONT_FAMILY).get(FontInfo.Type.Regular);
 
         MatHax.LOG.info("Found {} font families in {} milliseconds.", FONT_FAMILIES.size(), Utils.getCurrentTimeMillis() - start);

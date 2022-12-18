@@ -63,7 +63,6 @@ public abstract class WTextBox extends WWidget {
     protected void onCalculateSize() {
         double pad = pad();
         double textHeight = theme.textHeight();
-
         width = pad + textHeight + pad;
         height = pad + textHeight + pad;
 
@@ -88,6 +87,7 @@ public abstract class WTextBox extends WWidget {
     @Override
     public void move(double deltaX, double deltaY) {
         super.move(deltaX, deltaY);
+
         if (completionsW != null) {
             completionsW.move(deltaX, deltaY);
         }
@@ -122,7 +122,6 @@ public abstract class WTextBox extends WWidget {
 
                 for (int i = 0; i < textWidths.size(); i++) {
                     double difference = Math.abs(textWidths.getDouble(i) + pad - relativeMouseX);
-
                     if (difference < smallestDifference) {
                         smallestDifference = difference;
                         cursor = i;
@@ -130,11 +129,14 @@ public abstract class WTextBox extends WWidget {
                 }
 
                 preSelectionCursor = cursor;
+
                 resetSelection();
+
                 cursorChanged();
             }
 
             setFocused(true);
+
             return true;
         }
 
@@ -159,7 +161,6 @@ public abstract class WTextBox extends WWidget {
 
         for (int i = 0; i < textWidths.size(); i++) {
             double difference = Math.abs(textWidths.getDouble(i) + pad - relativeMouseX);
-
             if (difference < smallestDifference) {
                 smallestDifference = difference;
                 if (i < preSelectionCursor) {
@@ -196,7 +197,6 @@ public abstract class WTextBox extends WWidget {
         }
 
         boolean control = MinecraftClient.IS_SYSTEM_MAC ? mods == GLFW_MOD_SUPER : mods == GLFW_MOD_CONTROL;
-
         if (control && key == GLFW_KEY_C) {
             if (cursor != selectionStart || cursor != selectionEnd) {
                 mc.keyboard.setClipboard(text.substring(selectionStart, selectionEnd));
@@ -226,11 +226,9 @@ public abstract class WTextBox extends WWidget {
             return true;
         } else if (key == GLFW_KEY_TAB && completionsW != null) {
             String completion = ((ICompletionItem) completionsW.cells.get(getSelectedCompletion()).widget()).getCompletion();
-
             StringBuilder stringBuilder = new StringBuilder(text.length() + completion.length() + 1);
             String substring = text.substring(0, cursor);
             stringBuilder.append(substring);
-
             for (int i = 0; i < completion.length() - 1; i++) {
                 if (substring.endsWith(completion.substring(0, completion.length() - i - 1))) {
                     completion = completion.substring(completion.length() - i - 1);
@@ -266,7 +264,6 @@ public abstract class WTextBox extends WWidget {
         boolean shift = mods == GLFW_MOD_SHIFT;
         boolean controlShift = mods == ((SystemUtils.IS_OS_WINDOWS ? GLFW_MOD_ALT : MinecraftClient.IS_SYSTEM_MAC ? GLFW_MOD_SUPER : GLFW_MOD_CONTROL) | GLFW_MOD_SHIFT);
         boolean altShift = mods == ((SystemUtils.IS_OS_WINDOWS ? GLFW_MOD_CONTROL : GLFW_MOD_ALT) | GLFW_MOD_SHIFT);
-
         if (control && key == GLFW_KEY_V) {
             clearSelection();
 
@@ -301,9 +298,9 @@ public abstract class WTextBox extends WWidget {
                 String preText = text;
 
                 int count = (mods == (SystemUtils.IS_OS_WINDOWS ? GLFW_MOD_ALT : MinecraftClient.IS_SYSTEM_MAC ? GLFW_MOD_SUPER : GLFW_MOD_CONTROL)) ? cursor : (mods == (SystemUtils.IS_OS_WINDOWS ? GLFW_MOD_CONTROL : GLFW_MOD_ALT)) ? countToNextSpace(true) : 1;
-
                 text = text.substring(0, cursor - count) + text.substring(cursor);
                 cursor -= count;
+
                 resetSelection();
 
                 if (!text.equals(preText)) {
@@ -318,11 +315,8 @@ public abstract class WTextBox extends WWidget {
             if (cursor < text.length()) {
                 if (cursor == selectionStart && cursor == selectionEnd) {
                     String preText = text;
-
                     int count = mods == (SystemUtils.IS_OS_WINDOWS ? GLFW_MOD_ALT : MinecraftClient.IS_SYSTEM_MAC ? GLFW_MOD_SUPER : GLFW_MOD_CONTROL) ? text.length() - cursor : (mods == (SystemUtils.IS_OS_WINDOWS ? GLFW_MOD_CONTROL : GLFW_MOD_ALT)) ? countToNextSpace(false) : 1;
-
                     text = text.substring(0, cursor) + text.substring(cursor + count);
-
                     if (!text.equals(preText)) {
                         runAction();
                     }
@@ -433,7 +427,6 @@ public abstract class WTextBox extends WWidget {
             return true;
         } else if (key == GLFW_KEY_DOWN && completionsW != null) {
             int currentI = getSelectedCompletion();
-
             if (currentI == Math.min(5, completions.size() - 1)) {
                 if (completionsStart + 6 < completions.size()) {
                     completionsStart++;
@@ -447,7 +440,6 @@ public abstract class WTextBox extends WWidget {
             return true;
         } else if (key == GLFW_KEY_UP && completionsW != null) {
             int currentI = getSelectedCompletion();
-
             if (currentI == 0) {
                 if (completionsStart > 0) {
                     completionsStart--;
@@ -489,9 +481,11 @@ public abstract class WTextBox extends WWidget {
             text = text.substring(0, cursor) + c + text.substring(cursor);
 
             cursor++;
+
             resetSelection();
 
             runAction();
+
             return true;
         }
 
@@ -521,7 +515,6 @@ public abstract class WTextBox extends WWidget {
         }
 
         String preText = text;
-
         text = text.substring(0, selectionStart) + text.substring(selectionEnd);
 
         cursor = selectionStart;
@@ -540,7 +533,6 @@ public abstract class WTextBox extends WWidget {
     private int countToNextSpace(boolean toLeft) {
         int count = 0;
         boolean hadNonSpace = false;
-
         for (int i = cursor; toLeft ? i >= 0 : i < text.length(); i += toLeft ? -1 : 1) {
             int j = i;
             if (toLeft) {
@@ -577,6 +569,7 @@ public abstract class WTextBox extends WWidget {
 
     private void runAction() {
         calculateTextWidths();
+
         cursorChanged();
 
         if (action != null) {
@@ -603,7 +596,6 @@ public abstract class WTextBox extends WWidget {
 
         onCursorChanged();
 
-        // Completions
         completions = renderer.getCompletions(text, this.cursor);
         completionsStart = 0;
         completionsW = null;

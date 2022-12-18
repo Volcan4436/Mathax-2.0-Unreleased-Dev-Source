@@ -22,7 +22,7 @@ public class WButtonTheme extends WButton implements WidgetTheme {
             renderer.text(text, x + width / 2 - textWidth / 2, y + pad, theme.textColorSetting.get(), false);
         } else {
             double textHeight = theme.textHeight();
-            renderer.quad(x + width / 2 - textHeight / 2, y + pad, textHeight, textHeight, texture, theme.textColorSetting.get());
+            renderer.quad(texture, theme.textColorSetting.get(), x + width / 2 - textHeight / 2, y + pad, textHeight, textHeight);
         }
     }
 }

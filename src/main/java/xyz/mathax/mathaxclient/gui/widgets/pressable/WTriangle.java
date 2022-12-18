@@ -6,7 +6,6 @@ public abstract class WTriangle extends WPressable {
     @Override
     protected void onCalculateSize() {
         double textHeight = theme.textHeight();
-
         width = textHeight;
         height = textHeight;
     }

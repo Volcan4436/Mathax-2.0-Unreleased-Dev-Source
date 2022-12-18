@@ -1,27 +1,36 @@
 package xyz.mathax.mathaxclient.systems.modules;
 
-import xyz.mathax.mathaxclient.utils.render.color.Color;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.Pair;
+import xyz.mathax.mathaxclient.gui.renderer.GuiRenderer;
+import xyz.mathax.mathaxclient.gui.renderer.packer.GuiTexture;
+import xyz.mathax.mathaxclient.utils.render.color.Color;
 
 public class Category {
     public final String name;
 
-    public final Item icon;
+    public final Pair<Identifier, Item> icons;
 
     public final Color color;
 
     private final int nameHash;
 
-    public Category(String name, Item icon, Color color) {
+    public Category(String name, Pair<Identifier, Item> icons, Color color) {
         this.name = name;
-        this.icon = icon;
+        this.icons = icons;
         this.color = color;
         this.nameHash = name.hashCode();
     }
 
-    public ItemStack getIconAsItemStack() {
-        return icon.getDefaultStack();
+    public Pair<GuiTexture, Item> getIcons() {
+        for (var pair : GuiRenderer.CATEGORIES) {
+            if (name.startsWith(pair.getLeft())) {
+                return new Pair<>(pair.getRight(), icons.getRight());
+            }
+        }
+
+        return new Pair<>(GuiRenderer.addTexture(icons.getLeft(), name), icons.getRight());
     }
 
     @Override

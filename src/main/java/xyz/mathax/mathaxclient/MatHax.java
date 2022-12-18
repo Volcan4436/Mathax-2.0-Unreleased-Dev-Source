@@ -46,6 +46,7 @@ import java.lang.invoke.MethodHandles;
 import java.util.*;
 
 // TODO: Make all modules use sections for text rendering
+// TODO: If i change how a setting works (from boolean to enum etc), the game will crash with old configs
 
 public class MatHax implements ClientModInitializer {
     public static MinecraftClient mc;

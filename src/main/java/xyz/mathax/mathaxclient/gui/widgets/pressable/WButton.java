@@ -16,7 +16,6 @@ public abstract class WButton extends WPressable {
     @Override
     protected void onCalculateSize() {
         double pad = pad();
-
         if (text != null) {
             textWidth = theme.textWidth(text);
 
@@ -24,7 +23,6 @@ public abstract class WButton extends WPressable {
             height = pad + theme.textHeight() + pad;
         } else {
             double textHeight = theme.textHeight();
-
             width = pad + textHeight + pad;
             height = pad + textHeight + pad;
         }

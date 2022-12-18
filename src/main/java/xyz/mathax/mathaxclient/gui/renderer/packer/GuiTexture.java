@@ -12,13 +12,10 @@ public class GuiTexture {
 
     public TextureRegion get(double width, double height) {
         double targetDiagonal = Math.sqrt(width * width + height * height);
-
         double closestDifference = Double.MAX_VALUE;
         TextureRegion closestRegion = null;
-
         for (TextureRegion region : regions) {
             double difference = Math.abs(targetDiagonal - region.diagonal);
-
             if (difference < closestDifference) {
                 closestDifference = difference;
                 closestRegion = region;

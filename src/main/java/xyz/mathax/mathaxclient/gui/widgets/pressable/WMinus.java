@@ -5,7 +5,6 @@ public abstract class WMinus extends WPressable {
     protected void onCalculateSize() {
         double pad = pad();
         double textHeight = theme.textHeight();
-
         width = pad + textHeight + pad;
         height = pad + textHeight + pad;
     }

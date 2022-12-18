@@ -33,7 +33,7 @@ public class WDropdownTheme<T> extends WDropdown<T> implements WidgetTheme {
         double w = theme.textWidth(text);
         renderer.text(text, x + pad + maxValueWidth / 2 - w / 2, y + pad, theme.textColorSetting.get(), false);
 
-        renderer.rotatedQuad(x + pad + maxValueWidth + pad, y + pad, textHeight, textHeight, 0, GuiRenderer.TRIANGLE, theme.textColorSetting.get());
+        renderer.rotatedQuad(GuiRenderer.TRIANGLE, theme.textColorSetting.get(), x + pad + maxValueWidth + pad, y + pad, textHeight, textHeight, 0);
     }
 
     private static class WRoot extends WDropdownRoot implements WidgetTheme {

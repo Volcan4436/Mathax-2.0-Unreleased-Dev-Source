@@ -54,7 +54,6 @@ public class BlockDataSettingScreen extends WindowScreen {
     public <T extends ICopyable<T> & ISerializable<T> & IChangeable & IBlockData<T>> void initTable() {
         for (Block block : Registries.BLOCK) {
             T blockData = (T) setting.get().get(block);
-
             if (blockData != null && blockData.isChanged()) {
                 BLOCKS.add(0, block);
             } else {
@@ -69,7 +68,6 @@ public class BlockDataSettingScreen extends WindowScreen {
             }
 
             T blockData = (T) setting.get().get(block);
-
             table.add(theme.itemWithLabel(block.asItem().getDefaultStack(), Names.get(block))).expandCellX();
             table.add(theme.label((blockData != null && blockData.isChanged()) ? "*" : " "));
 

@@ -32,9 +32,8 @@ public class WSliderTheme extends WSlider implements WidgetTheme {
     }
 
     private void renderHandle(GuiRenderer renderer, double valueWidth) {
-        Theme theme = theme();
         double handleSize = handleSize();
 
-        renderer.quad(x + valueWidth, y, handleSize, handleSize, GuiRenderer.CIRCLE, theme.sliderHandleSetting.get(dragging, handleMouseOver));
+        renderer.quad(GuiRenderer.CIRCLE, theme().sliderHandleSetting.get(dragging, handleMouseOver), x + valueWidth, y, handleSize, handleSize);
     }
 }

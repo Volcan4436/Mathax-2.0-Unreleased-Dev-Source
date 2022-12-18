@@ -10,6 +10,7 @@ import org.json.JSONObject;
 public class AccountCache implements ISerializable<AccountCache> {
     public String username = "";
     public String uuid = "";
+
     private PlayerHeadTexture headTexture;
 
     public PlayerHeadTexture getHeadTexture() {
@@ -17,7 +18,10 @@ public class AccountCache implements ISerializable<AccountCache> {
     }
 
     public void loadHead() {
-        if (uuid == null || uuid.isBlank()) return;
+        if (uuid == null || uuid.isBlank()) {
+            return;
+        }
+
         headTexture = PlayerHeadUtils.fetchHead(UUIDTypeAdapter.fromString(uuid));
     }
 

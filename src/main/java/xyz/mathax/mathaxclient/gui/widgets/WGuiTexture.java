@@ -1,19 +1,20 @@
 package xyz.mathax.mathaxclient.gui.widgets;
 
 import xyz.mathax.mathaxclient.gui.renderer.GuiRenderer;
-import xyz.mathax.mathaxclient.renderer.Texture;
+import xyz.mathax.mathaxclient.gui.renderer.packer.GuiTexture;
+import xyz.mathax.mathaxclient.utils.render.color.Color;
 
-public class WTexture extends WWidget {
+public class WGuiTexture extends WWidget {
     private final double width, height;
     private final double rotation;
 
-    private final Texture texture;
+    private final GuiTexture guiTexture;
 
-    public WTexture(double width, double height, double rotation, Texture texture) {
+    public WGuiTexture(double width, double height, double rotation, GuiTexture guiTexture) {
         this.width = width;
         this.height = height;
         this.rotation = rotation;
-        this.texture = texture;
+        this.guiTexture = guiTexture;
     }
 
     @Override
@@ -24,8 +25,6 @@ public class WTexture extends WWidget {
 
     @Override
     protected void onRender(GuiRenderer renderer, double mouseX, double mouseY, double delta) {
-        if (texture.isValid()) {
-            renderer.texture(texture, x, y, super.width, super.height, rotation);
-        }
+        renderer.rotatedQuad(guiTexture, Color.WHITE, x, y, super.width, super.height, rotation);
     }
 }

@@ -23,6 +23,7 @@ public abstract class WPressable extends WWidget {
     public boolean onMouseReleased(double mouseX, double mouseY, int button) {
         if (pressed) {
             onPressed(button);
+
             if (action != null) {
                 action.run();
             }

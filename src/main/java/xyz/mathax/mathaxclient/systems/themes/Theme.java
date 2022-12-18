@@ -31,6 +31,7 @@ import xyz.mathax.mathaxclient.utils.json.JSONUtils;
 import xyz.mathax.mathaxclient.utils.misc.ISerializable;
 import xyz.mathax.mathaxclient.utils.misc.Names;
 import xyz.mathax.mathaxclient.utils.render.Alignment;
+import xyz.mathax.mathaxclient.utils.render.CategoryIcons;
 import xyz.mathax.mathaxclient.utils.render.color.Color;
 import xyz.mathax.mathaxclient.utils.render.color.SettingColor;
 import net.minecraft.client.gui.screen.Screen;
@@ -97,10 +98,10 @@ public class Theme implements ISerializable<Theme> {
             .build()
     );*/
 
-    public final Setting<Boolean> categoryIconsSetting = generalSettings.add(new BoolSetting.Builder()
+    public final Setting<CategoryIcons> categoryIconsSetting = generalSettings.add(new EnumSetting.Builder<CategoryIcons>()
             .name("Category icons")
-            .description("Item icons in module categories titles.")
-            .defaultValue(true)
+            .description("Icons in module categories titles.")
+            .defaultValue(CategoryIcons.Custom)
             .build()
     );
 
@@ -416,6 +417,10 @@ public class Theme implements ISerializable<Theme> {
         return widget(new WTexture(width, height, rotation, texture));
     }
 
+    public WGuiTexture guiTexture(double width, double height, double rotation, GuiTexture guiTexture) {
+        return widget(new WGuiTexture(width, height, rotation, guiTexture));
+    }
+
     public WIntEdit intEdit(int value, int min, int max, int sliderMin, int sliderMax, boolean noSlider) {
         return widget(new WIntEdit(value, min, max, sliderMin, sliderMax, noSlider));
     }
@@ -512,7 +517,7 @@ public class Theme implements ISerializable<Theme> {
         return /*roundSetting.get() ? roundingSetting.get() :*/ 0;
     }
 
-    public boolean categoryIcons() {
+    public CategoryIcons categoryIcons() {
         return categoryIconsSetting.get();
     }
 
