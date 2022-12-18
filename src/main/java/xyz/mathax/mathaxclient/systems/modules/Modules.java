@@ -18,6 +18,7 @@ import xyz.mathax.mathaxclient.settings.Setting;
 import xyz.mathax.mathaxclient.settings.SettingGroup;
 import xyz.mathax.mathaxclient.systems.System;
 import xyz.mathax.mathaxclient.systems.Systems;
+import xyz.mathax.mathaxclient.systems.modules.chat.AntiSale;
 import xyz.mathax.mathaxclient.systems.modules.chat.Spam;
 import xyz.mathax.mathaxclient.systems.modules.combat.*;
 import xyz.mathax.mathaxclient.systems.modules.movement.*;
@@ -203,6 +204,7 @@ public class Modules extends System<Modules> {
         // Chat
         Category chat = Categories.Chat;
         add(new Spam(chat));
+        add(new AntiSale(chat));
 
         // Misc
         Category misc = Categories.Misc;
